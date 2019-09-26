@@ -1,6 +1,10 @@
-MIT License
+The MIT License (MIT)
 
-Copyright (c) 2019 SimFin
+Copyright (c) 2019
+
+The database is created by SimFin. The Python API and download system was
+originally designed and implemented by Hvass Labs. Further development of
+the Python API by SimFin and the community.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

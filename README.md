@@ -154,4 +154,9 @@ Further development of the Python API by SimFin and the community.
 
 ## License (MIT)
 
-Copyright (C) 2019. See LICENSE.txt for details.
+This is published under the
+[MIT License](https://github.com/simfin/simfin/blob/master/LICENSE.txt)
+which allows very broad use for both academic and commercial purposes.
+
+You are very welcome to modify and use this source-code in your own project.
+Please keep a link to the [original repository](https://github.com/simfin/simfin).

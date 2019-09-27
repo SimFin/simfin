@@ -105,7 +105,7 @@ def iter_all_datasets():
 
     Example:
 
-    for dataset, variant in all_datasets():
+    for dataset, variant in iter_all_datasets():
         print(dataset, variant)
     """
 

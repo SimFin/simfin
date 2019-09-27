@@ -34,12 +34,29 @@ and print the Revenue and Net Income for Microsoft.
     # The dir will be created if it does not already exist.
     sf.set_data_dir('~/simfin_data/')
 
-    # Load all Income Statements for Trailing Twelve Months (TTM).
+    # Load the annual Income Statements for all companies.
     # The data is automatically downloaded if you don't have it already.
-    df = sf.load_income(variant='ttm')
+    df = sf.load_income(variant='annual')
 
     # Print all Revenue and Net Income for Microsoft (ticker MSFT).
     print(df.loc['MSFT'][[REVENUE, NET_INCOME]])
+
+This produces the following output:
+
+                      Revenue   Net Income
+    Report Date
+    2008-06-30   6.042000e+10  17681000000
+    2009-06-30   5.843700e+10  14569000000
+    2010-06-30   6.248400e+10  18760000000
+    2011-06-30   6.994300e+10  23150000000
+    2012-06-30   7.372300e+10  16978000000
+    2013-06-30   7.784900e+10  21863000000
+    2014-06-30   8.683300e+10  22074000000
+    2015-06-30   9.358000e+10  12193000000
+    2016-06-30   9.115400e+10  20539000000
+    2017-06-30   9.657100e+10  25489000000
+    2018-06-30   1.103600e+11  16571000000
+    2019-06-30   1.258430e+11  39240000000
 
 
 ## Tutorials

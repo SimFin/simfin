@@ -1,9 +1,9 @@
 ---
-name: 
-about: 
+name: Bug Report
+about: Simfin gives unexpected results, raises an exception, or causes another problem
 title: Bug Report
 labels: bug
-assignees: 
+assignees: ''
 
 ---
 

@@ -1,6 +1,10 @@
 ---
-title: 'Data Error'
+name: 
+about: 
+title: Data Error
 labels: data-error
+assignees: 
+
 ---
 
 # Data Error

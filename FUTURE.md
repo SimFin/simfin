@@ -37,16 +37,42 @@ for the general public to try out.
 ### Tasks
 
 -   Fix errors reported in the "private" beta.
+
+-   Create web-page on www.simfin.com with a list of available datasets
+    and the difference between free / paid datasets (Thomas).
+    Add link in tutorial and README.md (Magnus).
+
+-   Find solution for handling duplicate tickers. Should the ticker be
+    unique within a single market (e.g. all tickers for market=usa are
+    unique)? Delisted tickers can be renamed XYZ1, XYZ2, etc. What
+    about GOOG, is it an error it has two SIMFIN_ID's? (Thomas and Magnus)
+
+-   Allow sf.load_fundamentals() to index by SIMFIN_ID instead of TICKER?
+    This is only really necessary if tickers are not always unique.
+    How can it be done most elegantly? (Magnus)
+
+-   Document the most important names for data-columns in Income Statements,
+    Balance Sheets, Cash-Flow Statements, etc. as found in `names.py`
+    Either expand the existing web-page: https://simfin.com/data/help/main?topic=definitions
+    or create a wiki on github. (Thomas) Add link to `names.py` (Magnus)
+    
 -   Extend the data-tests in `test_bulk_data.ipynb` and improve data
     quality. (Thomas)
--   Maybe include some of the features listed below.
 
 
 ## Future Versions
 
+-   Document the remaining names for data-columns in Income Statements,
+    Balance Sheets, Cash-Flow Statements, etc. as found in `names.py`
+    Either expand the existing web-page: https://simfin.com/data/help/main?topic=definitions
+    or create a wiki on github. (Thomas)
+
 -   Helper-function for calculating per-share numbers e.g. Sales Per Share
     and Earnings Per Share.
+
 -   Helper-function for calculating growth-rates e.g. Sales Growth.
+
 -   Helper-function for calculating returns and annualized returns.
+
 -   Tutorial for a simple stock-screener using 'shareprices-latest'
     and basic valuation ratios such as P/E, Sales Growth, and ROE.

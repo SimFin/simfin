@@ -186,14 +186,14 @@ def _download(*args, **kwargs):
     download_path = _compose_download_path(*args, **kwargs)
 
     # Open a streaming connection to the SimFin server.
-    with requests.get(url, stream=True) as r:
+    with requests.get(url, stream=True) as response:
         # Get the status code for the connection.
-        status_code = r.status_code
+        status_code = response.status_code
 
         # If connection is OK then download the file.
         if status_code == 200:
             # Total number of bytes to be downloaded.
-            total_size = int(r.headers.get('content-length', default=0))
+            total_size = int(response.headers.get('content-length', default=0))
 
             # Number of bytes downloaded so far.
             downloaded_size = 0
@@ -202,7 +202,7 @@ def _download(*args, **kwargs):
             with open(download_path, 'wb') as file:
                 # Read the data in chunks from the server.
                 # The chunk_size is set automatically when None.
-                for chunk in r.iter_content(chunk_size=None):
+                for chunk in response.iter_content(chunk_size=None):
                     # Write the chunk to file.
                     file.write(chunk)
 
@@ -215,7 +215,7 @@ def _download(*args, **kwargs):
         # Or if the SimFin server returned an error.
         elif status_code == 400:
             # Get the error message reported by the SimFin server.
-            error = r.json()['error']
+            error = response.json()['error']
 
             # Raise exception with the error message from the SimFin server.
             raise ServerException(error)
@@ -223,7 +223,7 @@ def _download(*args, **kwargs):
         # Or if another error occurred.
         else:
             # Raise the error as an exception.
-            r.raise_for_status()
+            response.raise_for_status()
 
     return download_path
 

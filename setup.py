@@ -25,6 +25,5 @@ setup(
         'pandas',
         'numpy',
         'requests',
-        'nbval'
     ],
 )

@@ -7,7 +7,7 @@ Requests. Please withhold feature suggestions until this warning is
 removed.
 
 
-# SimFin - Simple financial data for Python.
+# SimFin - Simple financial data for Python
 
 SimFin makes it easy to obtain and use financial data in Python.
 It automatically downloads data from the [SimFin](https://www.simfin.com/)
@@ -114,34 +114,57 @@ You should now be able to edit the files inside the simfin directory and
 use them whenever you have a Python module that imports the simfin package.
 
 
-### Testing
+## Testing
 
-Two kinds of tests are included:
+Two kinds of tests are provided with the simfin package:
 
--   Unit-tests ensure the various functions of the simfin package can
-    run without raising exceptions. The unit-tests generally do not test
-    whether the data is valid. These tests are mainly used by developers
-    when they make changes to the simfin package.
 
--   Data-tests ensure the bulk-data downloaded from the SimFin servers
-    is valid. These tests are mainly used by SimFin's database admin to
-    ensure the data is always valid, but the end-user may also run these
-    tests to ensure the downloaded data is valid.
+### Unit Tests
 
-Run the following commands from the root directory of the simfin package
-to execute both the unit-tests and data-tests:
+Unit-tests ensure the various functions of the simfin package can
+run without raising exceptions. The unit-tests generally do not test
+whether the data is valid. These tests are mainly used by developers
+when they make changes to the simfin package.
+
+The unit-tests are run with the following commands from the root directory
+of the simfin package:
 
     source activate simfin-env
+    pytest
+
+
+### Data Tests
+
+Data-tests ensure the bulk-data downloaded from the SimFin servers
+is valid. These tests are mainly used by SimFin's database admin to
+ensure the data is always valid, but the end-user may also run these
+tests to ensure the downloaded data is valid.
+
+First you need to install [nbval](https://pypi.org/project/nbval/),
+which enables support for Jupyter Notebooks in the pytest framework.
+This is not automatically installed with the simfin package, so as
+to keep the number of dependencies minimal for normal users of simfin.
+To install nbval run the following commands:
+
+    source activate simfin-env
+    pip install nbval
+
+Then you can run the following commands from the root directory of the
+simfin package to execute both the unit-tests and data-tests:
+
     pytest --nbval-lax
 
 The following command only runs the data-tests:
 
     pytest --nbval-lax tests/test_bulk_data.ipynb
 
+
+### More Tests
+
 The [tutorials](https://www.github.com/simfin/simfin-tutorials/)
 provide more realistic use-cases of the simfin package, and they can
-also be run automatically using `pytest`. See the tutorials' README for
-details.
+also be run and tested automatically using `pytest`. See the tutorials'
+README for details.
 
 
 ## Credits

@@ -17,6 +17,9 @@ from simfin.datasets import iter_all_datasets, valid_variants
 # Set data directory.
 sf.set_data_dir(data_dir='~/simfin_data/')
 
+# Load API key or use default 'free' if key-file doesn't exist.
+sf.load_api_key(path='~/simfin_api_key.txt', default_key='free')
+
 # Set number of days before refreshing data from SimFin server.
 refresh_days = 30
 
@@ -35,18 +38,24 @@ def test_load_income():
     """Test simfin.bulk.load_income()"""
     for variant in valid_variants['income']:
         sf.bulk.load_income(variant=variant, refresh_days=refresh_days)
+        sf.bulk.load_income_banks(variant=variant, refresh_days=refresh_days)
+        sf.bulk.load_income_insurance(variant=variant, refresh_days=refresh_days)
 
 
 def test_load_balance():
     """Test simfin.bulk.load_balance()"""
     for variant in valid_variants['balance']:
         sf.bulk.load_balance(variant=variant, refresh_days=refresh_days)
+        sf.bulk.load_balance_banks(variant=variant, refresh_days=refresh_days)
+        sf.bulk.load_balance_insurance(variant=variant, refresh_days=refresh_days)
 
 
 def test_load_cashflow():
     """Test simfin.bulk.load_cashflow()"""
     for variant in valid_variants['cashflow']:
         sf.bulk.load_cashflow(variant=variant, refresh_days=refresh_days)
+        sf.bulk.load_cashflow_banks(variant=variant, refresh_days=refresh_days)
+        sf.bulk.load_cashflow_insurance(variant=variant, refresh_days=refresh_days)
 
 
 def test_load_shareprices():

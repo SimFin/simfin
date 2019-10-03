@@ -16,6 +16,7 @@ from simfin.exceptions import ServerException
 import pandas as pd
 import zipfile
 import requests
+import functools
 import sys
 import os
 import time
@@ -400,7 +401,8 @@ def load(dataset, variant=None, market=None,
     return df
 
 ##########################################################################
-# Wrapper-functions for loading different datasets.
+# Wrapper-functions for loading datasets with Fundamental Data, that is,
+# Income Statements, Balance Sheets and Cash-Flow Statements.
 
 def load_fundamental(index=REPORT_DATE, *args, **kwargs):
     """
@@ -421,72 +423,63 @@ def load_fundamental(index=REPORT_DATE, *args, **kwargs):
                 parse_dates=[REPORT_DATE, PUBLISH_DATE],
                 *args, **kwargs)
 
+# The following are specializations of load_fundamental for different datasets.
+# Note that the doc-strings are not properly set in those functions, so you
+# have to lookup the valid args from load_fundamental() and load() above.
 
-def load_income(variant='ttm', index=REPORT_DATE, *args, **kwargs):
-    """
-    Load Income Statements. This is a simple wrapper for the load() function,
-    which just ensures that the DataFrame is indexed by TICKER and either
-    REPORT_DATE or PUBLISH_DATE, and that those dates are also parsed.
+# Load Income Statements for all companies except banks and insurance companies.
+load_income = functools.partial(load_fundamental, dataset='income')
+load_income.__doc__ = "Load Income Statements for all companies except banks " \
+                      "and insurance companies. See simfin.load() for valid args."
 
-    :param variant:
-        String with the dataset variant. Valid options:
-            'annual': Annual financial reports.
-            'quarterly': Quarterly financial reports.
-            'ttm': Trailing-Twelve-Months (TTM) reports.
+# Load Income Statements for banks.
+load_income_banks = functools.partial(load_fundamental,
+                                      dataset='income-banks')
+load_income_banks.__doc__ = "Load Income Statements for banks. " \
+                            "See simfin.load() for valid args."
 
-    :param index:
-        Column-name to use for the date-index: REPORT_DATE or PUBLISH_DATE.
+# Load Income Statements for insurance companies.
+load_income_insurance = functools.partial(load_fundamental,
+                                          dataset='income-insurance')
+load_income_insurance.__doc__ = "Load Income Statements for insurance " \
+                                "companies. See simfin.load() for valid args."
 
-    :return:
-        Pandas DataFrame with the data.
-    """
-    return load_fundamental(dataset='income', variant=variant,
-                            index=index, *args, **kwargs)
+# Load Balance Sheets for all companies except banks and insurance companies.
+load_balance = functools.partial(load_fundamental, dataset='balance')
+load_balance.__doc__ = "Load Balance Sheets for all companies except banks and " \
+                       "insurance companies. See simfin.load() for valid args."
 
+# Load Balance Sheets for banks.
+load_balance_banks = functools.partial(load_fundamental,
+                                       dataset='balance-banks')
+load_balance_banks.__doc__ = "Load Balance Sheets for banks. " \
+                             "See simfin.load() for valid args."
 
-def load_balance(variant='ttm', index=REPORT_DATE, *args, **kwargs):
-    """
-    Load Balance Sheets. This is a simple wrapper for the load() function,
-    which just ensures that the DataFrame is indexed by TICKER and either
-    REPORT_DATE or PUBLISH_DATE, and that those dates are also parsed.
+# Load Balance Sheets for insurance companies.
+load_balance_insurance = functools.partial(load_fundamental,
+                                           dataset='balance-insurance')
+load_balance_insurance.__doc__ = "Load Balance Sheets for insurance companies. " \
+                                 "See simfin.load() for valid args."
 
-    :param variant:
-        String with the dataset variant. Valid options:
-            'annual': Annual financial reports.
-            'quarterly': Quarterly financial reports.
-            'ttm': Trailing-Twelve-Months (TTM) reports.
+# Load Cash-Flow Statements for all companies except banks and insurance companies.
+load_cashflow = functools.partial(load_fundamental, dataset='cashflow')
+load_cashflow.__doc__ = "Load Cash-Flow Statements for all companies except banks " \
+                        "and insurance companies. See simfin.load() for valid args."
 
-    :param index:
-        Column-name to use for the date-index: REPORT_DATE or PUBLISH_DATE.
+# Load Cash-Flow Statements for banks.
+load_cashflow_banks = functools.partial(load_fundamental,
+                                        dataset='cashflow-banks')
+load_cashflow_banks.__doc__ = "Load Cash-Flow Statements for banks. " \
+                              "See simfin.load() for valid args."
 
-    :return:
-        Pandas DataFrame with the data.
-    """
-    return load_fundamental(dataset='balance', variant=variant,
-                            index=index, *args, **kwargs)
+# Load Cash-Flow Statements for insurance companies.
+load_cashflow_insurance = functools.partial(load_fundamental,
+                                            dataset='cashflow-insurance')
+load_cashflow_insurance.__doc__ = "Load Cash-Flow Statements for insurance " \
+                                  "companies. See simfin.load() for valid args."
 
-
-def load_cashflow(variant='ttm', index=REPORT_DATE, *args, **kwargs):
-    """
-    Load Cash-Flow Statements. This is a simple wrapper for the load() function,
-    which just ensures that the DataFrame is indexed by TICKER and either
-    REPORT_DATE or PUBLISH_DATE, and that those dates are also parsed.
-
-    :param variant:
-        String with the dataset variant. Valid options:
-            'annual': Annual financial reports.
-            'quarterly': Quarterly financial reports.
-            'ttm': Trailing-Twelve-Months (TTM) reports.
-
-    :param index:
-        Column-name to use for the date-index: REPORT_DATE or PUBLISH_DATE.
-
-    :return:
-        Pandas DataFrame with the data.
-    """
-    return load_fundamental(dataset='cashflow', variant=variant,
-                            index=index, *args, **kwargs)
-
+##########################################################################
+# Wrapper-functions for loading other datasets.
 
 def load_companies(index=TICKER, *args, **kwargs):
     """

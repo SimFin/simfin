@@ -3,8 +3,10 @@ __version__ = "0.1.0"
 
 # Expose the following as top-level imports.
 
-from simfin.bulk import load, load_income, load_balance, load_cashflow
-from simfin.bulk import load_shareprices, load_companies, load_industries
+from simfin.bulk import load, load_shareprices, load_companies, load_industries
+from simfin.bulk import load_income, load_income_banks, load_income_insurance
+from simfin.bulk import load_balance, load_balance_banks, load_balance_insurance
+from simfin.bulk import load_cashflow, load_cashflow_banks, load_cashflow_insurance
 
 from simfin.resample import resample, resample_daily
 

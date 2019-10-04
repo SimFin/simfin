@@ -12,9 +12,9 @@ enough for a small group of friends and experienced SimFin users to try out.
 -   Check all column-names and update `names.py` (Magnus)
 -   Split bulk-data into markets (usa, uk, de, etc.) and make API support
     for it using e.g. markets=usa (Thomas and Magnus)
--   Make API support for different data-columns e.g. columns=all/subset
+-   <del>Make API support for different data-columns e.g. columns=all/subset
     where free datasets have a subset of all the data-columns. Also try
-    and find a more elegant solution. (Thomas and Magnus)
+    and find a more elegant solution. (Thomas and Magnus)</del>
 -   Fix the serious and obvious problems with the datasets e.g. negative
     Revenue. If it is too difficult to find the bug, then just black-list
     problematic companies for now, and re-include them in the future when

@@ -42,7 +42,9 @@ datasets_all = datasets_income + datasets_balance + datasets_cashflow + \
 # Variants.
 
 # Lists of the variant-choices for different types of datasets.
-variants_fundamental = ['annual', 'quarterly', 'ttm']
+variants_fundamental = ['annual', 'annual-full',
+                        'quarterly', 'quarterly-full',
+                        'ttm', 'ttm-full']
 variants_shareprices = ['daily']
 variants_none = [None]
 
@@ -64,33 +66,6 @@ valid_variants = \
         'shareprices': variants_shareprices,
         'companies': variants_none,
         'industries': variants_none,
-    }
-
-##########################################################################
-# Columns.
-
-# Lists of the possible column-choices for different types of datasets.
-columns_fundamental = ['subset', 'all']
-columns_none = [None]
-
-# Dict for easy lookup of the valid columns for a given dataset name.
-valid_columns = \
-    {
-        'income': columns_fundamental,
-        'income-banks': columns_fundamental,
-        'income-insurance': columns_fundamental,
-
-        'balance': columns_fundamental,
-        'balance-banks': columns_fundamental,
-        'balance-insurance': columns_fundamental,
-
-        'cashflow': columns_fundamental,
-        'cashflow-banks': columns_fundamental,
-        'cashflow-insurance': columns_fundamental,
-
-        'shareprices': columns_none,
-        'companies': columns_none,
-        'industries': columns_none,
     }
 
 ##########################################################################

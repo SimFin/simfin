@@ -203,8 +203,10 @@ def _download(*args, **kwargs):
             # Create local file and copy data from the server.
             with open(download_path, 'wb') as file:
                 # Read the data in chunks from the server.
-                # The chunk_size is set automatically when None.
-                for chunk in response.iter_content(chunk_size=None):
+                # The chunk_size is set automatically if None,
+                # but this can result in large files being downloaded
+                # as one big chunk, so the progress is not shown.
+                for chunk in response.iter_content(chunk_size=16384):
                     # Write the chunk to file.
                     file.write(chunk)
 

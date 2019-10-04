@@ -16,10 +16,11 @@ from simfin.exceptions import ServerException
 import pandas as pd
 import zipfile
 import requests
-import functools
 import sys
 import os
 import time
+
+from functools import partial
 from datetime import timedelta
 
 ##########################################################################
@@ -401,124 +402,79 @@ def load(dataset, variant=None, market=None,
     return df
 
 ##########################################################################
-# Wrapper-functions for loading datasets with Fundamental Data, that is,
+# Specialized functions for loading datasets with fundamental data:
 # Income Statements, Balance Sheets and Cash-Flow Statements.
 
-def load_fundamental(index=REPORT_DATE, *args, **kwargs):
-    """
-    Load fundamental financial data such as Income Statements, Balance Sheets,
-    or Cash-Flow Statements. This is a simple wrapper for the load() function,
-    which has a complete description of the valid parameters.
+# These are implemented very easily using functools.partial() which sets
+# some of the args in the load() function above. These args can still be
+# changed when the user calls the specialized functions.
 
-    This wrapper just ensures that the DataFrame is indexed by TICKER and
-    either REPORT_DATE or PUBLISH_DATE, and that those dates are also parsed.
+# Common doc-string for all the specialized load-functions.
+_DOC_LOAD = ' See simfin.load() for valid args.'
 
-    :param index:
-        Column-name to use for the date-index: REPORT_DATE or PUBLISH_DATE.
-
-    :return:
-        Pandas DataFrame with the data.
-    """
-    return load(index=[TICKER, index],
-                parse_dates=[REPORT_DATE, PUBLISH_DATE],
-                *args, **kwargs)
-
-# The following are specializations of load_fundamental for different datasets.
-# Note that the doc-strings are not properly set in those functions, so you
-# have to lookup the valid args from load_fundamental() and load() above.
+# Load fundamental data i.e. Income Statements, Balance Sheets, Cash-Flow Stmt.
+# This is used by load_income(), load_balance(), load_cashflow(), etc. because
+# they all set the same args in load().
+load_fundamental = partial(load, index=[TICKER, REPORT_DATE],
+                           parse_dates=[REPORT_DATE, PUBLISH_DATE])
+load_fundamental.__doc__ = 'Load fundamental data such as Income Statements, ' \
+                           'Balance Sheets, or Cash-Flow Statements.' + _DOC_LOAD
 
 # Load Income Statements for all companies except banks and insurance companies.
-load_income = functools.partial(load_fundamental, dataset='income')
-load_income.__doc__ = "Load Income Statements for all companies except banks " \
-                      "and insurance companies. See simfin.load() for valid args."
+load_income = partial(load_fundamental, dataset='income')
+load_income.__doc__ = 'Load Income Statements for all companies except banks ' \
+                      'and insurance companies.' + _DOC_LOAD
 
 # Load Income Statements for banks.
-load_income_banks = functools.partial(load_fundamental,
-                                      dataset='income-banks')
-load_income_banks.__doc__ = "Load Income Statements for banks. " \
-                            "See simfin.load() for valid args."
+load_income_banks = partial(load_fundamental, dataset='income-banks')
+load_income_banks.__doc__ = 'Load Income Statements for banks.' + _DOC_LOAD
 
 # Load Income Statements for insurance companies.
-load_income_insurance = functools.partial(load_fundamental,
-                                          dataset='income-insurance')
-load_income_insurance.__doc__ = "Load Income Statements for insurance " \
-                                "companies. See simfin.load() for valid args."
+load_income_insurance = partial(load_fundamental, dataset='income-insurance')
+load_income_insurance.__doc__ = 'Load Income Statements for insurance ' \
+                                'companies.' + _DOC_LOAD
 
 # Load Balance Sheets for all companies except banks and insurance companies.
-load_balance = functools.partial(load_fundamental, dataset='balance')
-load_balance.__doc__ = "Load Balance Sheets for all companies except banks and " \
-                       "insurance companies. See simfin.load() for valid args."
+load_balance = partial(load_fundamental, dataset='balance')
+load_balance.__doc__ = 'Load Balance Sheets for all companies except banks ' \
+                       'and insurance companies.' + _DOC_LOAD
 
 # Load Balance Sheets for banks.
-load_balance_banks = functools.partial(load_fundamental,
-                                       dataset='balance-banks')
-load_balance_banks.__doc__ = "Load Balance Sheets for banks. " \
-                             "See simfin.load() for valid args."
+load_balance_banks = partial(load_fundamental, dataset='balance-banks')
+load_balance_banks.__doc__ = 'Load Balance Sheets for banks.' + _DOC_LOAD
 
 # Load Balance Sheets for insurance companies.
-load_balance_insurance = functools.partial(load_fundamental,
-                                           dataset='balance-insurance')
-load_balance_insurance.__doc__ = "Load Balance Sheets for insurance companies. " \
-                                 "See simfin.load() for valid args."
+load_balance_insurance = partial(load_fundamental, dataset='balance-insurance')
+load_balance_insurance.__doc__ = 'Load Balance Sheets for insurance companies.' + _DOC_LOAD
 
 # Load Cash-Flow Statements for all companies except banks and insurance companies.
-load_cashflow = functools.partial(load_fundamental, dataset='cashflow')
-load_cashflow.__doc__ = "Load Cash-Flow Statements for all companies except banks " \
-                        "and insurance companies. See simfin.load() for valid args."
+load_cashflow = partial(load_fundamental, dataset='cashflow')
+load_cashflow.__doc__ = 'Load Cash-Flow Statements for all companies except ' \
+                        'banks and insurance companies.' + _DOC_LOAD
 
 # Load Cash-Flow Statements for banks.
-load_cashflow_banks = functools.partial(load_fundamental,
-                                        dataset='cashflow-banks')
-load_cashflow_banks.__doc__ = "Load Cash-Flow Statements for banks. " \
-                              "See simfin.load() for valid args."
+load_cashflow_banks = partial(load_fundamental, dataset='cashflow-banks')
+load_cashflow_banks.__doc__ = 'Load Cash-Flow Statements for banks.' + _DOC_LOAD
 
 # Load Cash-Flow Statements for insurance companies.
-load_cashflow_insurance = functools.partial(load_fundamental,
-                                            dataset='cashflow-insurance')
-load_cashflow_insurance.__doc__ = "Load Cash-Flow Statements for insurance " \
-                                  "companies. See simfin.load() for valid args."
+load_cashflow_insurance = partial(load_fundamental, dataset='cashflow-insurance')
+load_cashflow_insurance.__doc__ = 'Load Cash-Flow Statements for insurance ' \
+                                  'companies.' + _DOC_LOAD
 
 ##########################################################################
-# Wrapper-functions for loading other datasets.
+# Specialized functions for loading other datasets.
 
-def load_companies(index=TICKER, *args, **kwargs):
-    """
-    Load details about companies.
-    This is a simple wrapper for the load() function.
+# Load details about companies.
+load_companies = partial(load, dataset='companies', index=TICKER)
+load_companies.__doc__ = 'Load details about companies.' + _DOC_LOAD
 
-    :param index:
-        Column-name to use for the index: TICKER or SIMFIN_ID.
+# Load details about industries and sectors.
+load_industries = partial(load, dataset='industries', index=INDUSTRY_ID)
+load_industries.__doc__ = 'Load details about industries and sectors.' + _DOC_LOAD
 
-    :return:
-        Pandas DataFrame with the data.
-    """
-    return load(dataset='companies', index=index, *args, **kwargs)
-
-
-def load_industries(*args, **kwargs):
-    """
-    Load details about industries and sectors.
-    This is a simple wrapper for the load() function.
-
-    :return:
-        Pandas DataFrame with the data.
-    """
-    return load(dataset='industries', index=INDUSTRY_ID, *args, **kwargs)
-
-
-def load_shareprices(variant='daily', *args, **kwargs):
-    """
-    Load all share-prices. This is a simple wrapper for the load() function.
-
-    :param variant:
-        String with the dataset variant. Valid options:
-            'daily': Daily share-prices.
-
-    :return:
-        Pandas DataFrame with the data.
-    """
-    return load(dataset='shareprices', variant=variant,
-                index=[TICKER, DATE], parse_dates=[DATE],
-                *args, **kwargs)
+# Load share-prices.
+load_shareprices = partial(load, dataset='shareprices', variant='daily',
+                           index=[TICKER, DATE], parse_dates=[DATE])
+load_shareprices.__doc__ = 'Load share-prices.' + _DOC_LOAD
 
 ##########################################################################

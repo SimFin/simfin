@@ -47,9 +47,9 @@ for the general public to try out.
     unique)? Delisted tickers can be renamed XYZ1, XYZ2, etc. What
     about GOOG, is it an error it has two SIMFIN_ID's? (Thomas and Magnus)
 
--   Allow sf.load_fundamentals() to index by SIMFIN_ID instead of TICKER?
+-   <del>Allow sf.load_fundamentals() to index by SIMFIN_ID instead of TICKER?
     This is only really necessary if tickers are not always unique.
-    How can it be done most elegantly? (Magnus)
+    How can it be done most elegantly? (Magnus)</del>
 
 -   Document the most important names for data-columns in Income Statements,
     Balance Sheets, Cash-Flow Statements, etc. as found in `names.py`

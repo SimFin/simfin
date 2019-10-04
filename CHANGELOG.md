@@ -7,7 +7,8 @@ experienced users of SimFin.
 
 ### Changes
 
-- Added specialized load-functions for banks and insurance companies.
+-   Added bulk-data load-functions for banks and insurance companies.
+-   Changed all specialized bulk-data load-functions to use functools.partial.
 
 
 ## Version 0.1.0 (2019-09-26)

@@ -11,6 +11,7 @@
 from simfin.names import TICKER, REPORT_DATE
 
 import pandas as pd
+import functools
 
 ##########################################################################
 
@@ -97,15 +98,11 @@ def resample(df, rule='D', method='ffill',
     return df_resampled
 
 
-def resample_daily(*args, **kwargs):
-    """
-    Resample a Pandas DataFrame or Series to daily data. This is typically
-    used for upsampling quarterly or annual financial data.
-
-    This is a simple wrapper for the `resample` function and has the same
-    arguments, except for `rule` which has been set to 'D' for daily.
-    """
-
-    return resample(rule='D', *args, **kwargs)
+# Function for resampling to daily data.
+resample_daily = functools.partial(resample, rule='D')
+resample_daily.__doc__ = 'Resample a Pandas DataFrame or Series to daily ' \
+                         'data. This is typically used for upsampling ' \
+                         'quarterly or annual financial data. ' \
+                         'See simfin.resample() for valid args.'
 
 ##########################################################################

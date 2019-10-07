@@ -60,7 +60,7 @@ for the general public to try out.
     quality. (Thomas)
 
 
-## Future Versions
+## Feature Wishlist
 
 -   Document the remaining names for data-columns in Income Statements,
     Balance Sheets, Cash-Flow Statements, etc. as found in `names.py`
@@ -74,5 +74,22 @@ for the general public to try out.
 
 -   Helper-function for calculating returns and annualized returns.
 
+-   Helper-functions for calculating ROA / ROE / Profit Margin / etc.
+
 -   Tutorial for a simple stock-screener using 'shareprices-latest'
     and basic valuation ratios such as P/E, Sales Growth, and ROE.
+
+
+## Dataset Wishlist
+
+-   Other data from US SEC such as insider trading for companies, and
+    the portfolios of hedge-funds.
+
+-   Consumer Price Index (CPI) from https://www.bls.gov/cpi/data.htm
+    It would be nice to have this in the SimFin database so it could
+    be loaded with e.g. `sf.load_cpi(variant='all-urban-consumers')`
+
+-   US Gov. Bond yields from e.g. https://www.federalreserve.gov/datadownload/Choose.aspx?rel=H15
+    It might be a good idea to combine all the different bond maturities
+    into a single CSV-file and give the columns descriptive names,
+    instead of only having a single bond-maturity in each CSV-file.

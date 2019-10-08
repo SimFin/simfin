@@ -11,7 +11,9 @@
 ##########################################################################
 
 import simfin as sf
+
 from collections import defaultdict
+import sys
 
 ##########################################################################
 # Datasets.
@@ -112,11 +114,22 @@ def load_all_datasets(*args, **kwargs):
 
     # For all possible datasets and variants.
     for dataset, variant in iter_all_datasets():
-        # Load the dataset and variant as a Pandas DataFrame.
-        df = sf.load(dataset=dataset, variant=variant, *args, **kwargs)
+        try:
+            # Load the dataset and variant as a Pandas DataFrame.
+            df = sf.load(dataset=dataset, variant=variant, *args, **kwargs)
 
-        # Add the Pandas DataFrame to the nested dict-dict.
-        dfs[dataset][variant] = df
+            # Add the Pandas DataFrame to the nested dict-dict.
+            dfs[dataset][variant] = df
+        except Exception as e:
+            # Exceptions can occur e.g. if the API key is invalid, or if there
+            # is another server error, or if there is no internet connection.
+
+            # Print the exception and continue.
+            print(e, file=sys.stderr)
+
+            # Set the Pandas DataFrame to None in the nested dict-dict,
+            # to indicate that it could not be loaded.
+            dfs[dataset][variant] = None
 
     # Convert and return the nested defaultdict to a normal dict-dict.
     return dict(dfs)

@@ -347,7 +347,8 @@ def load(dataset, variant=None, market=None,
             'ttm': Trailing-Twelve-Months (TTM) reports.
 
         Valid options for shareprices:
-            'daily': Daily share-prices.
+            'latest': Latest share-prices (small data-file).
+            'daily': Daily share-prices (large data-file).
 
     :param market:
         String for the market e.g. 'USA' or 'UK'.
@@ -475,7 +476,7 @@ load_industries = partial(load, dataset='industries', index=INDUSTRY_ID)
 load_industries.__doc__ = 'Load details about industries and sectors.' + _DOC_LOAD
 
 # Load share-prices.
-load_shareprices = partial(load, dataset='shareprices', variant='daily',
+load_shareprices = partial(load, dataset='shareprices', variant='latest',
                            index=[TICKER, DATE], parse_dates=[DATE])
 load_shareprices.__doc__ = 'Load share-prices.' + _DOC_LOAD
 

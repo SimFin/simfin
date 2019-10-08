@@ -20,10 +20,10 @@ enough for a small group of friends and experienced SimFin users to try out.
     problematic companies for now, and re-include them in the future when
     the data has been fixed. (Thomas)
 -   <del>Make API support for datasets: 'income-banks', 'income-insurance', etc. (Magnus)</del>
--   Make a new variant 'latest' of dataset 'shareprices' which only contains
+-   <del>Make a new variant 'latest' of dataset 'shareprices' which only contains
     the data for the most recent trading day. This can be used to make a
     simple stock-screener, without having to download the entire dataset
-    for shareprices every single day. (Thomas and Magnus)
+    for shareprices every single day. (Thomas and Magnus)</del>
 -   Update Python API and tutorial with all the new features. (Magnus)
 
 

@@ -11,6 +11,7 @@ experienced users of SimFin.
 -   Changed all specialized bulk-data load-functions to use functools.partial.
 -   Added 'full' variants for datasets: income, balance, cashflow.
     The 'full' variant has more columns than the 'free' variant.
+-   Added 'shareprices-latest' dataset variant.
 
 
 ## Version 0.1.0 (2019-09-26)

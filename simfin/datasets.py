@@ -45,7 +45,7 @@ datasets_all = datasets_income + datasets_balance + datasets_cashflow + \
 variants_fundamental = ['annual', 'annual-full',
                         'quarterly', 'quarterly-full',
                         'ttm', 'ttm-full']
-variants_shareprices = ['daily']
+variants_shareprices = ['latest', 'daily']
 variants_none = [None]
 
 # Dict for easy lookup of the valid variants for a given dataset.

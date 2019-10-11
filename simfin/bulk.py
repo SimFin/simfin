@@ -44,11 +44,11 @@ def _compose_filename(dataset, market=None, variant=None, extension=None):
     if market is None:
         filename = dataset
     else:
-        filename = "{}-{}".format(market.lower(), dataset.lower())
+        filename = "{}-{}".format(market, dataset)
 
     # Add variant to filename.
     if variant is not None:
-        filename = "{}-{}".format(filename, variant.lower())
+        filename = "{}-{}".format(filename, variant)
 
     # Add extension to filename.
     if extension is not None:
@@ -328,7 +328,7 @@ def load(dataset, variant=None, market=None,
     is automatically downloaded from the SimFin server.
 
     :param dataset:
-        String with the name of the dataset. Examples:
+        String with the name of the dataset (always lowercase). Examples:
             'income': Income statements.
             'balance': Balance sheets.
             'cashflow': Cash-flow statements.
@@ -340,18 +340,20 @@ def load(dataset, variant=None, market=None,
         link ???
 
     :param variant:
-        String with the dataset variant. Valid options depends on the dataset.
-        Valid options for fundamental data:
+        String with the dataset's variant (always lowercase).
+        Valid options depends on the dataset.
+
+        Valid options for datasets 'income', 'balance', and 'cashflow':
             'annual': Annual financial reports.
             'quarterly': Quarterly financial reports.
             'ttm': Trailing-Twelve-Months (TTM) reports.
 
-        Valid options for shareprices:
+        Valid options for dataset 'shareprices':
             'latest': Latest share-prices (small data-file).
             'daily': Daily share-prices (large data-file).
 
     :param market:
-        String for the market e.g. 'USA' or 'UK'.
+        String for the dataset's market (always lowercase).
 
         Currently not supported on the SimFin server and should be set to None.
 
@@ -379,6 +381,15 @@ def load(dataset, variant=None, market=None,
     :return:
         Pandas DataFrame with the data.
     """
+
+    assert dataset is not None
+
+    # Convert dataset name, variant, and market to lower-case.
+    dataset = dataset.lower()
+    if variant is not None:
+        variant = variant.lower()
+    if market is not None:
+        market = market.lower()
 
     # Download file if it does not exist on local disk, or if it is too old.
     _maybe_download(dataset=dataset, variant=variant, market=market,

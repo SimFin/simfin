@@ -9,7 +9,7 @@
 ##########################################################################
 
 import simfin as sf
-from simfin.datasets import iter_all_datasets, valid_variants
+from simfin.datasets import iter_all_datasets, valid_variants, valid_markets
 
 ##########################################################################
 # Test configuration.
@@ -24,49 +24,85 @@ sf.load_api_key(path='~/simfin_api_key.txt', default_key='free')
 refresh_days = 30
 
 ##########################################################################
+# Helper functions.
+
+def _create_kwargs(variant, market):
+    """
+    Create a dict with keyword args for sf.load() functions that take
+    variant, market and refresh_days as kwargs.
+    """
+    kwargs = \
+        {
+            'variant': variant,
+            'market': market,
+            'refresh_days': refresh_days,
+        }
+
+    return kwargs
+
+##########################################################################
 # Test functions.
 
 def test_load():
     """Test simfin.bulk.load()"""
-    for dataset, variant in iter_all_datasets():
+    for dataset, variant, market in iter_all_datasets():
         sf.bulk.load(dataset=dataset,
                      variant=variant,
+                     market=market,
                      refresh_days=refresh_days)
 
 
 def test_load_income():
     """Test simfin.bulk.load_income()"""
-    for variant in valid_variants['income']:
-        sf.bulk.load_income(variant=variant, refresh_days=refresh_days)
-        sf.bulk.load_income_banks(variant=variant, refresh_days=refresh_days)
-        sf.bulk.load_income_insurance(variant=variant, refresh_days=refresh_days)
+    dataset = 'income'
+    for variant in valid_variants[dataset]:
+        for market in valid_markets[dataset]:
+            kwargs = _create_kwargs(variant=variant, market=market)
+
+            sf.bulk.load_income(**kwargs)
+            sf.bulk.load_income_banks(**kwargs)
+            sf.bulk.load_income_insurance(**kwargs)
 
 
 def test_load_balance():
     """Test simfin.bulk.load_balance()"""
-    for variant in valid_variants['balance']:
-        sf.bulk.load_balance(variant=variant, refresh_days=refresh_days)
-        sf.bulk.load_balance_banks(variant=variant, refresh_days=refresh_days)
-        sf.bulk.load_balance_insurance(variant=variant, refresh_days=refresh_days)
+    dataset = 'balance'
+    for variant in valid_variants[dataset]:
+        for market in valid_markets[dataset]:
+            kwargs = _create_kwargs(variant=variant, market=market)
+
+            sf.bulk.load_balance(**kwargs)
+            sf.bulk.load_balance_banks(**kwargs)
+            sf.bulk.load_balance_insurance(**kwargs)
 
 
 def test_load_cashflow():
     """Test simfin.bulk.load_cashflow()"""
-    for variant in valid_variants['cashflow']:
-        sf.bulk.load_cashflow(variant=variant, refresh_days=refresh_days)
-        sf.bulk.load_cashflow_banks(variant=variant, refresh_days=refresh_days)
-        sf.bulk.load_cashflow_insurance(variant=variant, refresh_days=refresh_days)
+    dataset = 'cashflow'
+    for variant in valid_variants[dataset]:
+        for market in valid_markets[dataset]:
+            kwargs = _create_kwargs(variant=variant, market=market)
+
+            sf.bulk.load_cashflow(**kwargs)
+            sf.bulk.load_cashflow_banks(**kwargs)
+            sf.bulk.load_cashflow_insurance(**kwargs)
 
 
 def test_load_shareprices():
     """Test simfin.bulk.load_shareprices()"""
-    for variant in valid_variants['shareprices']:
-        sf.bulk.load_shareprices(variant=variant, refresh_days=refresh_days)
+    dataset = 'shareprices'
+    for variant in valid_variants[dataset]:
+        for market in valid_markets[dataset]:
+            kwargs = _create_kwargs(variant=variant, market=market)
+
+            sf.bulk.load_shareprices(**kwargs)
 
 
 def test_load_companies():
     """Test simfin.bulk.load_companies()"""
-    sf.bulk.load_companies(refresh_days=refresh_days)
+    dataset = 'companies'
+    for market in valid_markets[dataset]:
+        sf.bulk.load_companies(market=market, refresh_days=refresh_days)
 
 
 def test_load_industries():

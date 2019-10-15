@@ -11,6 +11,7 @@
 
 from simfin.config import get_data_dir, get_download_dir, get_api_key
 from simfin.names import TICKER, DATE, REPORT_DATE, PUBLISH_DATE, INDUSTRY_ID
+from simfin.names import MARKET_ID
 from simfin.exceptions import ServerException
 
 import pandas as pd
@@ -355,7 +356,16 @@ def load(dataset, variant=None, market=None,
     :param market:
         String for the dataset's market (always lowercase).
 
-        Currently not supported on the SimFin server and should be set to None.
+        This is used to group the entire database into smaller sections
+        for individual markets such as USA, Germany, etc.
+
+        Examples of valid options:
+            'us': USA
+            'de': Germany
+            'sg': Singapore
+
+        Some datasets such as 'industries' do not support the market-keyword
+        and will generate a server-error.
 
     :param parse_dates:
         String or list of strings with column-names that contain dates
@@ -429,7 +439,7 @@ _DOC_LOAD = ' See simfin.load() for valid args.'
 # Load fundamental data i.e. Income Statements, Balance Sheets, Cash-Flow Stmt.
 # This is used by load_income(), load_balance(), load_cashflow(), etc. because
 # they all set the same args in load().
-load_fundamental = partial(load, index=[TICKER, REPORT_DATE],
+load_fundamental = partial(load, market='us', index=[TICKER, REPORT_DATE],
                            parse_dates=[REPORT_DATE, PUBLISH_DATE])
 load_fundamental.__doc__ = 'Load fundamental data such as Income Statements, ' \
                            'Balance Sheets, or Cash-Flow Statements.' + _DOC_LOAD
@@ -479,15 +489,19 @@ load_cashflow_insurance.__doc__ = 'Load Cash-Flow Statements for insurance ' \
 # Specialized functions for loading other datasets.
 
 # Load details about companies.
-load_companies = partial(load, dataset='companies', index=TICKER)
+load_companies = partial(load, dataset='companies', market='us', index=TICKER)
 load_companies.__doc__ = 'Load details about companies.' + _DOC_LOAD
+
+# Load details about markets.
+load_markets = partial(load, dataset='markets', index=MARKET_ID)
+load_markets.__doc__ = 'Load details about markets.' + _DOC_LOAD
 
 # Load details about industries and sectors.
 load_industries = partial(load, dataset='industries', index=INDUSTRY_ID)
 load_industries.__doc__ = 'Load details about industries and sectors.' + _DOC_LOAD
 
 # Load share-prices.
-load_shareprices = partial(load, dataset='shareprices', variant='latest',
+load_shareprices = partial(load, dataset='shareprices', variant='latest', market='us',
                            index=[TICKER, DATE], parse_dates=[DATE])
 load_shareprices.__doc__ = 'Load share-prices.' + _DOC_LOAD
 

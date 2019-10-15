@@ -154,6 +154,12 @@ SHARE_DIVIDENDS = 'Dividends'
 COMPANY_NAME = 'Company Name'
 
 ##########################################################################
+
+MARKET_ID = 'MarketId'
+
+MARKET_NAME = 'Market Name'
+
+##########################################################################
 # Sector and Industry.
 
 # Unique ID for an industry in the SimFin database.
@@ -171,6 +177,9 @@ SECTOR = 'Sector'
 
 # Sales / Number of Shares.
 SALES_PER_SHARE = 'Sales Per Share'
+
+# Net Income / Number of Shares.
+EARNINGS_PER_SHARE = 'Earnings Per Share'
 
 # Price / Earnings Ratio.
 PE = 'P/E'

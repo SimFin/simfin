@@ -328,23 +328,47 @@ def load(dataset, variant=None, market=None,
     If the dataset does not exist on local disk, or if it is too old, then it
     is automatically downloaded from the SimFin server.
 
+    This is the main function for downloading and loading datasets. It is
+    specialized in several so-called partial function definitions below,
+    such as load_income() and load_shareprices(), which merely set some of
+    the arguments in this function for convenience.
+
+    A dataset is specified by its name e.g. 'income' for Income Statements,
+    its variant e.g. 'annual' for annual reports, and the market e.g. 'us'
+    for USA. All datasets have a name, but only some of them have options
+    for variants and markets. For a full list of available datasets see:
+    ??? link to simfin website with definition of all datasets, variants, etc.
+
+    All datasets are saved on disk as CSV-files, where the columns define
+    the data-items such as Ticker, Revenue and Net Income, and the rows are
+    data-points or records. The number of columns is typically fairly small
+    (less than 100) but the number of rows may be thousands or even millions.
+
+    This function can automatically parse and convert columns that contain
+    strings with dates into proper date-types. You do this by passing the
+    column-names as the argument `parse_dates`.
+
+    This function can also use one or more of the columns as an index for
+    the resulting Pandas DataFrame. You do this by passing the column-names
+    as the argument `index`. The index will be sorted in ascending order.
+
     :param dataset:
-        String with the name of the dataset (always lowercase). Examples:
+        String with the name of the dataset (always lowercase).
+
+        Examples:
             'income': Income statements.
             'balance': Balance sheets.
             'cashflow': Cash-flow statements.
             'shareprices': Share-prices.
             'companies': Company details.
             'industries': Sector and industry details.
-
-        Complete list of datasets:
-        link ???
+            'markets': Market details.
 
     :param variant:
         String with the dataset's variant (always lowercase).
-        Valid options depends on the dataset.
+        The valid options depends on the dataset.
 
-        Valid options for datasets 'income', 'balance', and 'cashflow':
+        Examples for datasets 'income', 'balance', and 'cashflow':
             'annual': Annual financial reports.
             'quarterly': Quarterly financial reports.
             'ttm': Trailing-Twelve-Months (TTM) reports.
@@ -365,7 +389,7 @@ def load(dataset, variant=None, market=None,
             'sg': Singapore
 
         Some datasets such as 'industries' do not support the market-keyword
-        and will generate a server-error.
+        and will generate a server-error if the market is set.
 
     :param parse_dates:
         String or list of strings with column-names that contain dates
@@ -376,6 +400,7 @@ def load(dataset, variant=None, market=None,
 
     :param index:
         String or list of strings with column-names that will be used as index.
+        The index will automatically be sorted in ascending order.
 
     :param refresh_days:
         Integer with the number of days before data is downloaded again.

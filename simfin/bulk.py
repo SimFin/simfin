@@ -158,13 +158,13 @@ def _print_download_progress(downloaded_size, total_size):
         pct_complete = min(1.0, pct_complete)
 
         # Status-message. Note the \r which means the line should overwrite itself.
-        msg = "\r- Download progress: {0:.1%}".format(pct_complete)
+        msg = '\r- Download progress: {0:.1%}'.format(pct_complete)
     else:
         # Show the progress as number of bytes downloaded,
         # because the total size is unknown.
 
         # Status-message. Note the \r which means the line should overwrite itself.
-        msg = "\r- Downloaded bytes: {0:,}".format(downloaded_size)
+        msg = '\r- Downloaded bytes: {0:,}'.format(downloaded_size)
 
     # Print the status-message.
     sys.stdout.write(msg)
@@ -267,7 +267,7 @@ def _maybe_download(refresh_days, *args, **kwargs):
         download = True
 
         # Status message.
-        msg = "Dataset \"{}\" is being downloaded ... "
+        msg = 'Dataset \"{}\" downloading ... '
         msg = msg.format(dataset_name)
 
     elif os.path.exists(path):
@@ -285,10 +285,10 @@ def _maybe_download(refresh_days, *args, **kwargs):
 
         # status message.
         if download:
-            msg = "Dataset \"{}\" on disk is {} days old, downloading new file ... "
+            msg = 'Dataset \"{}\" on disk ({} days old), downloading new ...'
             msg = msg.format(dataset_name, time_dif.days)
         else:
-            msg = "Loading \"{}\" from disk ({} days old)."
+            msg = 'Dataset \"{}\" on disk ({} days old), loading.'
             msg = msg.format(dataset_name, time_dif.days)
 
     else:
@@ -296,7 +296,7 @@ def _maybe_download(refresh_days, *args, **kwargs):
         download = True
 
         # Status message.
-        msg = "Dataset \"{}\" does not exist on disk, downloading ... "
+        msg = 'Dataset \"{}\" not on disk, downloading ...'
         msg = msg.format(dataset_name)
 
     # Print status message.
@@ -307,13 +307,13 @@ def _maybe_download(refresh_days, *args, **kwargs):
         download_path = _download(*args, **kwargs)
 
         # Print status message.
-        print("\n- Extracting zip-file: ", end="")
+        print('\n- Extracting zip-file: ', end="")
 
         # Unpack the zip-file to the data_dir.
         zipfile.ZipFile(file=download_path, mode="r").extractall(get_data_dir())
 
         # Print status message.
-        print("Done!")
+        print('Done!')
 
     # Return boolean whether the file was downloaded or not.
     return download

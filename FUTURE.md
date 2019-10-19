@@ -40,7 +40,7 @@ for the general public to try out.
 
 -   Create web-page on www.simfin.com with a list of available datasets
     and the difference between free / paid datasets (Thomas).
-    Add link in tutorial and README.md (Magnus).
+    Add link in tutorial and README.md and bulk.py (Magnus).
 
 -   Find solution for handling duplicate tickers. Should the ticker be
     unique within a single market (e.g. all tickers for market=usa are
@@ -59,6 +59,10 @@ for the general public to try out.
 -   Extend the data-tests in `test_bulk_data.ipynb` and improve data
     quality. (Thomas)
 
+-   Create a dataset that contains a list of all available datasets and valid
+    variants and markets. (Thomas) Use it in `datasets.py` to load and iterate
+    over all available datasets, variants and markets. (Magnus)
+
 
 ## Feature Wishlist
 
@@ -66,6 +70,8 @@ for the general public to try out.
     Balance Sheets, Cash-Flow Statements, etc. as found in `names.py`
     Either expand the existing web-page: https://simfin.com/data/help/main?topic=definitions
     or create a wiki on github. (Thomas)
+    Maybe use the first paragraph from sites like this: https://www.accountingtools.com/articles/early-extinguishment-of-debt.html
+    and then provide a link so people can read the rest?
 
 -   Helper-function for calculating per-share numbers e.g. Sales Per Share
     and Earnings Per Share.

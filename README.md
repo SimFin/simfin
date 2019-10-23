@@ -106,12 +106,14 @@ This will create a directory named simfin on your disk. Then you need to
 create a new virtual environment, where you install your local copy of
 the simfin package using these commands:
 
-    source activate simfin-env
+    conda create --name simfin-dev python=3
+    source activate simfin-dev
     cd simfin
     pip install --editable .
 
 You should now be able to edit the files inside the simfin directory and
-use them whenever you have a Python module that imports the simfin package.
+use them whenever you have a Python module that imports the simfin package,
+while you have the virtual environment `simfin-dev` active.
 
 
 ## Testing

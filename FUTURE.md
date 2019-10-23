@@ -9,7 +9,7 @@ enough for a small group of friends and experienced SimFin users to try out.
 
 ### Tasks
 
--   Check all column-names and update `names.py` (Magnus)
+-   <del>Check all column-names and update `names.py` (Magnus)</del>
 -   <del>Split bulk-data into markets (usa, uk, de, etc.) and make API support
     for it using e.g. markets=usa (Thomas and Magnus)</del>
 -   <del>Make API support for different data-columns e.g. columns=all/subset

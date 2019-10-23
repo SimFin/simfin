@@ -679,7 +679,7 @@ TOTAL_INT_INCOME = 'Total Interest Income'
 
 TOTAL_INVEST = 'Total Investments'
 
-TOTAL_LIAB = 'Total Liabilities'
+TOTAL_LIAB = TOTAL_LIABILITIES = 'Total Liabilities'
 
 TOTAL_LIAB_EQUITY = 'Total Liabilities & Equity'
 

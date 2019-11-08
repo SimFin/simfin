@@ -14,6 +14,8 @@ experienced users of SimFin.
 -   Added 'shareprices-latest' dataset variant.
 -   Added support for dataset markets e.g. `sf.load_income(variant='annual', market='us')`
 -   Added a script that generates 'names.py' from the SimFin-server's database.
+-   Improved implementation of `sf.resample()` and also added the functions
+    `sf.reindex()` and `sf.asfreq()`. Also wrote a new tutorial for these.
 
 
 ## Version 0.1.0 (2019-09-26)

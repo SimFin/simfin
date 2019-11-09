@@ -1,9 +1,12 @@
 # Changes to the SimFin Python package
 
-## Version 0.2.0 (2019-MM-DD)
+## Version 0.2.0 (2019-11-09)
 
 "Private" beta version only intended for a small number of friends and
 experienced users of SimFin.
+
+It took us a while to make these changes, because we consider our moves
+very carefully: https://www.youtube.com/watch?v=HxWCAJS7Co8
 
 ### Changes
 

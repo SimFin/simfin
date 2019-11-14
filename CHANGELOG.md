@@ -1,5 +1,16 @@
 # Changes to the SimFin Python package
 
+## Version 0.3.0 (2019-MM-DD)
+
+"Private" beta version only intended for a small number of friends and
+experienced users of SimFin.
+
+### Changes
+
+-   Added function `sf.rel_change()` for calculating stock returns and
+    various growth-rates. Also wrote a new tutorial for this function.
+
+
 ## Version 0.2.0 (2019-11-09)
 
 "Private" beta version only intended for a small number of friends and

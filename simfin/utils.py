@@ -9,7 +9,7 @@
 ##########################################################################
 
 import pandas as pd
-from simfin.names import REPORT_DATE
+from simfin.names import REPORT_DATE, TICKER
 
 ##########################################################################
 
@@ -61,5 +61,69 @@ def add_date_offset(df, index_date=REPORT_DATE, offset=pd.DateOffset(days=90)):
     df2 = df2.set_index(index_date, append=True)
 
     return df2
+
+##########################################################################
+
+def apply(df, func, group_index=TICKER):
+    """
+    Apply a function to a Pandas DataFrame or Series with either a
+    DatetimeIndex or MultiIndex. This is useful when you don't know
+    whether a DataFrame contains data for a single or multiple stocks.
+
+    You write your function to work for a DataFrame with a single stock,
+    and this function lets you apply it to both DataFrames with a single
+    or multiple stocks. The function automatically uses Pandas groupby to
+    split-apply-merge on DataFrames with multiple stocks.
+
+    :param df:
+        Pandas DataFrame or Series assumed to have either a DatetimeIndex
+        or a MultiIndex with 2 indices, one of which is a DatetimeIndex
+        and the other is given by the arg `group_index`.
+
+    :param func:
+        Function to apply on a per-stock or per-group basis.
+        The function is assumed to be of the form:
+
+            def func(df_grp):
+                # df_grp is a Pandas DataFrame with data for a single stock.
+                # Perform some calculation on df_grp and create another
+                # Pandas DataFrame or Series with the result and return it.
+                # For example, we can calculate the cumulative sum:
+                return df_grp.cumsum()
+
+    :param group_index:
+        If `df` has a MultiIndex then group data using this index-column.
+        By default this is TICKER but it could also be e.g. SIMFIN_ID if
+        you are using that as an index in your DataFrame.
+
+    :return:
+        Pandas DataFrame or Series with the result of applying `func`.
+    """
+
+    assert isinstance(df, (pd.DataFrame, pd.Series))
+    assert isinstance(df.index, (pd.DatetimeIndex, pd.MultiIndex))
+
+    # If the DataFrame has a DatetimeIndex.
+    if isinstance(df.index, pd.DatetimeIndex):
+        df_result = func(df)
+
+    # If the DataFrame has a MultiIndex.
+    elif isinstance(df.index, pd.MultiIndex):
+        # Helper-function for a DataFrame with a single group.
+        def _apply_group(df_grp):
+            # Remove group-index (e.g. TICKER) from the MultiIndex.
+            df_grp = df_grp.reset_index(group_index, drop=True)
+
+            # Perform the operation on this group.
+            df_grp_result = func(df_grp)
+
+            return df_grp_result
+
+        # Split the DataFrame into sub-groups and perform
+        # the operation on each sub-group and glue the
+        # results back together into a single DataFrame.
+        df_result = df.groupby(group_index).apply(_apply_group)
+
+    return df_result
 
 ##########################################################################

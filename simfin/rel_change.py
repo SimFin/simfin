@@ -12,6 +12,7 @@
 
 import pandas as pd
 
+from simfin.utils import apply
 from simfin.names import TICKER
 
 ##########################################################################
@@ -220,9 +221,6 @@ def rel_change(df, freq, future, bdays=0, days=0, weeks=0, months=0,
         Pandas DataFrame with the result.
     """
 
-    assert isinstance(df, (pd.DataFrame, pd.Series))
-    assert isinstance(df.index, (pd.DatetimeIndex, pd.MultiIndex))
-
     # Convert the arguments to the equivalent number of periods (int) that
     # the DataFrame must be shifted, and the total number of years (float)
     # that it corresponds to, which is used in the annualized formula below.
@@ -232,44 +230,23 @@ def rel_change(df, freq, future, bdays=0, days=0, weeks=0, months=0,
                                                  quarters=quarters,
                                                  years=years)
 
-    # If the DataFrame has a DatetimeIndex.
-    if isinstance(df.index, pd.DatetimeIndex):
+    # Function to apply on a DataFrame with a single stock.
+    def _rel_change(df_grp):
         # Relative change between past time-step [t-periods] and step [t].
-        # This calculates: df_result[t] = df[t] / df[t-periods]
+        # This calculates: df_grp_result[t] = df_grp[t] / df_grp[t-periods]
         # Note that 1 will be subtracted further below.
-        df_result = df / df.shift(periods=periods)
+        df_grp_result = df_grp / df_grp.shift(periods=periods)
 
         if future:
             # Shift the data to get the relative change between current
             # time-step [t] and future time-step [t+periods].
-            # This calculates: df_result[t] = df[t+periods] / df[t]
-            df_result = df_result.shift(periods=-periods)
+            # This calculates: df_grp_result[t] = df_grp[t+periods] / df_grp[t]
+            df_grp_result = df_grp_result.shift(periods=-periods)
 
-    # If the DataFrame has a MultiIndex.
-    elif isinstance(df.index, pd.MultiIndex):
-        # Helper-function for a DataFrame with a single group.
-        def _rel_change(df_grp):
-            # Remove group-index (e.g. TICKER) from the MultiIndex.
-            df_grp = df_grp.reset_index(group_index, drop=True)
+        return df_grp_result
 
-            # Perform the operation on this group to get the relative
-            # change between the past time-step [t-periods] and step t.
-            # This calculates: df_result[t] = df[t] / df[t-periods]
-            # Note that 1 will be subtracted further below.
-            df_grp = df_grp / df_grp.shift(periods=periods)
-
-            if future:
-                # Shift to get the relative change between current
-                # time-step [t] and future time-step [t+periods].
-                # This calculates: df_result[t] = df[t+periods] / df[t]
-                df_grp = df_grp.shift(periods=-periods)
-
-            return df_grp
-
-        # Split the DataFrame into sub-groups and perform
-        # the operation on each sub-group and glue the
-        # results back together into a single DataFrame.
-        df_result = df.groupby(group_index).apply(_rel_change)
+    # Apply the function and use groupby if DataFrame has multiple stocks.
+    df_result = apply(df=df, func=_rel_change, group_index=group_index)
 
     if annualized:
         # Calculate the annualized change.

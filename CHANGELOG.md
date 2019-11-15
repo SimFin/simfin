@@ -10,6 +10,11 @@ experienced users of SimFin.
 -   Added function `sf.rel_change()` for calculating stock returns and
     various growth-rates. Also wrote a new tutorial for this function.
 
+-   Added function `sf.apply()` for applying a function to a DataFrame
+    with either a single or multiple stocks. Changed `sf.asfreq()`,
+    `sf.resample()`, `sf.reindex()`, and `sf.rel_change()` to use this.
+    Added a section to Tutorial 01 on this.
+
 
 ## Version 0.2.0 (2019-11-09)
 

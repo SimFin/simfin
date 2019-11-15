@@ -8,6 +8,7 @@
 # See README.md for instructions and LICENSE.txt for license details.
 ##########################################################################
 
+from simfin.utils import apply
 from simfin.names import TICKER
 
 import pandas as pd
@@ -93,7 +94,7 @@ def asfreq(df, freq, method=None, group_index=TICKER, **kwargs):
         https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.asfreq.html
 
     :param group_index:
-        If `df` has a MultiIndex then group companies using this index-column.
+        If `df` has a MultiIndex then group data using this index-column.
         By default this is TICKER but it could also be e.g. SIMFIN_ID if
         you are using that as an index in your DataFrame.
 
@@ -107,29 +108,12 @@ def asfreq(df, freq, method=None, group_index=TICKER, **kwargs):
         Resampled DataFrame or Series.
     """
 
-    assert isinstance(df, (pd.DataFrame, pd.Series))
-    assert isinstance(df.index, (pd.DatetimeIndex, pd.MultiIndex))
+    # Function to apply on a DataFrame with a single stock.
+    def _asfreq(df_grp):
+        return df_grp.asfreq(freq=freq, method=method, **kwargs)
 
-    # If the DataFrame has a DatetimeIndex.
-    if isinstance(df.index, pd.DatetimeIndex):
-        df_result = df.asfreq(freq=freq, method=method, **kwargs)
-
-    # If the DataFrame has a MultiIndex.
-    elif isinstance(df.index, pd.MultiIndex):
-        # Helper-function for a DataFrame with a single group.
-        def _asfreq(df_grp):
-            # Remove group-index (e.g. TICKER) from the MultiIndex.
-            df_grp = df_grp.reset_index(group_index, drop=True)
-
-            # Perform the operation on this group.
-            df_grp = df_grp.asfreq(freq=freq, method=method, **kwargs)
-
-            return df_grp
-
-        # Split the DataFrame into sub-groups and perform
-        # the operation on each sub-group and glue the
-        # results back together into a single DataFrame.
-        df_result = df.groupby(group_index).apply(_asfreq)
+    # Apply the function and use groupby if DataFrame has multiple stocks.
+    df_result = apply(df=df, func=_asfreq, group_index=group_index)
 
     return df_result
 
@@ -180,7 +164,7 @@ def resample(df, rule, method='ffill', group_index=TICKER, **kwargs):
         after the resampling, e.g.: method=lambda x: x.nearest(limit=100)
 
     :param group_index:
-        If `df` has a MultiIndex then group companies using this index-column.
+        If `df` has a MultiIndex then group data using this index-column.
         By default this is TICKER but it could also be e.g. SIMFIN_ID if
         you are using that as an index in your DataFrame.
 
@@ -194,34 +178,17 @@ def resample(df, rule, method='ffill', group_index=TICKER, **kwargs):
         Resampled DataFrame or Series.
     """
 
-    assert isinstance(df, (pd.DataFrame, pd.Series))
-    assert isinstance(df.index, (pd.DatetimeIndex, pd.MultiIndex))
-
     # Convert arg `method` to a function that can be called after resampling.
     # For example, if fill_func = lambda x: x.ffill() then we have that
     # fill_func(df.resample()) is equivalent to df.resample().ffill()
     fill_func = _convert_method_arg(method=method)
 
-    # If the DataFrame has a DatetimeIndex.
-    if isinstance(df.index, pd.DatetimeIndex):
-        df_result = fill_func(df.resample(rule=rule, **kwargs))
+    # Function to apply on a DataFrame with a single stock.
+    def _resample(df_grp):
+        return fill_func(df_grp.resample(rule=rule, **kwargs))
 
-    # If the DataFrame has a MultiIndex.
-    elif isinstance(df.index, pd.MultiIndex):
-        # Helper-function for a DataFrame with a single group.
-        def _resample(df_grp):
-            # Remove group-index (e.g. TICKER) from the MultiIndex.
-            df_grp = df_grp.reset_index(group_index, drop=True)
-
-            # Perform the operation on this group.
-            df_grp = fill_func(df_grp.resample(rule=rule, **kwargs))
-
-            return df_grp
-
-        # Split the DataFrame into sub-groups and perform
-        # the operation on each sub-group and glue the
-        # results back together into a single DataFrame.
-        df_result = df.groupby(group_index).apply(_resample)
+    # Apply the function and use groupby if DataFrame has multiple stocks.
+    df_result = apply(df=df, func=_resample, group_index=group_index)
 
     return df_result
 
@@ -305,7 +272,7 @@ def reindex(df_src, df_target, group_index=TICKER, union=True,
         must be a DatetimeIndex. The names of the indices can be different.
 
     :param group_index:
-        If `df_src` and `df_target` have a MultiIndex then group companies
+        If `df_src` and `df_target` have a MultiIndex then group data
         using this index-column. By default this is TICKER but it could also
         be e.g. SIMFIN_ID if you are using that as an index in your DataFrame.
 
@@ -347,7 +314,6 @@ def reindex(df_src, df_target, group_index=TICKER, union=True,
 
     assert isinstance(df_src, (pd.DataFrame, pd.Series))
     assert isinstance(df_target, (pd.DataFrame, pd.Series))
-    assert isinstance(df_src.index, (pd.DatetimeIndex, pd.MultiIndex))
     # This is not a "deep" type comparison. Two MultiIndex could be different.
     assert (type(df_src.index) == type(df_target.index))
 
@@ -364,32 +330,11 @@ def reindex(df_src, df_target, group_index=TICKER, union=True,
         # Only use the index of the target DataFrame.
         new_index = df_target.index
 
-    # If the DataFrame has a DatetimeIndex.
-    if isinstance(df_src.index, pd.DatetimeIndex):
-        df_result = fill_func(df_src.reindex(index=new_index, **kwargs))
+    # Reindex the DataFrame. This works with both DatetimeIndex and MultiIndex.
+    df_result = df_src.reindex(index=new_index, **kwargs)
 
-    # If the DataFrame has a MultiIndex.
-    elif isinstance(df_src.index, pd.MultiIndex):
-        # Helper-function for a DataFrame with a single group.
-        # This is not necessary for some filling-functions such as ffill(),
-        # because they can work directly on the MultiIndex created by the
-        # reindex function. But other filling-function cannot work on a
-        # MultiIndex, so we need to use groupby() and remove TICKER from
-        # the index, so it is just a DatetimeIndex.
-        def _fill(df_grp):
-            # Remove group-index (e.g. TICKER) from the MultiIndex.
-            df_grp = df_grp.reset_index(group_index, drop=True)
-
-            # Perform the operation on this group.
-            df_grp = fill_func(df_grp)
-
-            return df_grp
-
-        # Split the DataFrame into sub-groups and perform
-        # the operation on each sub-group and glue the
-        # results back together into a single DataFrame.
-        df_result = df_src.reindex(index=new_index, **kwargs) \
-                          .groupby(group_index).apply(_fill)
+    # Apply the fill-function and use groupby if DataFrame has multiple stocks.
+    df_result = apply(df=df_result, func=fill_func, group_index=group_index)
 
     # Perform an additional reindex operation to ensure the final
     # result only contains the rows from df_target. This is only

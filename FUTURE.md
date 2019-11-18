@@ -1,32 +1,5 @@
 # The Future of SimFin
 
-## v. 0.2.0 (Private Beta)
-
-### Goal
-
-Make a "private" beta version with the basic features, that is good
-enough for a small group of friends and experienced SimFin users to try out.
-
-### Tasks
-
--   <del>Check all column-names and update `names.py` (Magnus)</del>
--   <del>Split bulk-data into markets (usa, uk, de, etc.) and make API support
-    for it using e.g. markets=usa (Thomas and Magnus)</del>
--   <del>Make API support for different data-columns e.g. columns=all/subset
-    where free datasets have a subset of all the data-columns. Also try
-    and find a more elegant solution. (Thomas and Magnus)</del>
--   Fix the serious and obvious problems with the datasets e.g. negative
-    Revenue. If it is too difficult to find the bug, then just black-list
-    problematic companies for now, and re-include them in the future when
-    the data has been fixed. (Thomas)
--   <del>Make API support for datasets: 'income-banks', 'income-insurance', etc. (Magnus)</del>
--   <del>Make a new variant 'latest' of dataset 'shareprices' which only contains
-    the data for the most recent trading day. This can be used to make a
-    simple stock-screener, without having to download the entire dataset
-    for shareprices every single day. (Thomas and Magnus)</del>
--   Update Python API and tutorial with all the new features. (Magnus)
-
-
 ## v. 0.3.0 (Private Beta)
 
 ### Goal
@@ -42,6 +15,12 @@ general public to try out yet.
     unique within a single market (e.g. all tickers for market=us are
     unique)? Delisted tickers can be renamed XYZ1, XYZ2, etc. What
     about GOOG, is it an error it has the same ticker with two SIMFIN_ID's?
+
+-   **Thomas:** Merge financial data for GOOG and GOOG_OLD, so it is just
+    one company in the database. Is it the same problem for other companies? 
+
+-   <del>**Magnus:** Implement helper-function for calculating growth-rates
+    and stock-returns.</del>
 
 -   **Magnus:** Implement some of the helper-functions on the wishlist.
 
@@ -70,6 +49,9 @@ general public to try out yet.
       because it loads very fast now! But please schedule the generation
       in the cron, so it is automatically done every day. We've made
       some changes to names and shortcuts that aren't currently shown.
+
+    - Write the timestamp when the update-script finishes and show it on
+      the web-page. It would make it easier to diagnose if the cron is down, etc. 
 
     - All the available datasets should be shown e.g. 'markets', 'companies',
       'shareprices' and 'industries'.
@@ -129,7 +111,7 @@ general public to try out yet.
       I don't think the full url should be shown. The only reason people
       need the url, is if they want to build an API for another language,
       but then they're probably clever enough to get the url.
-
+      
 -   **Thomas:** Extend the data-tests in `test_bulk_data.ipynb` and improve data
     quality.
 
@@ -142,10 +124,6 @@ general public to try out yet.
 -   Helper-function for calculating per-share numbers e.g. Sales Per Share
     and Earnings Per Share.
 
--   Helper-function for calculating growth-rates e.g. Sales Growth.
-
--   Helper-function for calculating returns and annualized returns.
-
 -   Helper-functions for calculating ROA / ROE / Profit Margin / etc.
 
 -   Tutorial for a simple stock-screener using 'shareprices-latest'
@@ -154,12 +132,19 @@ general public to try out yet.
 
 ## Dataset Wishlist
 
+-   Share-prices for selected ETF's. These would be a good proxy for e.g.
+    large-cap, mid-cap and small-cap stock indices. It is also easier to
+    calculate the Total Return for ETF-data, because ETF dividends are paid
+    as if it was a regular stock.
+
 -   Other data from US SEC such as insider trading for companies, and
     the portfolios of hedge-funds.
 
 -   Consumer Price Index (CPI) from https://www.bls.gov/cpi/data.htm
     It would be nice to have this in the SimFin database so it could
     be loaded with e.g. `sf.load_cpi(variant='all-urban-consumers')`
+    
+-   Other economic data such as unemployment rates, housing-prices, etc. 
 
 -   US Gov. Bond yields from e.g. https://www.federalreserve.gov/datadownload/Choose.aspx?rel=H15
     It might be a good idea to combine all the different bond maturities

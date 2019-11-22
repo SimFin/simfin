@@ -77,13 +77,7 @@ CASH_REPAY_ST_DEBT = 'Cash from (Repayment of) Short Term Debt, Net'
 
 CASH_REPURCHASE_EQUITY = 'Cash from (Repurchase of) Equity'
 
-CASH_FIN_ACT = 'Cash from Financing Activities'
-
-CASH_INVEST_ACT = 'Cash from Investing Activities'
-
 CASH_LT_DEBT = 'Cash from Long Term Debt'
-
-CASH_OP_ACT = 'Cash from Operating Activities'
 
 CASH_EQUIV_ST_INVEST = 'Cash, Cash Equivalents & Short Term Investments'
 
@@ -93,7 +87,7 @@ CHG_ACCOUNTS_RECV = 'Change in Accounts Receivable'
 
 CHG_CASH_DISCOP_OTHER = 'Change in Cash from Disc. Operations and Other'
 
-CHG_FIX_ASSETS_INT = 'Change in Fixed Assets & Intangibles'
+CAPEX = CHG_FIX_ASSETS_INT = 'Change in Fixed Assets & Intangibles'
 
 CHG_INSURANCE_RESERVES = 'Change in Insurance Reserves'
 
@@ -385,6 +379,12 @@ NET_CASH_DISCOP_INVEST = 'Net Cash from Discontinued Operations (Investing)'
 NET_CASH_DISCOP_OPER = 'Net Cash from Discontinued Operations (Operating)'
 
 NET_CASH_DIVEST = 'Net Cash from Divestitures'
+
+NET_CASH_FIN = 'Net Cash from Financing Activities'
+
+NET_CASH_INV = 'Net Cash from Investing Activities'
+
+NET_CASH_OPS = 'Net Cash from Operating Activities'
 
 NET_CASH_OTHER_ACQ = 'Net Cash from Other Acquisitions'
 

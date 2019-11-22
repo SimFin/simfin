@@ -64,7 +64,7 @@ def add_date_offset(df, index_date=REPORT_DATE, offset=pd.DateOffset(days=90)):
 
 ##########################################################################
 
-def apply(df, func, group_index=TICKER):
+def apply(df, func, group_index=TICKER, **kwargs):
     """
     Apply a function to a Pandas DataFrame or Series with either a
     DatetimeIndex or MultiIndex. This is useful when you don't know
@@ -96,6 +96,9 @@ def apply(df, func, group_index=TICKER):
         By default this is TICKER but it could also be e.g. SIMFIN_ID if
         you are using that as an index in your DataFrame.
 
+    :param **kwargs:
+        Optional keyword-arguments passed to `func`.
+
     :return:
         Pandas DataFrame or Series with the result of applying `func`.
     """
@@ -105,7 +108,7 @@ def apply(df, func, group_index=TICKER):
 
     # If the DataFrame has a DatetimeIndex.
     if isinstance(df.index, pd.DatetimeIndex):
-        df_result = func(df)
+        df_result = func(df, **kwargs)
 
     # If the DataFrame has a MultiIndex.
     elif isinstance(df.index, pd.MultiIndex):
@@ -115,7 +118,7 @@ def apply(df, func, group_index=TICKER):
             df_grp = df_grp.reset_index(group_index, drop=True)
 
             # Perform the operation on this group.
-            df_grp_result = func(df_grp)
+            df_grp_result = func(df_grp, **kwargs)
 
             return df_grp_result
 

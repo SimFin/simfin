@@ -13,7 +13,7 @@ from simfin.names import REPORT_DATE, TICKER
 
 ##########################################################################
 
-def add_date_offset(df, index_date=REPORT_DATE, offset=pd.DateOffset(days=90)):
+def add_date_offset(df, date_index=REPORT_DATE, offset=pd.DateOffset(days=90)):
     """
     Add an offset to the date-index of a Pandas DataFrame.
 
@@ -38,7 +38,7 @@ def add_date_offset(df, index_date=REPORT_DATE, offset=pd.DateOffset(days=90)):
         Pandas DataFrame assumed to have a MultiIndex
         containing dates in a column named `index_date`.
 
-    :param index_date:
+    :param date_index:
         Name of the date-column e.g. REPORT_DATE.
 
     :param offset:
@@ -52,13 +52,13 @@ def add_date_offset(df, index_date=REPORT_DATE, offset=pd.DateOffset(days=90)):
     # Perhaps there is a better way of doing this in Pandas?
 
     # Remove the column with dates from the index.
-    df2 = df.reset_index(index_date)
+    df2 = df.reset_index(date_index)
 
     # Add the offset to the dates.
-    df2[index_date] += offset
+    df2[date_index] += offset
 
     # Reinsert the dates into the index.
-    df2 = df2.set_index(index_date, append=True)
+    df2 = df2.set_index(date_index, append=True)
 
     return df2
 

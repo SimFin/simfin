@@ -15,6 +15,9 @@ experienced users of SimFin.
     `sf.resample()`, `sf.reindex()`, and `sf.rel_change()` to use this.
     Added a section to Tutorial 01 on this.
 
+-   Added several functions for calculating signals from financial data,
+    and wrote a new tutorial for these functions.
+
 
 ## Version 0.2.0 (2019-11-09)
 

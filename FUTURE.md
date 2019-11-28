@@ -132,6 +132,9 @@ general public to try out yet.
 
 ## Dataset Wishlist
 
+-   Add datasets with e.g. Point-In-Time (PIT) data such as [Compustat](https://wrds-www.wharton.upenn.edu/pages/support/data-overview/overview-compustat-preliminary-unrestated-and-point-time-datasets/)
+    Should this be another dataset-variant? Or should the main datasets just be PIT?
+
 -   Share-prices for selected ETF's. These would be a good proxy for e.g.
     large-cap, mid-cap and small-cap stock indices. It is also easier to
     calculate the Total Return for ETF-data, because ETF dividends are paid

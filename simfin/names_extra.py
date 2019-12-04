@@ -50,6 +50,9 @@ DIV_YIELD = 'Dividend Yield'
 # Free Cash Flow.
 FCF = 'Free Cash Flow'
 
+# Earnings Before Interest, Taxes, Depreciation & Amortization.
+EBITDA = 'EBITDA'
+
 # Net Income / Revenue.
 NET_PROFIT_MARGIN = 'Net Profit Margin'
 

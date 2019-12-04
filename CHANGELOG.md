@@ -17,6 +17,8 @@ experienced users of SimFin.
 
 -   Added several functions for calculating signals from financial data,
     and wrote a new tutorial for these functions.
+    
+-   Added function `sf.ebitda` for calculating EBITDA.
 
 
 ## Version 0.2.0 (2019-11-09)

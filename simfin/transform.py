@@ -10,7 +10,7 @@
 
 import pandas as pd
 
-from simfin.names import FCF, NET_CASH_OPS, CAPEX
+from simfin.names import *
 
 ##########################################################################
 
@@ -33,6 +33,54 @@ def free_cash_flow(df_cashflow):
 
     # Rename the result to FCF.
     df_result.rename(FCF, inplace=True)
+
+    return df_result
+
+##########################################################################
+
+def ebitda(df_income, df_cashflow, formula=NET_INCOME):
+    """
+    Calculate 'Earnings Before Interest, Taxes, Depreciation & Amortization'
+    aka. EBITDA from columns in the given DataFrames.
+
+    :param df_income:
+        Pandas DataFrame with Income Statements.
+
+    :param df_cashflow:
+        Pandas DataFrame with Cash-Flow Statements.
+
+    :param formula:
+        String for the formula to use in the EBITDA calculation.
+
+        If `formula=NET_INCOME` then the formula is:
+            EBITDA = Net Income + Interest + Taxes + Depreciation + Amortization
+
+        If `formula=OP_INCOME` then the formula is:
+            EBITDA = Operating Income + Depreciation + Amortization
+
+    :return:
+        Pandas Series with the EBITDA.
+    """
+
+    if formula == OP_INCOME:
+        # Calculate EBITDA using Operating Income formula.
+        df_result = df_income[OP_INCOME].fillna(0) \
+                  + df_cashflow[DEPR_AMOR].fillna(0)
+    elif formula == NET_INCOME:
+        # Calculate EBITDA using Net Income formula.
+        # Note that INTEREST_EXP_NET and INCOME_TAX have negative values
+        # so in order to add them back to Net Income, we have to negate them.
+        df_result = df_income[NET_INCOME].fillna(0) \
+                  - df_income[INTEREST_EXP_NET].fillna(0) \
+                  - df_income[INCOME_TAX].fillna(0) \
+                  + df_cashflow[DEPR_AMOR].fillna(0)
+    else:
+        # Raise exception because of invalid arg.
+        msg = 'arg `formula` was invalid.'
+        raise ValueError(msg)
+
+    # Rename the result.
+    df_result.rename(EBITDA, inplace=True)
 
     return df_result
 

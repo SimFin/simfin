@@ -263,7 +263,7 @@ INCOME_AFFIL_NET_TAX = 'Income (Loss) from Affiliates, Net of Taxes'
 
 INCOME_CONT_OP = 'Income (Loss) from Continuing Operations'
 
-INCOME_TAX_BENEFIT = 'Income Tax (Expense) Benefit, Net'
+INCOME_TAX = 'Income Tax (Expense) Benefit, Net'
 
 INCOME_TAX_RECV = 'Income Taxes Receivable'
 
@@ -442,7 +442,7 @@ NET_REV_PROV = 'Net Revenue after Provisions'
 
 NON_CASH_ITEMS = 'Non-Cash Items'
 
-NON_OP_INCOME_LOSS = 'Non-Operating Income (Loss)'
+NON_OPERATING_INCOME = NON_OP_INCOME = 'Non-Operating Income (Loss)'
 
 NOTES_RECV_NET = 'Notes Receivable, Net'
 
@@ -451,7 +451,7 @@ OPEN = SHARE_PRICE_OPEN = 'Open'
 
 OPERATING_EXPENSES = OP_EXP = 'Operating Expenses'
 
-OP_INCOME_LOSS = 'Operating Income (Loss)'
+OPERATING_INCOME = OP_INCOME = 'Operating Income (Loss)'
 
 OP_LEASE_ASSETS = 'Operating Lease Assets'
 

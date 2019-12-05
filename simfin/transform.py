@@ -16,7 +16,9 @@ from simfin.names import *
 
 def free_cash_flow(df_cashflow):
     """
-    Calculate Free Cash Flow from columns in the given DataFrame.
+    Calculate Free Cash Flow from columns in the given DataFrame using the
+    formula:
+        FCF = Net Cash from Operations - Capital Expenditures
 
     :param df_cashflow:
         Pandas DataFrame assumed to have columns named NET_CASH_OPS and CAPEX.
@@ -29,7 +31,9 @@ def free_cash_flow(df_cashflow):
     # Because CAPEX is defined as the Disposition *minus* Acquisition of
     # Fixed Assets and Intangibles, we have to add CAPEX to NET_CASH_OPS in
     # order to subtract the Acquisition-part and calculate the Free Cash Flow.
-    df_result = df_cashflow[NET_CASH_OPS] + df_cashflow[CAPEX]
+    # This is discussed in more detail in Tutorial 04.
+    df_result = df_cashflow[NET_CASH_OPS].fillna(0) \
+              + df_cashflow[CAPEX].fillna(0)
 
     # Rename the result to FCF.
     df_result.rename(FCF, inplace=True)

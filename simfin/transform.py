@@ -41,7 +41,14 @@ def free_cash_flow(df_cashflow):
 def ebitda(df_income, df_cashflow, formula=NET_INCOME):
     """
     Calculate 'Earnings Before Interest, Taxes, Depreciation & Amortization'
-    aka. EBITDA from columns in the given DataFrames.
+    aka. EBITDA from columns in the given DataFrames. Two different EBITDA
+    formulas are supported:
+
+    If `formula=NET_INCOME` then the formula is:
+        EBITDA = Net Income + Interest + Taxes + Depreciation + Amortization
+
+    If `formula=OP_INCOME` then the formula is:
+        EBITDA = Operating Income + Depreciation + Amortization
 
     :param df_income:
         Pandas DataFrame with Income Statements.
@@ -51,12 +58,7 @@ def ebitda(df_income, df_cashflow, formula=NET_INCOME):
 
     :param formula:
         String for the formula to use in the EBITDA calculation.
-
-        If `formula=NET_INCOME` then the formula is:
-            EBITDA = Net Income + Interest + Taxes + Depreciation + Amortization
-
-        If `formula=OP_INCOME` then the formula is:
-            EBITDA = Operating Income + Depreciation + Amortization
+        Use either NET_INCOME or OP_INCOME defined in `names.py`
 
     :return:
         Pandas Series with the EBITDA.

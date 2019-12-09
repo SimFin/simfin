@@ -8,7 +8,9 @@ experienced users of SimFin.
 ### Changes
 
 -   Added function `sf.rel_change()` for calculating stock returns and
-    various growth-rates. Also wrote a new tutorial for this function.
+    various growth-rates. Added `sf.mean_log_change()` for calculating
+    mean-log stock returns e.g. for all 1-3 year periods. Also wrote a
+    new tutorial for these functions.
 
 -   Added function `sf.apply()` for applying a function to a DataFrame
     with either a single or multiple stocks. Changed `sf.asfreq()`,

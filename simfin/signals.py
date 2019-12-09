@@ -41,9 +41,8 @@ def price_signals(df_prices, group_index=TICKER):
         # Create new DataFrame for the signals.
         df_signals = pd.DataFrame()
 
-        # Get the closing share-price and trading volume.
+        # Use the closing share-price for all the signals.
         df_price = df_prices[CLOSE]
-        df_volume = df_prices[VOLUME]
 
         # Moving Average for past 20 days.
         df_signals[MAVG_20] = df_price.rolling(window=20).mean()
@@ -61,10 +60,6 @@ def price_signals(df_prices, group_index=TICKER):
 
         # MACD with extra smoothing by Exp. Moving Average for 9 days.
         df_signals[MACD_EMA] = df_signals[MACD].ewm(span=9).mean()
-
-        # Last trading volume relative to 20-day moving average.
-        df_rel_vol = df_volume / df_volume.rolling(window=20).mean()
-        df_signals[REL_VOL] = np.log(df_rel_vol)
 
         return df_signals
 
@@ -134,6 +129,96 @@ def trig_signals(df, signal1, signal2, group_index=TICKER):
 
 ##########################################################################
 
+def volume_signals(df_prices, df_shares, window=20,
+                   fill_method='ffill', group_index=TICKER):
+    """
+    Calculate signals for the daily trading-volume of stocks, such as:
+
+        REL_VOL: The daily trading-volume relative to its moving average.
+        VOLUME_MCAP: The Market-Capitalization of the daily trading volume.
+        VOLUME_TURNOVER: Trading-volume relative to the shares outstanding.
+
+    The moving-average is calculated in different ways for the signals.
+    For REL_VOL it is a part of the formula definition. For VOLUME_MCAP
+    and VOLUME_TURNOVER the moving-average is calculated afterwards.
+
+    :param df_prices:
+        Pandas DataFrame with share-prices for multiple stocks.
+
+    :param df_shares:
+        Pandas Series with share-counts. Take this from a DataFrame with
+        fundamental data such as `df_shares=df_income_ttm[SHARES_BASIC]`.
+
+    :param window:
+        Integer for the number of days to use in moving-average calculations.
+
+    :param fill_method:
+        String or callable for the method of filling in empty values when
+        reindexing financial data to daily data-points. See `sf.reindex`
+        for valid options.
+
+    :param group_index:
+        If the DataFrame has a MultiIndex then group data using this
+        index-column. By default this is TICKER but it could also be e.g.
+        SIMFIN_ID if you are using that as an index in your DataFrame.
+
+    :return:
+        Pandas DataFrame with volume-signals.
+    """
+
+    assert isinstance(df_shares, pd.Series)
+
+    # Get the column-name for the share-counts.
+    shares_index = df_shares.name
+
+    # Helper-function for calculating signals for a single stock.
+    def _signals(df):
+        # Create new DataFrame for the signals.
+        df_signals = pd.DataFrame()
+
+        # Get the relevant data.
+        df_price = df[CLOSE]
+        df_volume = df[VOLUME]
+
+        # Share-counts from financial reports, reindexed to daily data-points.
+        df_shares_daily = df[shares_index]
+
+        # Moving average for the daily trading volume.
+        df_volume_mavg = df_volume.rolling(window=window).mean()
+
+        # Last trading volume relative to its moving average.
+        df_rel_vol = df_volume / df_volume_mavg
+        df_signals[REL_VOL] = np.log(df_rel_vol)
+
+        # Calculate Market-Capitalization of the daily trading-volume.
+        df_vol_mcap = df_volume * df_price
+        df_signals[VOLUME_MCAP] = df_vol_mcap.rolling(window=window).mean()
+
+        # Calculate Volume Turnover as the daily trading-volume
+        # divided by the total number of shares outstanding.
+        df_vol_turn = df_volume / df_shares_daily
+        df_signals[VOLUME_TURNOVER] = df_vol_turn.rolling(window=window).mean()
+
+        return df_signals
+
+    # Reindex the share-counts to daily data-points.
+    df_shares_daily = reindex(df_src=df_shares, df_target=df_prices,
+                              method=fill_method, group_index=group_index)
+
+    # Combine the relevant data into a single DataFrame.
+    dfs = [df_prices[[CLOSE, VOLUME]], df_shares_daily]
+    df = pd.concat(dfs, axis=1)
+
+    # Calculate signals and use Pandas groupby if `df` has multiple stocks.
+    df_signals = apply(df=df, func=_signals, group_index=group_index)
+
+    # Sort the columns by their names.
+    df_signals.sort_index(axis='columns', inplace=True)
+
+    return df_signals
+
+##########################################################################
+
 def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
                 offset=None, func=None, fill_method='ffill',
                 date_index=REPORT_DATE, group_index=TICKER):
@@ -179,11 +264,6 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
 
     :param date_index:
         Name of the date-column for the financial data e.g. REPORT_DATE.
-
-    :param shares_index:
-        String with the column-name for the share-counts. SHARES_DILUTED
-        takes the potential diluting impact of stock-options into account, so
-        it results in more conservative valuation ratios than SHARES_BASIC.
 
     :param group_index:
         If the DataFrames have a MultiIndex then group data using this
@@ -475,15 +555,21 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
         Pandas DataFrame with valuation signals.
     """
 
-    # Create a DataFrame with the financial data we need.
-    # Start by copying data from the Income Statements.
-    df = df_income_ttm[[REVENUE, NET_INCOME_COMMON, shares_index]].copy()
+    # Get the required data from the Income Statements.
+    columns = [REVENUE, NET_INCOME_COMMON, shares_index]
+    df_inc = df_income_ttm[columns]
 
-    # Add Shareholder's Equity as a new column to the DataFrame.
-    df[TOTAL_EQUITY] = df_balance_ttm[TOTAL_EQUITY]
+    # Get the required data from the Balance Sheets.
+    columns = [TOTAL_CUR_ASSETS, CASH_EQUIV_ST_INVEST, ACC_NOTES_RECV,
+               INVENTORIES, TOTAL_LIABILITIES, TOTAL_EQUITY]
+    df_bal = df_balance_ttm[columns]
 
-    # Add Dividends Paid as a new column to the DataFrame.
-    df[DIVIDENDS_PAID] = df_cashflow_ttm[DIVIDENDS_PAID]
+    # Get the required data from the Cash-Flow Statements.
+    columns = [DIVIDENDS_PAID]
+    df_cf = df_cashflow_ttm[columns]
+
+    # Combine all the data. This creates a new copy that we can add columns to.
+    df = pd.concat([df_inc, df_bal, df_cf], axis=1)
 
     # Calculate FCF and add it as a new column to the DataFrame.
     df[FCF] = free_cash_flow(df_cashflow_ttm)
@@ -494,7 +580,11 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
 
     # Copy the number of shares before applying the user-supplied function,
     # which might change this number in the DataFrame.
-    shares = df[shares_index].copy()
+    df_shares = df[shares_index].copy()
+
+    # Reindex the share-counts to daily data-points.
+    df_shares_daily = reindex(df_src=df_shares, df_target=df_prices,
+                              method=fill_method, group_index=group_index)
 
     # Process the financial data using the user-supplied function
     # e.g. to calculate multi-year averages of Earnings, Sales, etc.
@@ -503,7 +593,7 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
 
     # Calculate Per-Share numbers. It is important to use the share-count
     # from before the user-supplied function was applied.
-    df_per_share = df.div(shares, axis=0)
+    df_per_share = df.div(df_shares, axis=0)
 
     # Reindex the per-share financial data to daily data-points.
     df_daily = reindex(df_src=df_per_share, df_target=df_prices,
@@ -512,18 +602,42 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
     # Create new DataFrame for the signals.
     df_signals = pd.DataFrame()
 
-    # Use the closing share-price for all the valuation signals.
+    # Use the closing share-price for all signals.
     df_price = df_prices[CLOSE]
 
-    # Calculate signals.
+    # Calculate basic signals.
     df_signals[PSALES] = df_price / df_daily[REVENUE]
     df_signals[PE] = df_price / df_daily[NET_INCOME_COMMON]
     df_signals[PFCF] = df_price / df_daily[FCF]
     df_signals[PBOOK] = df_price / df_daily[TOTAL_EQUITY]
 
+    # Calculate Price / Net Current Asset Value (NCAV).
+    # This measures the share-price relative to estimated liquidation value.
+    df_ncav = df_daily[TOTAL_CUR_ASSETS] - df_daily[TOTAL_LIABILITIES]
+    df_signals[P_NCAV] = df_price / df_ncav
+
+    # Calculate Price / Net-Net Working Capital (NNWC aka. NetNet).
+    # This measures the share-price relative to a more conservative estimate
+    # of liquidation value, which values the Receivables and Inventories at
+    # a discount to their book-value.
+    df_netnet = df_daily[CASH_EQUIV_ST_INVEST].fillna(0) \
+              + df_daily[ACC_NOTES_RECV].fillna(0) * 0.75 \
+              + df_daily[INVENTORIES].fillna(0) * 0.5 \
+              - df_daily[TOTAL_LIABILITIES]
+    df_signals[P_NETNET] = df_price / df_netnet
+
+    # Calculate Earnings Yield (inverse of the P/E ratio).
+    df_signals[EARNINGS_YIELD] = df_daily[NET_INCOME_COMMON] / df_price
+
+    # Calculate FCF Yield (inverse of the P/FCF ratio).
+    df_signals[FCF_YIELD] = df_daily[FCF] / df_price
+
     # Calculate Dividend Yield using Cash-Flow data.
     # Note the negation because DIVIDENDS_PAID is negative.
     df_signals[DIV_YIELD] = -df_daily[DIVIDENDS_PAID] / df_price
+
+    # Calculate Market Capitalization.
+    df_signals[MARKET_CAP] = df_shares_daily * df_price
 
     # Sort the columns by their names.
     df_signals.sort_index(axis='columns', inplace=True)

@@ -30,19 +30,45 @@ FCF_PS = 'Free Cash Flow Per Share'
 # Valuation Signals.
 
 # Price / Earnings Ratio.
-PE = 'P/E'
+P_E = PE = 'P/E'
 
 # Price / Sales Ratio.
-PSALES = 'P/Sales'
+P_SALES = PSALES = 'P/Sales'
 
 # Price / Free Cash Flow.
-PFCF = 'P/FCF'
+P_FCF = PFCF = 'P/FCF'
 
 # Price / Book-Value (aka. Equity).
-PBOOK = 'P/Book'
+P_BOOK = PBOOK = 'P/Book'
+
+# Price / Net Current Asset Value (NCAV).
+# Where NCAV = Current Assets - Total Liabilities.
+# This formula is attributed to Ben Graham (Warren Buffett's teacher).
+# It compares the share-price relative to an estimated liquidation value,
+# which may be overestimated because the Current Assets may not be sold at
+# their actual book-value. The P_NETNET ratio is a more conservative estimate.
+P_NCAV = PNCAV = 'P/NCAV'
+
+# Price / NetNet Working Capital (NetNet aka. NNWC).
+# Where NetNet = Cash & Equiv. + 0.75 * Receivables
+#              + 0.5 * Inventory - Total Liabilities.
+# This formula is attributed to Ben Graham (Warren Buffett's teacher).
+# It compares the share-price relative to an estimated liquidation value.
+# This is more conservative than P_NCAV because Receivables and Inventories
+# are not fully counted in the estimate of the liquidation value.
+P_NETNET = PNETNET = P_NNWC = PNNWC = 'P/NetNet'
+
+# Earnings / Price.
+EARNINGS_YIELD = 'Earnings Yield'
+
+# FCF / Price.
+FCF_YIELD = 'FCF Yield'
 
 # Dividend TTM / Share-Price.
 DIV_YIELD = 'Dividend Yield'
+
+# Market Capitalization = Shares Outstanding * Share-Price.
+MCAP = MARKET_CAP = 'Market-Cap'
 
 ##########################################################################
 # Financial Signals.
@@ -105,9 +131,6 @@ MACD = 'MACD'
 # MACD with extra smoothing by Exp. Moving Average.
 MACD_EMA = 'MACD-EMA'
 
-# Latest trading-volume relative to its moving average.
-REL_VOL = 'Relative Volume'
-
 # Buy signal (typically a boolean value).
 BUY = 'Buy'
 
@@ -116,5 +139,19 @@ SELL = 'Sell'
 
 # Hold signal (typically a boolean value).
 HOLD = 'Hold'
+
+##########################################################################
+# Volume Signals.
+
+# Daily trading-volume relative to its moving average.
+REL_VOL = 'Relative Volume'
+
+# Market-Capitalization of the daily trading-volume.
+# Defined as: Volume x Share-Price.
+VOL_MCAP = VOLUME_MCAP = 'Volume Market-Cap'
+
+# Daily trading-volume relative to the number of shares outstanding.
+# Defined as: Volume / Shares Outstanding
+VOL_TURN = VOLUME_TURNOVER = 'Volume Turnover'
 
 ##########################################################################

@@ -158,7 +158,7 @@ def _print_download_progress(downloaded_size, total_size):
         pct_complete = min(1.0, pct_complete)
 
         # Status-message. Note the \r which means the line should overwrite itself.
-        msg = '\r- Download progress: {0:.1%}'.format(pct_complete)
+        msg = '\r- Downloading ... {0:.1%}'.format(pct_complete)
     else:
         # Show the progress as number of bytes downloaded,
         # because the total size is unknown.
@@ -262,15 +262,7 @@ def _maybe_download(refresh_days, *args, **kwargs):
     path = _compose_path(*args, **kwargs)
 
     # Determine if the file must be downloaded.
-    if refresh_days == 0:
-        # File must always be downloaded.
-        download = True
-
-        # Status message.
-        msg = 'Dataset \"{}\" downloading ... '
-        msg = msg.format(dataset_name)
-
-    elif os.path.exists(path):
+    if os.path.exists(path):
         # If the file exists on local disk, then check its date.
 
         # Last time the file was modified.
@@ -283,21 +275,21 @@ def _maybe_download(refresh_days, *args, **kwargs):
         # Download the file again, if it is too old.
         download = (time_dif.days >= refresh_days)
 
-        # status message.
-        if download:
-            msg = 'Dataset \"{}\" on disk ({} days old), downloading new ...'
-            msg = msg.format(dataset_name, time_dif.days)
-        else:
-            msg = 'Dataset \"{}\" on disk ({} days old), loading.'
-            msg = msg.format(dataset_name, time_dif.days)
+        # Status message.
+        msg = 'Dataset \"{}\" on disk ({} days old).'
+        msg = msg.format(dataset_name, time_dif.days)
 
     else:
         # File does not exist on local disk, so we must download it.
         download = True
 
         # Status message.
-        msg = 'Dataset \"{}\" not on disk, downloading ...'
+        msg = 'Dataset \"{}\" not on disk.'
         msg = msg.format(dataset_name)
+
+    # File must always be downloaded regardless of its age.
+    if refresh_days == 0:
+        download = True
 
     # Print status message.
     print(msg)
@@ -307,7 +299,7 @@ def _maybe_download(refresh_days, *args, **kwargs):
         download_path = _download(*args, **kwargs)
 
         # Print status message.
-        print('\n- Extracting zip-file: ', end="")
+        print('\n- Extracting zip-file ... ', end='')
 
         # Unpack the zip-file to the data_dir.
         zipfile.ZipFile(file=download_path, mode="r").extractall(get_data_dir())
@@ -436,6 +428,9 @@ def load(dataset, variant=None, market=None,
     # Lambda function for converting strings to dates. Format: YYYY-MM-DD
     date_parser = lambda x: pd.to_datetime(x, yearfirst=True, dayfirst=False)
 
+    # Print status message.
+    print('- Loading from disk ... ', end='')
+
     # Load dataset into Pandas DataFrame.
     df = pd.read_csv(path, sep=';', header=0,
                      parse_dates=parse_dates, date_parser=date_parser)
@@ -447,6 +442,9 @@ def load(dataset, variant=None, market=None,
 
         # Sort the rows of the DataFrame according to the index.
         df.sort_index(ascending=True, inplace=True)
+
+    # Print status message.
+    print('Done!')
 
     return df
 

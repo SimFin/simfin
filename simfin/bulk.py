@@ -337,7 +337,7 @@ def load(dataset, variant=None, market=None,
     its variant e.g. 'annual' for annual reports, and the market e.g. 'us'
     for USA. All datasets have a name, but only some of them have options
     for variants and markets. For a full list of available datasets see:
-    ??? link to simfin website with definition of all datasets, variants, etc.
+    https://simfin.com/data/bulk
 
     All datasets are saved on disk as CSV-files, where the columns define
     the data-items such as Ticker, Revenue and Net Income, and the rows are

@@ -13,7 +13,7 @@
 import pandas as pd
 import numpy as np
 
-from simfin.utils import apply
+from simfin.utils import apply, rename_columns
 from simfin.names import TICKER
 
 ##########################################################################
@@ -212,6 +212,7 @@ def rel_change(df, freq, future, bdays=0, days=0, weeks=0, months=0,
 
     :param new_names:
         Dict or function for mapping / converting the column-names.
+        If `df` is a Pandas Series, then this is assumed to be a string.
 
     :param group_index:
         If `df` has a MultiIndex then group companies using this index-column.
@@ -258,7 +259,7 @@ def rel_change(df, freq, future, bdays=0, days=0, weeks=0, months=0,
 
     # Rename the columns.
     if new_names is not None:
-        df_result.rename(columns=new_names, inplace=True)
+        rename_columns(df=df_result, new_names=new_names, inplace=True)
 
     return df_result
 
@@ -344,6 +345,7 @@ def mean_log_change(df, freq, future,
 
     :param new_names:
         Dict or function for mapping / converting the column-names.
+        If `df` is a Pandas Series, then this is assumed to be a string.
 
     :param group_index:
         If `df` has a MultiIndex then group companies using this index-column.
@@ -449,7 +451,7 @@ def mean_log_change(df, freq, future,
 
     # Rename the columns.
     if new_names is not None:
-        df_result.rename(columns=new_names, inplace=True)
+        rename_columns(df=df_result, new_names=new_names, inplace=True)
 
     return df_result
 

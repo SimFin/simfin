@@ -130,3 +130,46 @@ def apply(df, func, group_index=TICKER, **kwargs):
     return df_result
 
 ##########################################################################
+
+def rename_columns(df, new_names, inplace=False):
+    """
+    Rename the columns in a Pandas DataFrame or Series. This function
+    is useful because the syntax is slightly different for DataFrame and
+    Series (this is one of many annoying inconsistencies in Pandas).
+
+    :param df:
+        Pandas DataFrame or Series.
+
+    :param new_names:
+        If `df` is a DataFrame then this is e.g. a dict mapping old
+        names to new, such as:
+            {'Old Name 1': 'New Name 1', 'Old Name 2': 'New Name 2'}
+
+        If `df` is a Series then this is expected to be a single string.
+
+    :param inplace:
+        Boolean whether to update `df` inplace.
+
+    :return:
+        Pandas DataFrame or Series. Same as `df` except with the new names.
+
+        There seems to be a bug in Pandas. If `df` is a DataFrame then
+        it returns None if `inplace=True`, but if `df` is a Series then
+        it returns the same Series if `inplace=True`.
+        https://github.com/pandas-dev/pandas/issues/30211
+    """
+
+    if isinstance(df, pd.DataFrame):
+        # Rename columns in a DataFrame.
+        df = df.rename(columns=new_names, inplace=inplace)
+    elif isinstance(df, pd.Series):
+        # If new_names is not a string, then Pandas Series apparently tries
+        # to rename the rows instead of the column, and it hangs the computer.
+        assert isinstance(new_names, str)
+
+        # Rename the single "column" of a Series.
+        df = df.rename(new_names, inplace=inplace)
+
+    return df
+
+##########################################################################

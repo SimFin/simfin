@@ -65,7 +65,7 @@ EARNINGS_YIELD = 'Earnings Yield'
 FCF_YIELD = 'FCF Yield'
 
 # Dividend TTM / Share-Price.
-DIV_YIELD = 'Dividend Yield'
+DIV_YIELD = DIVIDEND_YIELD = 'Dividend Yield'
 
 # Market Capitalization = Shares Outstanding * Share-Price.
 MCAP = MARKET_CAP = 'Market-Cap'

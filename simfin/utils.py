@@ -9,6 +9,10 @@
 ##########################################################################
 
 import pandas as pd
+import os
+import time
+from datetime import timedelta
+
 from simfin.names import REPORT_DATE, TICKER
 
 ##########################################################################
@@ -171,5 +175,25 @@ def rename_columns(df, new_names, inplace=False):
         df = df.rename(new_names, inplace=inplace)
 
     return df
+
+##########################################################################
+
+def file_age(path):
+    """
+    Return the age of the file with the given path. For example, to get the
+    age as the number of days call `file_age(path).days`
+
+    :param path: String with full path of the file.
+    :return: `datetime.timedelta` object.
+    """
+
+    # Last time the file was modified.
+    file_timestamp = os.path.getmtime(path)
+
+    # Difference between now and when the file was last modified.
+    time_dif = time.time() - file_timestamp
+    time_dif = timedelta(seconds=int(round(time_dif)))
+
+    return time_dif
 
 ##########################################################################

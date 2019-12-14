@@ -66,7 +66,6 @@ def get_api_key():
     """
     return _api_key
 
-
 ##########################################################################
 # Data directories.
 
@@ -75,6 +74,9 @@ _data_dir = None
 
 # Directory where the datasets are downloaded.
 _download_dir = None
+
+# Directory where the cached files are saved on disk.
+_cache_dir = None
 
 
 def set_data_dir(data_dir='~/simfin_data/'):
@@ -85,7 +87,7 @@ def set_data_dir(data_dir='~/simfin_data/'):
     :param data_dir: String with the directory-name.
     :return: None.
     """
-    global _data_dir, _download_dir
+    global _data_dir, _download_dir, _cache_dir
 
     # Expand directory if it begins with ~
     _data_dir = os.path.expanduser(data_dir)
@@ -93,11 +95,18 @@ def set_data_dir(data_dir='~/simfin_data/'):
     # Directory for download. This is a sub-dir of data_dir.
     _download_dir = os.path.join(_data_dir, 'download/')
 
+    # Directory for cache-files. This is a sub-dir of data_dir.
+    _cache_dir = os.path.join(_data_dir, 'cache/')
+
     # Check if download directory exists, otherwise create it.
     # This also creates all parent directories if they don't exist,
     # including the main data_dir.
     if not os.path.exists(_download_dir):
         os.makedirs(_download_dir)
+
+    # Check if cache directory exists, otherwise create it.
+    if not os.path.exists(_cache_dir):
+        os.makedirs(_cache_dir)
 
 
 def get_data_dir():
@@ -119,5 +128,13 @@ def get_download_dir():
     """
     return _download_dir
 
+
+def get_cache_dir():
+    """
+    Return the full path for the directory where cache-files are saved.
+
+    :return: String with the path for the cache directory.
+    """
+    return _cache_dir
 
 ##########################################################################

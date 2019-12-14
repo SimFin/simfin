@@ -20,6 +20,10 @@ experienced users of SimFin.
 -   Added several functions for calculating signals from financial data,
     and wrote a new tutorial for these functions.
     
+-   Added wrapper-function ` @sf.cache` for caching the result of slow
+    functions to disk. Added its use in all signal-functions. Wrote
+    Tutorial 06 on this.
+
 -   Added function `sf.ebitda` for calculating EBITDA.
 
 

@@ -9,6 +9,8 @@ from simfin.bulk import load_income, load_income_banks, load_income_insurance
 from simfin.bulk import load_balance, load_balance_banks, load_balance_insurance
 from simfin.bulk import load_cashflow, load_cashflow_banks, load_cashflow_insurance
 
+from simfin.cache import cache
+
 from simfin.config import set_api_key, load_api_key, get_api_key
 from simfin.config import set_data_dir, get_data_dir, get_download_dir
 

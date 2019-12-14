@@ -25,5 +25,6 @@ setup(
         'pandas',
         'numpy',
         'requests',
+        'pyarrow',
     ],
 )

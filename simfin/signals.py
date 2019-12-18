@@ -181,8 +181,8 @@ def trig_signals(df, signal1, signal2, group_index=TICKER):
 ##########################################################################
 
 @cache
-def volume_signals(df_prices, df_shares, window=20,
-                   fill_method='ffill', group_index=TICKER):
+def volume_signals(df_prices, df_shares, window=20, fill_method='ffill',
+                   offset=None, date_index=REPORT_DATE, group_index=TICKER):
     """
     Calculate signals for the daily trading-volume of stocks, such as:
 
@@ -217,6 +217,13 @@ def volume_signals(df_prices, df_shares, window=20,
         String or callable for the method of filling in empty values when
         reindexing financial data to daily data-points. See `sf.reindex`
         for valid options.
+
+    :param offset:
+        Pandas DateOffset added to the date-index of `df_shares`. Example:
+        `pd.DateOffset(days=60)` See `sf.add_date_offset` for more details.
+
+    :param date_index:
+        Name of the date-column for `df_shares` e.g. REPORT_DATE.
 
     :param group_index:
         If the DataFrame has a MultiIndex then group data using this
@@ -276,6 +283,11 @@ def volume_signals(df_prices, df_shares, window=20,
         df_signals[VOLUME_TURNOVER] = df_vol_turn.rolling(window=window).mean()
 
         return df_signals
+
+    # Add offset / lag to the dates of the share-counts.
+    if offset is not None:
+        df_shares = add_date_offset(df=df_shares, offset=offset,
+                                    date_index=date_index)
 
     # Reindex the share-counts to daily data-points.
     df_shares_daily = reindex(df_src=df_shares, df_target=df_prices,

@@ -177,11 +177,14 @@ def rename_columns(df, new_names, inplace=False):
     return df
 
 ##########################################################################
+# Functions for file-dates.
 
 def file_age(path):
     """
-    Return the age of the file with the given path. For example, to get the
-    age as the number of days call `file_age(path).days`
+    Return the age of the file with the given path, as the difference
+    between the current time minus the file's last modification time.
+
+    To get the file's age as the number of days call `file_age(path).days`
 
     :param path: String with full path of the file.
     :return: `datetime.timedelta` object.
@@ -195,5 +198,71 @@ def file_age(path):
     time_dif = timedelta(seconds=int(round(time_dif)))
 
     return time_dif
+
+
+def is_file_newer(path, other_paths, no_exist=True):
+    """
+    Check whether the file located in `path` is newer than all the files
+    located in `other_paths`.
+
+    :param path:
+        String with full path for the file.
+
+    :param other_paths:
+        String or list of strings with full paths for other files.
+
+    :param no_exist:
+        Boolean to use for files that do not exist.
+
+    :return:
+        Boolean.
+    """
+
+    # Convert string to list of strings, so we can use the same code below.
+    if isinstance(other_paths, str):
+        other_paths = [other_paths]
+
+    # Timestamp for when the file was last modified.
+    file_timestamp = os.path.getmtime(path)
+
+    # Initialize the return-value.
+    is_newer = True
+
+    for other_path in other_paths:
+        try:
+            # Timestamp for when the other file was last modified.
+            other_timestamp = os.path.getmtime(other_path)
+
+            # Update the return-value.
+            is_newer &= (file_timestamp > other_timestamp)
+        except FileNotFoundError:
+            # Other file did not exist, use the default boolean value.
+            is_newer &= no_exist
+
+        # Break out of the for-loop if we know the return-value will be False.
+        if not is_newer:
+            break
+
+    return is_newer
+
+
+def is_file_older(**kwargs):
+    """
+    Check whether the file located in `path` is older than all the files
+    located in `other_paths`. This is a simple wrapper for `is_file_newer`.
+
+    :param kwargs: Keyword args passed to `is_file_newer`.
+    :return: Boolean.
+    """
+    return not is_file_newer(**kwargs)
+
+##########################################################################
+
+def is_str_or_list_str(s):
+    """
+    Return boolean whether `s` is a string or list of strings.
+    """
+    return isinstance(s, str) or \
+          (isinstance(s, list) and all(isinstance(x, str) for x in s))
 
 ##########################################################################

@@ -14,12 +14,12 @@ import os
 from functools import wraps
 
 from simfin.config import get_cache_dir
-from simfin.utils import file_age
+from simfin.utils import file_age, is_file_older, is_str_or_list_str
 
 ##########################################################################
 # Private helper-functions.
 
-def _compose_path(func, cache_name, cache_format):
+def _compose_cache_path(func, cache_name, cache_format):
     """
     Compose the filename and full path for the cache-file.
 
@@ -30,11 +30,13 @@ def _compose_path(func, cache_name, cache_format):
     """
     # We have already asserted that the cache_format is valid.
 
-    # File-extension.
-    extension = '.' + cache_format
+    # Compose filename of the cache-file.
+    filename = func.__name__
+    if cache_name is not None:
+        filename += '-' + cache_name
+    filename += '.' + cache_format
 
-    # Compose name and full path of the cache-file.
-    filename = func.__name__ + '-' + cache_name + extension
+    # Compose full path of the cache-file.
     path = os.path.join(get_cache_dir(), filename)
 
     return filename, path
@@ -108,7 +110,7 @@ def cache(func):
     """
 
     @wraps(func)
-    def wrapper(cache_name=None, cache_refresh_days=1,
+    def wrapper(cache_name=None, cache_refresh=None,
                 cache_format='pickle', **kwargs):
         """
         This uses more advanced Python features to wrap `func` using a
@@ -125,15 +127,25 @@ def cache(func):
 
         :param cache_name:
             String with the name of the cache-file. The full filename is the
-            function's name + `cache_name` + '.' + `cache_format`
-            If `cache_name=None` then the cache-file is never used and the
-            function is always called as normal.
+            function's name + '-' + `cache_name` + '.' + `cache_format`
 
-        :param cache_refresh_days:
-            Integer with the number of days for the cache-file before the
-            function is called again and the cache-file is refreshed. Setting
-            `cache_refresh_days=0` ignores the age of the cache-file and calls
-            the function again to refresh the cache-file.
+        :param cache_refresh:
+            Determines if `func` should be called and the results saved to the
+            cache-file. Different conditions are supported, depending on the
+            type and value of this argument:
+
+            - If `None` then the cache-file is never used and `func` is always
+              called as normal.
+            - If `True` then `func` is called and the cache-file refreshed.
+            - If `False` the cache-file is always used, unless it does not
+              exist, in which case `func` is called and the cache-file saved.
+            - If an integer which is lower than the cache-file's age in days,
+              then `func` is called and the cache-file is refreshed. The cache
+              is also refreshed if the integer is 0 (zero).
+            - If a string or list of strings, these are considered file-paths
+              e.g. for dataset-files. If the cache-file is older than any one
+              of those files, then `func` is called and the cache-file is
+              refreshed.
 
         :param cache_format:
             String with the format of the cache-file. Default is 'pickle' which
@@ -152,37 +164,55 @@ def cache(func):
             or the results from computing the wrapped function.
         """
 
-        if cache_name is None:
+        if cache_refresh is None:
             # Never use the cache, always just compute the function.
             df_result = func(**kwargs)
         else:
+            # We want to use a cache-file. Determine if it should be refreshed.
+
             # Ensure the cache-format is a valid string.
             assert cache_format.startswith('pickle') or \
                    cache_format in ['parquet', 'feather']
 
             # Compose the filename and full path for the cache-file.
-            filename, path = _compose_path(func=func,
-                                           cache_name=cache_name,
-                                           cache_format=cache_format)
+            cache_filename, cache_path = \
+                _compose_cache_path(func=func, cache_name=cache_name,
+                                    cache_format=cache_format)
 
-            # Does cache-file exist on disk?
-            if os.path.exists(path):
+            # Check if cache-file exists on disk.
+            if os.path.exists(cache_path):
                 # Cache-file exists on disk, so get its age in days.
-                file_age_days = file_age(path).days
+                cache_file_age_days = file_age(cache_path).days
 
                 # Print status.
                 msg = 'Cache-file \'{0}\' on disk ({1} days old).'
-                msg = msg.format(filename, file_age_days)
+                msg = msg.format(cache_filename, cache_file_age_days)
                 print(msg)
 
-                # Is cache-file too old so we need to recompute the function?
-                compute = (cache_refresh_days == 0) or \
-                          (file_age_days > cache_refresh_days)
+                # Should the function be computed and the cache-file refreshed?
+                if isinstance(cache_refresh, bool):
+                    # Use cache_refresh directly as a bool whether to refresh.
+                    compute = cache_refresh
+                elif isinstance(cache_refresh, int):
+                    # Use cache_refresh as the number of days before refresh.
+                    compute = (cache_refresh == 0) or \
+                              (cache_file_age_days > cache_refresh)
+                elif is_str_or_list_str(cache_refresh):
+                    # Use cache_refresh as a file-path or list of file-paths.
+                    # Refresh if the cache-file is older than the other files.
+                    compute = is_file_older(path=cache_path,
+                                            other_paths=cache_refresh)
+                else:
+                    # Raise exception for invalid argument.
+                    msg = 'invalid arg cache_refresh={0}'
+                    msg = msg.format(cache_refresh)
+                    raise ValueError(msg)
 
+                # Load cache-file instead of computing function?
                 if not compute:
-                    # Cache-file is not too old, so load it.
-                    print('- Loading cache-file from disk ... ', end='')
-                    df_result = _read_cache(path=path, cache_format=cache_format)
+                    print('- Loading from disk ... ', end='')
+                    df_result = _read_cache(path=cache_path,
+                                            cache_format=cache_format)
                     print('Done!')
             else:
                 # Cache-file does not exist, so we must compute the function.
@@ -190,7 +220,7 @@ def cache(func):
 
                 # Print status.
                 msg = 'Cache-file \'{0}\' not on disk.'
-                msg = msg.format(filename)
+                msg = msg.format(cache_filename)
                 print(msg)
 
             # Should we compute the function?
@@ -208,7 +238,8 @@ def cache(func):
 
                 # Save the resulting Pandas DataFrame to the cache-file.
                 print('- Saving cache-file to disk ... ', end='')
-                _write_cache(df=df_result, path=path, cache_format=cache_format)
+                _write_cache(df=df_result, path=cache_path,
+                             cache_format=cache_format)
                 print('Done!')
 
         return df_result

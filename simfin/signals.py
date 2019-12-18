@@ -27,10 +27,10 @@ def price_signals(df_prices, group_index=TICKER):
     in the given DataFrame.
 
     This function can take a while to compute, so it will create a cache-file
-    if you set the arg `cache_name`. The next time you call this function, the
-    cache-file will get loaded if it is more recent than `cache_refresh_days`,
-    otherwise the function will get computed again and the result saved in the
-    cache-file for future use.
+    if you set the arg `cache_refresh`. The next time you call this function,
+    the cache-file will get loaded if it is more recent than specified by
+    `cache_refresh`, otherwise the function will get computed again and the
+    result saved in the cache-file for future use.
 
     WARNING: You *MUST* use keyword arguments to this function, otherwise the
     first unnamed arguments would get passed to the @cache wrapper instead.
@@ -44,14 +44,24 @@ def price_signals(df_prices, group_index=TICKER):
         SIMFIN_ID if you are using that as an index in your DataFrame.
 
     :param cache_name:
-        String with the name of the cache-file. If `cache_name=None` then the
-        cache-file is never used and the function is always called as normal.
+        String with the name of the cache-file.
 
-    :param cache_refresh_days:
-        Integer with the max number of days for the cache-file before the
-        function is called again and the cache-file is refreshed. Setting
-        `cache_refresh_days=0` ignores the age of the cache-file and calls
-        the function again to refresh the cache-file.
+    :param cache_refresh:
+        Determines if the function should be called and the results saved to
+        the cache-file. Different conditions are supported, depending on the
+        type and value of this argument:
+
+        - If `None` then the cache-file is never used and the function is
+          always called as normal.
+        - If `True` then the function is called and the cache-file refreshed.
+        - If `False` the cache-file is always used, unless it does not exist,
+          in which case the function is called and the cache-file saved.
+        - If an integer which is lower than the cache-file's age in days, then
+          the function is called and the cache-file is refreshed. The cache is
+          also refreshed if the integer is 0 (zero).
+        - If a string or list of strings, these are considered file-paths e.g.
+          for dataset-files. If the cache-file is older than any one of those
+          files, then the function is called and the cache-file is refreshed.
 
     :param cache_format:
         String with the format of the cache-file. Default is 'pickle' which
@@ -109,10 +119,10 @@ def trig_signals(df, signal1, signal2, group_index=TICKER):
     if df[signal1] crosses below df[signal2] create a Sell signal.
 
     This function can take a while to compute, so it will create a cache-file
-    if you set the arg `cache_name`. The next time you call this function, the
-    cache-file will get loaded if it is more recent than `cache_refresh_days`,
-    otherwise the function will get computed again and the result saved in the
-    cache-file for future use.
+    if you set the arg `cache_refresh`. The next time you call this function,
+    the cache-file will get loaded if it is more recent than specified by
+    `cache_refresh`, otherwise the function will get computed again and the
+    result saved in the cache-file for future use.
 
     WARNING: You *MUST* use keyword arguments to this function, otherwise the
     first unnamed arguments would get passed to the @cache wrapper instead.
@@ -133,14 +143,24 @@ def trig_signals(df, signal1, signal2, group_index=TICKER):
         SIMFIN_ID if you are using that as an index in your DataFrame.
 
     :param cache_name:
-        String with the name of the cache-file. If `cache_name=None` then the
-        cache-file is never used and the function is always called as normal.
+        String with the name of the cache-file.
 
-    :param cache_refresh_days:
-        Integer with the max number of days for the cache-file before the
-        function is called again and the cache-file is refreshed. Setting
-        `cache_refresh_days=0` ignores the age of the cache-file and calls
-        the function again to refresh the cache-file.
+    :param cache_refresh:
+        Determines if the function should be called and the results saved to
+        the cache-file. Different conditions are supported, depending on the
+        type and value of this argument:
+
+        - If `None` then the cache-file is never used and the function is
+          always called as normal.
+        - If `True` then the function is called and the cache-file refreshed.
+        - If `False` the cache-file is always used, unless it does not exist,
+          in which case the function is called and the cache-file saved.
+        - If an integer which is lower than the cache-file's age in days, then
+          the function is called and the cache-file is refreshed. The cache is
+          also refreshed if the integer is 0 (zero).
+        - If a string or list of strings, these are considered file-paths e.g.
+          for dataset-files. If the cache-file is older than any one of those
+          files, then the function is called and the cache-file is refreshed.
 
     :param cache_format:
         String with the format of the cache-file. Default is 'pickle' which
@@ -195,10 +215,10 @@ def volume_signals(df_prices, df_shares, window=20, fill_method='ffill',
     and VOLUME_TURNOVER the moving-average is calculated afterwards.
 
     This function can take a while to compute, so it will create a cache-file
-    if you set the arg `cache_name`. The next time you call this function, the
-    cache-file will get loaded if it is more recent than `cache_refresh_days`,
-    otherwise the function will get computed again and the result saved in the
-    cache-file for future use.
+    if you set the arg `cache_refresh`. The next time you call this function,
+    the cache-file will get loaded if it is more recent than specified by
+    `cache_refresh`, otherwise the function will get computed again and the
+    result saved in the cache-file for future use.
 
     WARNING: You *MUST* use keyword arguments to this function, otherwise the
     first unnamed arguments would get passed to the @cache wrapper instead.
@@ -231,14 +251,24 @@ def volume_signals(df_prices, df_shares, window=20, fill_method='ffill',
         SIMFIN_ID if you are using that as an index in your DataFrame.
 
     :param cache_name:
-        String with the name of the cache-file. If `cache_name=None` then the
-        cache-file is never used and the function is always called as normal.
+        String with the name of the cache-file.
 
-    :param cache_refresh_days:
-        Integer with the max number of days for the cache-file before the
-        function is called again and the cache-file is refreshed. Setting
-        `cache_refresh_days=0` ignores the age of the cache-file and calls
-        the function again to refresh the cache-file.
+    :param cache_refresh:
+        Determines if the function should be called and the results saved to
+        the cache-file. Different conditions are supported, depending on the
+        type and value of this argument:
+
+        - If `None` then the cache-file is never used and the function is
+          always called as normal.
+        - If `True` then the function is called and the cache-file refreshed.
+        - If `False` the cache-file is always used, unless it does not exist,
+          in which case the function is called and the cache-file saved.
+        - If an integer which is lower than the cache-file's age in days, then
+          the function is called and the cache-file is refreshed. The cache is
+          also refreshed if the integer is 0 (zero).
+        - If a string or list of strings, these are considered file-paths e.g.
+          for dataset-files. If the cache-file is older than any one of those
+          files, then the function is called and the cache-file is refreshed.
 
     :param cache_format:
         String with the format of the cache-file. Default is 'pickle' which
@@ -316,10 +346,10 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
     etc. for all stocks in the given DataFrames.
 
     This function can take a while to compute, so it will create a cache-file
-    if you set the arg `cache_name`. The next time you call this function, the
-    cache-file will get loaded if it is more recent than `cache_refresh_days`,
-    otherwise the function will get computed again and the result saved in the
-    cache-file for future use.
+    if you set the arg `cache_refresh`. The next time you call this function,
+    the cache-file will get loaded if it is more recent than specified by
+    `cache_refresh`, otherwise the function will get computed again and the
+    result saved in the cache-file for future use.
 
     WARNING: You *MUST* use keyword arguments to this function, otherwise the
     first unnamed arguments would get passed to the @cache wrapper instead.
@@ -369,14 +399,24 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
         SIMFIN_ID if you are using that as an index in your DataFrame.
 
     :param cache_name:
-        String with the name of the cache-file. If `cache_name=None` then the
-        cache-file is never used and the function is always called as normal.
+        String with the name of the cache-file.
 
-    :param cache_refresh_days:
-        Integer with the max number of days for the cache-file before the
-        function is called again and the cache-file is refreshed. Setting
-        `cache_refresh_days=0` ignores the age of the cache-file and calls
-        the function again to refresh the cache-file.
+    :param cache_refresh:
+        Determines if the function should be called and the results saved to
+        the cache-file. Different conditions are supported, depending on the
+        type and value of this argument:
+
+        - If `None` then the cache-file is never used and the function is
+          always called as normal.
+        - If `True` then the function is called and the cache-file refreshed.
+        - If `False` the cache-file is always used, unless it does not exist,
+          in which case the function is called and the cache-file saved.
+        - If an integer which is lower than the cache-file's age in days, then
+          the function is called and the cache-file is refreshed. The cache is
+          also refreshed if the integer is 0 (zero).
+        - If a string or list of strings, these are considered file-paths e.g.
+          for dataset-files. If the cache-file is older than any one of those
+          files, then the function is called and the cache-file is refreshed.
 
     :param cache_format:
         String with the format of the cache-file. Default is 'pickle' which
@@ -469,10 +509,10 @@ def growth_signals(df_income_ttm, df_income_qrt,
       the Quarterly Revenue from the previous quarter.
 
     This function can take a while to compute, so it will create a cache-file
-    if you set the arg `cache_name`. The next time you call this function, the
-    cache-file will get loaded if it is more recent than `cache_refresh_days`,
-    otherwise the function will get computed again and the result saved in the
-    cache-file for future use.
+    if you set the arg `cache_refresh`. The next time you call this function,
+    the cache-file will get loaded if it is more recent than specified by
+    `cache_refresh`, otherwise the function will get computed again and the
+    result saved in the cache-file for future use.
 
     WARNING: You *MUST* use keyword arguments to this function, otherwise the
     first unnamed arguments would get passed to the @cache wrapper instead.
@@ -533,14 +573,24 @@ def growth_signals(df_income_ttm, df_income_qrt,
         SIMFIN_ID if you are using that as an index in your DataFrame.
 
     :param cache_name:
-        String with the name of the cache-file. If `cache_name=None` then the
-        cache-file is never used and the function is always called as normal.
+        String with the name of the cache-file.
 
-    :param cache_refresh_days:
-        Integer with the max number of days for the cache-file before the
-        function is called again and the cache-file is refreshed. Setting
-        `cache_refresh_days=0` ignores the age of the cache-file and calls
-        the function again to refresh the cache-file.
+    :param cache_refresh:
+        Determines if the function should be called and the results saved to
+        the cache-file. Different conditions are supported, depending on the
+        type and value of this argument:
+
+        - If `None` then the cache-file is never used and the function is
+          always called as normal.
+        - If `True` then the function is called and the cache-file refreshed.
+        - If `False` the cache-file is always used, unless it does not exist,
+          in which case the function is called and the cache-file saved.
+        - If an integer which is lower than the cache-file's age in days, then
+          the function is called and the cache-file is refreshed. The cache is
+          also refreshed if the integer is 0 (zero).
+        - If a string or list of strings, these are considered file-paths e.g.
+          for dataset-files. If the cache-file is older than any one of those
+          files, then the function is called and the cache-file is refreshed.
 
     :param cache_format:
         String with the format of the cache-file. Default is 'pickle' which
@@ -643,10 +693,10 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
     in the given DataFrames.
 
     This function can take a while to compute, so it will create a cache-file
-    if you set the arg `cache_name`. The next time you call this function, the
-    cache-file will get loaded if it is more recent than `cache_refresh_days`,
-    otherwise the function will get computed again and the result saved in the
-    cache-file for future use.
+    if you set the arg `cache_refresh`. The next time you call this function,
+    the cache-file will get loaded if it is more recent than specified by
+    `cache_refresh`, otherwise the function will get computed again and the
+    result saved in the cache-file for future use.
 
     WARNING: You *MUST* use keyword arguments to this function, otherwise the
     first unnamed arguments would get passed to the @cache wrapper instead.
@@ -700,14 +750,24 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
         SIMFIN_ID if you are using that as an index in your DataFrame.
 
     :param cache_name:
-        String with the name of the cache-file. If `cache_name=None` then the
-        cache-file is never used and the function is always called as normal.
+        String with the name of the cache-file.
 
-    :param cache_refresh_days:
-        Integer with the max number of days for the cache-file before the
-        function is called again and the cache-file is refreshed. Setting
-        `cache_refresh_days=0` ignores the age of the cache-file and calls
-        the function again to refresh the cache-file.
+    :param cache_refresh:
+        Determines if the function should be called and the results saved to
+        the cache-file. Different conditions are supported, depending on the
+        type and value of this argument:
+
+        - If `None` then the cache-file is never used and the function is
+          always called as normal.
+        - If `True` then the function is called and the cache-file refreshed.
+        - If `False` the cache-file is always used, unless it does not exist,
+          in which case the function is called and the cache-file saved.
+        - If an integer which is lower than the cache-file's age in days, then
+          the function is called and the cache-file is refreshed. The cache is
+          also refreshed if the integer is 0 (zero).
+        - If a string or list of strings, these are considered file-paths e.g.
+          for dataset-files. If the cache-file is older than any one of those
+          files, then the function is called and the cache-file is refreshed.
 
     :param cache_format:
         String with the format of the cache-file. Default is 'pickle' which

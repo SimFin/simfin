@@ -75,7 +75,8 @@ def price_signals(df_prices, group_index=TICKER):
     # Helper-function for calculating signals for a single stock.
     def _signals(df_prices):
         # Create new DataFrame for the signals.
-        df_signals = pd.DataFrame()
+        # Setting the index improves performance.
+        df_signals = pd.DataFrame(index=df_prices.index)
 
         # Use the closing share-price for all the signals.
         df_price = df_prices[CLOSE]
@@ -174,7 +175,8 @@ def trig_signals(df, signal1, signal2, group_index=TICKER):
     # Helper-function for calculating signals for a single stock.
     def _signals(df):
         # Create new DataFrame for the signals.
-        df_signals = pd.DataFrame()
+        # Setting the index improves performance.
+        df_signals = pd.DataFrame(index=df.index)
 
         # Boolean whether signal1 >= signal2.
         df_above = (df[signal1] >= df[signal2])
@@ -287,7 +289,8 @@ def volume_signals(df_prices, df_shares, window=20, fill_method='ffill',
     # Helper-function for calculating signals for a single stock.
     def _signals(df):
         # Create new DataFrame for the signals.
-        df_signals = pd.DataFrame()
+        # Setting the index improves performance.
+        df_signals = pd.DataFrame(index=df.index)
 
         # Get the relevant data.
         df_price = df[CLOSE]
@@ -430,7 +433,8 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
     # Helper-function for calculating signals for a single stock.
     def _signals(df):
         # Create new DataFrame for the signals.
-        df_signals = pd.DataFrame()
+        # Setting the index improves performance.
+        df_signals = pd.DataFrame(index=df.index)
 
         # Net Profit Margin.
         df_signals[NET_PROFIT_MARGIN] = df[NET_INCOME] / df[REVENUE]
@@ -823,7 +827,8 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
                        method=fill_method, group_index=group_index)
 
     # Create new DataFrame for the signals.
-    df_signals = pd.DataFrame()
+    # Setting the index improves performance.
+    df_signals = pd.DataFrame(index=df_prices.index)
 
     # Use the closing share-price for all signals.
     df_price = df_prices[CLOSE]

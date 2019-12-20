@@ -13,6 +13,7 @@
 import pandas as pd
 import numpy as np
 
+from simfin.cache import cache
 from simfin.utils import apply, rename_columns
 from simfin.names import TICKER
 
@@ -132,6 +133,7 @@ def _convert_to_periods(freq, bdays, days, weeks, months, quarters, years):
 
 ##########################################################################
 
+@cache
 def rel_change(df, freq, future, bdays=0, days=0, weeks=0, months=0,
                quarters=0, years=0, annualized=False, new_names=None,
                group_index=TICKER):
@@ -177,6 +179,16 @@ def rel_change(df, freq, future, bdays=0, days=0, weeks=0, months=0,
     df_result[t] = (df[t] / df[t-periods]) ** (1 / shifted_years) - 1
 
     See Tutorial 03 for detailed examples on how to use this function.
+
+    This function can take a while to compute, so it will create a cache-file
+    if you pass the arg `cache_refresh`. The next time you call this function,
+    the cache-file will get loaded if it is more recent than specified by
+    `cache_refresh`, otherwise the function will get computed again and the
+    result saved in the cache-file for future use. See the documentation for
+    the `cache` wrapper-function for details on its arguments.
+
+    WARNING: You *MUST* use keyword arguments to this function, otherwise the
+    first unnamed arguments would get passed to the `cache` wrapper instead.
 
     :param df:
         Pandas DataFrame or Series assumed to have either a DatetimeIndex
@@ -265,6 +277,7 @@ def rel_change(df, freq, future, bdays=0, days=0, weeks=0, months=0,
 
 ##########################################################################
 
+@cache
 def mean_log_change(df, freq, future,
                     min_bdays=0, min_days=0, min_weeks=0,
                     min_months=0, min_quarters=0, min_years=0,
@@ -299,6 +312,16 @@ def mean_log_change(df, freq, future,
     that quarterly and annual financial data such as Income Statements are
     all complete in this sense, but if you are using other data-sources,
     then you must ensure this yourself.
+
+    This function can take a while to compute, so it will create a cache-file
+    if you pass the arg `cache_refresh`. The next time you call this function,
+    the cache-file will get loaded if it is more recent than specified by
+    `cache_refresh`, otherwise the function will get computed again and the
+    result saved in the cache-file for future use. See the documentation for
+    the `cache` wrapper-function for details on its arguments.
+
+    WARNING: You *MUST* use keyword arguments to this function, otherwise the
+    first unnamed arguments would get passed to the `cache` wrapper instead.
 
     :param df:
         Pandas DataFrame or Series assumed to have either a DatetimeIndex

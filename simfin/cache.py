@@ -94,13 +94,44 @@ def cache(func):
     This is used e.g. in the signal-functions because they can take several
     minutes to compute, while it only takes a second to load a cache-file.
 
-    By default the cache-files are saved in the binary and uncompressed
-    pickle-format, which is very fast but can create quite large files.
-    It is also possible to save the cache-files as compressed pickle-files,
-    which trades computation time for disk-space. Other file-formats such
-    as Parquet and Feather are also supported, but they put several
-    restrictions on the Pandas DataFrames, so those formats are mainly
-    useful for sharing DataFrames with others.
+    WARNING: You *MUST* use keyword arguments when calling the wrapped
+    function, otherwise the first unnamed arguments would get passed to this
+    `cache` wrapper instead.
+
+    The following arguments are added to the wrapped function:
+
+    - cache_name:
+        String with the name of the cache-file. The full filename is the
+        function's name + '-' + `cache_name` + '.' + `cache_format`
+
+    - cache_refresh:
+        Determines if `func` should be called and the results saved to the
+        cache-file. Different conditions are supported, depending on the
+        type and value of this argument:
+
+        - If `None` then the cache-file is never used and `func` is always
+          called as normal.
+        - If `True` then `func` is called and the cache-file refreshed.
+        - If `False` the cache-file is always used, unless it does not
+          exist, in which case `func` is called and the cache-file saved.
+        - If an integer which is lower than the cache-file's age in days,
+          then `func` is called and the cache-file is refreshed. The cache
+          is also refreshed if the integer is 0 (zero).
+        - If a string or list of strings, these are considered file-paths
+          e.g. for dataset-files. If the cache-file is older than any one
+          of those files, then `func` is called and the cache-file is
+          refreshed.
+
+    - cache_format:
+        String with the format of the cache-file. Default is 'pickle' which
+        is very fast but creates large, uncompressed files. Compression can
+        be enabled with the option 'pickle.gz' which is slightly slower.
+
+        Other valid options are: 'parquet' and 'feather' which put several
+        restrictions on the DataFrames, and are mainly useful for sharing
+        the DataFrames with others.
+
+    The following are the normal arguments for this function:
 
     :param func:
         Function which does the actual computation and returns a DataFrame.
@@ -123,7 +154,7 @@ def cache(func):
         Because we are using @wraps the original function name and doc-string
         is kept in the wrapped / decorated function. So you may want to copy
         the following doc-strings for the parameters into the doc-string of the
-        function you have wrapped with @cache.
+        function you have wrapped with `@cache`.
 
         :param cache_name:
             String with the name of the cache-file. The full filename is the

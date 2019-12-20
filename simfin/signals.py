@@ -27,13 +27,14 @@ def price_signals(df_prices, group_index=TICKER):
     in the given DataFrame.
 
     This function can take a while to compute, so it will create a cache-file
-    if you set the arg `cache_refresh`. The next time you call this function,
+    if you pass the arg `cache_refresh`. The next time you call this function,
     the cache-file will get loaded if it is more recent than specified by
     `cache_refresh`, otherwise the function will get computed again and the
-    result saved in the cache-file for future use.
+    result saved in the cache-file for future use. See the documentation for
+    the `cache` wrapper-function for details on its arguments.
 
     WARNING: You *MUST* use keyword arguments to this function, otherwise the
-    first unnamed arguments would get passed to the @cache wrapper instead.
+    first unnamed arguments would get passed to the `cache` wrapper instead.
 
     :param df_prices:
         Pandas DataFrame with share-prices for multiple stocks.
@@ -42,31 +43,6 @@ def price_signals(df_prices, group_index=TICKER):
         If the DataFrame has a MultiIndex then group data using this
         index-column. By default this is TICKER but it could also be e.g.
         SIMFIN_ID if you are using that as an index in your DataFrame.
-
-    :param cache_name:
-        String with the name of the cache-file.
-
-    :param cache_refresh:
-        Determines if the function should be called and the results saved to
-        the cache-file. Different conditions are supported, depending on the
-        type and value of this argument:
-
-        - If `None` then the cache-file is never used and the function is
-          always called as normal.
-        - If `True` then the function is called and the cache-file refreshed.
-        - If `False` the cache-file is always used, unless it does not exist,
-          in which case the function is called and the cache-file saved.
-        - If an integer which is lower than the cache-file's age in days, then
-          the function is called and the cache-file is refreshed. The cache is
-          also refreshed if the integer is 0 (zero).
-        - If a string or list of strings, these are considered file-paths e.g.
-          for dataset-files. If the cache-file is older than any one of those
-          files, then the function is called and the cache-file is refreshed.
-
-    :param cache_format:
-        String with the format of the cache-file. Default is 'pickle' which
-        is very fast but creates large, uncompressed files. Compression can
-        be enabled with the option 'pickle.gz' which is slightly slower.
 
     :return:
         Pandas DataFrame with price-signals.
@@ -120,13 +96,14 @@ def trig_signals(df, signal1, signal2, group_index=TICKER):
     if df[signal1] crosses below df[signal2] create a Sell signal.
 
     This function can take a while to compute, so it will create a cache-file
-    if you set the arg `cache_refresh`. The next time you call this function,
+    if you pass the arg `cache_refresh`. The next time you call this function,
     the cache-file will get loaded if it is more recent than specified by
     `cache_refresh`, otherwise the function will get computed again and the
-    result saved in the cache-file for future use.
+    result saved in the cache-file for future use. See the documentation for
+    the `cache` wrapper-function for details on its arguments.
 
     WARNING: You *MUST* use keyword arguments to this function, otherwise the
-    first unnamed arguments would get passed to the @cache wrapper instead.
+    first unnamed arguments would get passed to the `cache` wrapper instead.
 
     :param df:
         Pandas DataFrame with columns `signal1` and `signal2`.
@@ -142,31 +119,6 @@ def trig_signals(df, signal1, signal2, group_index=TICKER):
         If the DataFrame has a MultiIndex then group data using this
         index-column. By default this is TICKER but it could also be e.g.
         SIMFIN_ID if you are using that as an index in your DataFrame.
-
-    :param cache_name:
-        String with the name of the cache-file.
-
-    :param cache_refresh:
-        Determines if the function should be called and the results saved to
-        the cache-file. Different conditions are supported, depending on the
-        type and value of this argument:
-
-        - If `None` then the cache-file is never used and the function is
-          always called as normal.
-        - If `True` then the function is called and the cache-file refreshed.
-        - If `False` the cache-file is always used, unless it does not exist,
-          in which case the function is called and the cache-file saved.
-        - If an integer which is lower than the cache-file's age in days, then
-          the function is called and the cache-file is refreshed. The cache is
-          also refreshed if the integer is 0 (zero).
-        - If a string or list of strings, these are considered file-paths e.g.
-          for dataset-files. If the cache-file is older than any one of those
-          files, then the function is called and the cache-file is refreshed.
-
-    :param cache_format:
-        String with the format of the cache-file. Default is 'pickle' which
-        is very fast but creates large, uncompressed files. Compression can
-        be enabled with the option 'pickle.gz' which is slightly slower.
 
     :return:
         Pandas Dataframe with BUY, SELL, HOLD signals.
@@ -217,13 +169,14 @@ def volume_signals(df_prices, df_shares, window=20, fill_method='ffill',
     and VOLUME_TURNOVER the moving-average is calculated afterwards.
 
     This function can take a while to compute, so it will create a cache-file
-    if you set the arg `cache_refresh`. The next time you call this function,
+    if you pass the arg `cache_refresh`. The next time you call this function,
     the cache-file will get loaded if it is more recent than specified by
     `cache_refresh`, otherwise the function will get computed again and the
-    result saved in the cache-file for future use.
+    result saved in the cache-file for future use. See the documentation for
+    the `cache` wrapper-function for details on its arguments.
 
     WARNING: You *MUST* use keyword arguments to this function, otherwise the
-    first unnamed arguments would get passed to the @cache wrapper instead.
+    first unnamed arguments would get passed to the `cache` wrapper instead.
 
     :param df_prices:
         Pandas DataFrame with share-prices for multiple stocks.
@@ -251,31 +204,6 @@ def volume_signals(df_prices, df_shares, window=20, fill_method='ffill',
         If the DataFrame has a MultiIndex then group data using this
         index-column. By default this is TICKER but it could also be e.g.
         SIMFIN_ID if you are using that as an index in your DataFrame.
-
-    :param cache_name:
-        String with the name of the cache-file.
-
-    :param cache_refresh:
-        Determines if the function should be called and the results saved to
-        the cache-file. Different conditions are supported, depending on the
-        type and value of this argument:
-
-        - If `None` then the cache-file is never used and the function is
-          always called as normal.
-        - If `True` then the function is called and the cache-file refreshed.
-        - If `False` the cache-file is always used, unless it does not exist,
-          in which case the function is called and the cache-file saved.
-        - If an integer which is lower than the cache-file's age in days, then
-          the function is called and the cache-file is refreshed. The cache is
-          also refreshed if the integer is 0 (zero).
-        - If a string or list of strings, these are considered file-paths e.g.
-          for dataset-files. If the cache-file is older than any one of those
-          files, then the function is called and the cache-file is refreshed.
-
-    :param cache_format:
-        String with the format of the cache-file. Default is 'pickle' which
-        is very fast but creates large, uncompressed files. Compression can
-        be enabled with the option 'pickle.gz' which is slightly slower.
 
     :return:
         Pandas DataFrame with volume-signals.
@@ -349,13 +277,14 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
     etc. for all stocks in the given DataFrames.
 
     This function can take a while to compute, so it will create a cache-file
-    if you set the arg `cache_refresh`. The next time you call this function,
+    if you pass the arg `cache_refresh`. The next time you call this function,
     the cache-file will get loaded if it is more recent than specified by
     `cache_refresh`, otherwise the function will get computed again and the
-    result saved in the cache-file for future use.
+    result saved in the cache-file for future use. See the documentation for
+    the `cache` wrapper-function for details on its arguments.
 
     WARNING: You *MUST* use keyword arguments to this function, otherwise the
-    first unnamed arguments would get passed to the @cache wrapper instead.
+    first unnamed arguments would get passed to the `cache` wrapper instead.
 
     :param df_prices:
         Optional Pandas DataFrame with share-prices for one or more stocks.
@@ -400,31 +329,6 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
         If the DataFrames have a MultiIndex then group data using this
         index-column. By default this is TICKER but it could also be e.g.
         SIMFIN_ID if you are using that as an index in your DataFrame.
-
-    :param cache_name:
-        String with the name of the cache-file.
-
-    :param cache_refresh:
-        Determines if the function should be called and the results saved to
-        the cache-file. Different conditions are supported, depending on the
-        type and value of this argument:
-
-        - If `None` then the cache-file is never used and the function is
-          always called as normal.
-        - If `True` then the function is called and the cache-file refreshed.
-        - If `False` the cache-file is always used, unless it does not exist,
-          in which case the function is called and the cache-file saved.
-        - If an integer which is lower than the cache-file's age in days, then
-          the function is called and the cache-file is refreshed. The cache is
-          also refreshed if the integer is 0 (zero).
-        - If a string or list of strings, these are considered file-paths e.g.
-          for dataset-files. If the cache-file is older than any one of those
-          files, then the function is called and the cache-file is refreshed.
-
-    :param cache_format:
-        String with the format of the cache-file. Default is 'pickle' which
-        is very fast but creates large, uncompressed files. Compression can
-        be enabled with the option 'pickle.gz' which is slightly slower.
 
     :return:
         Pandas DataFrame with financial signals.
@@ -513,13 +417,14 @@ def growth_signals(df_income_ttm, df_income_qrt,
       the Quarterly Revenue from the previous quarter.
 
     This function can take a while to compute, so it will create a cache-file
-    if you set the arg `cache_refresh`. The next time you call this function,
+    if you pass the arg `cache_refresh`. The next time you call this function,
     the cache-file will get loaded if it is more recent than specified by
     `cache_refresh`, otherwise the function will get computed again and the
-    result saved in the cache-file for future use.
+    result saved in the cache-file for future use. See the documentation for
+    the `cache` wrapper-function for details on its arguments.
 
     WARNING: You *MUST* use keyword arguments to this function, otherwise the
-    first unnamed arguments would get passed to the @cache wrapper instead.
+    first unnamed arguments would get passed to the `cache` wrapper instead.
 
     :param df_prices:
         Optional Pandas DataFrame with share-prices for one or more stocks.
@@ -575,31 +480,6 @@ def growth_signals(df_income_ttm, df_income_qrt,
         If the DataFrames have a MultiIndex then group data using this
         index-column. By default this is TICKER but it could also be e.g.
         SIMFIN_ID if you are using that as an index in your DataFrame.
-
-    :param cache_name:
-        String with the name of the cache-file.
-
-    :param cache_refresh:
-        Determines if the function should be called and the results saved to
-        the cache-file. Different conditions are supported, depending on the
-        type and value of this argument:
-
-        - If `None` then the cache-file is never used and the function is
-          always called as normal.
-        - If `True` then the function is called and the cache-file refreshed.
-        - If `False` the cache-file is always used, unless it does not exist,
-          in which case the function is called and the cache-file saved.
-        - If an integer which is lower than the cache-file's age in days, then
-          the function is called and the cache-file is refreshed. The cache is
-          also refreshed if the integer is 0 (zero).
-        - If a string or list of strings, these are considered file-paths e.g.
-          for dataset-files. If the cache-file is older than any one of those
-          files, then the function is called and the cache-file is refreshed.
-
-    :param cache_format:
-        String with the format of the cache-file. Default is 'pickle' which
-        is very fast but creates large, uncompressed files. Compression can
-        be enabled with the option 'pickle.gz' which is slightly slower.
 
     :return:
         Pandas DataFrame with growth signals.
@@ -697,13 +577,14 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
     in the given DataFrames.
 
     This function can take a while to compute, so it will create a cache-file
-    if you set the arg `cache_refresh`. The next time you call this function,
+    if you pass the arg `cache_refresh`. The next time you call this function,
     the cache-file will get loaded if it is more recent than specified by
     `cache_refresh`, otherwise the function will get computed again and the
-    result saved in the cache-file for future use.
+    result saved in the cache-file for future use. See the documentation for
+    the `cache` wrapper-function for details on its arguments.
 
     WARNING: You *MUST* use keyword arguments to this function, otherwise the
-    first unnamed arguments would get passed to the @cache wrapper instead.
+    first unnamed arguments would get passed to the `cache` wrapper instead.
 
     :param df_prices:
         Pandas DataFrame with share-prices for one or more stocks.
@@ -752,31 +633,6 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
         If the DataFrames have a MultiIndex then group data using this
         index-column. By default this is TICKER but it could also be e.g.
         SIMFIN_ID if you are using that as an index in your DataFrame.
-
-    :param cache_name:
-        String with the name of the cache-file.
-
-    :param cache_refresh:
-        Determines if the function should be called and the results saved to
-        the cache-file. Different conditions are supported, depending on the
-        type and value of this argument:
-
-        - If `None` then the cache-file is never used and the function is
-          always called as normal.
-        - If `True` then the function is called and the cache-file refreshed.
-        - If `False` the cache-file is always used, unless it does not exist,
-          in which case the function is called and the cache-file saved.
-        - If an integer which is lower than the cache-file's age in days, then
-          the function is called and the cache-file is refreshed. The cache is
-          also refreshed if the integer is 0 (zero).
-        - If a string or list of strings, these are considered file-paths e.g.
-          for dataset-files. If the cache-file is older than any one of those
-          files, then the function is called and the cache-file is refreshed.
-
-    :param cache_format:
-        String with the format of the cache-file. Default is 'pickle' which
-        is very fast but creates large, uncompressed files. Compression can
-        be enabled with the option 'pickle.gz' which is slightly slower.
 
     :return:
         Pandas DataFrame with valuation signals.

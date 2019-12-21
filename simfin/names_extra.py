@@ -49,6 +49,9 @@ P_BOOK = PBOOK = 'P/Book'
 # their actual book-value. The P_NETNET ratio is a more conservative estimate.
 P_NCAV = PNCAV = 'P/NCAV'
 
+# Net Current Asset Value (see P_NCAV for more explanation).
+NCAV = 'Net Current Asset Value (NCAV)'
+
 # Price / NetNet Working Capital (NetNet aka. NNWC).
 # Where NetNet = Cash & Equiv. + 0.75 * Receivables
 #              + 0.5 * Inventory - Total Liabilities.
@@ -57,6 +60,9 @@ P_NCAV = PNCAV = 'P/NCAV'
 # This is more conservative than P_NCAV because Receivables and Inventories
 # are not fully counted in the estimate of the liquidation value.
 P_NETNET = PNETNET = P_NNWC = PNNWC = 'P/NetNet'
+
+# NetNet Working Capital (see P_NETNET for more explanation).
+NETNET = 'NetNet Working Capital'
 
 # Earnings / Price.
 EARNINGS_YIELD = 'Earnings Yield'

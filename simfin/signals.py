@@ -14,7 +14,7 @@ import numpy as np
 from simfin.resample import reindex
 from simfin.rel_change import rel_change
 from simfin.utils import apply, add_date_offset
-from simfin.transform import free_cash_flow
+from simfin.transform import free_cash_flow, ncav, netnet
 from simfin.cache import cache
 from simfin.names import *
 
@@ -654,8 +654,13 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
     # Combine all the data. This creates a new copy that we can add columns to.
     df = pd.concat([df_inc, df_bal, df_cf], axis=1)
 
-    # Calculate FCF and add it as a new column to the DataFrame.
+    # Calculate derived financial data such as Free Cash Flow (FCF),
+    # and add it as new columns to the DataFrame.
+    # This is only TTM data with 4 data-points per year, so it is
+    # faster than calculating it for the daily data-points below.
     df[FCF] = free_cash_flow(df_cashflow_ttm)
+    df[NCAV] = ncav(df_balance_ttm)
+    df[NETNET] = netnet(df_balance_ttm)
 
     # Add offset / lag to the index-dates of the financial data.
     if offset is not None:
@@ -697,18 +702,13 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
 
     # Calculate Price / Net Current Asset Value (NCAV).
     # This measures the share-price relative to estimated liquidation value.
-    df_ncav = df_daily[TOTAL_CUR_ASSETS] - df_daily[TOTAL_LIABILITIES]
-    df_signals[P_NCAV] = df_price / df_ncav
+    df_signals[P_NCAV] = df_price / df_daily[NCAV]
 
     # Calculate Price / Net-Net Working Capital (NNWC aka. NetNet).
     # This measures the share-price relative to a more conservative estimate
     # of liquidation value, which values the Receivables and Inventories at
     # a discount to their book-value.
-    df_netnet = df_daily[CASH_EQUIV_ST_INVEST].fillna(0) \
-              + df_daily[ACC_NOTES_RECV].fillna(0) * 0.75 \
-              + df_daily[INVENTORIES].fillna(0) * 0.5 \
-              - df_daily[TOTAL_LIABILITIES]
-    df_signals[P_NETNET] = df_price / df_netnet
+    df_signals[P_NETNET] = df_price / df_daily[NETNET]
 
     # Calculate Earnings Yield (inverse of the P/E ratio).
     df_signals[EARNINGS_YIELD] = df_daily[NET_INCOME_COMMON] / df_price

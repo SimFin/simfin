@@ -92,6 +92,59 @@ def ebitda(df_income, df_cashflow, formula=NET_INCOME):
 
 ##########################################################################
 
+def ncav(df_balance):
+    """
+    Calculate the so-called Net Current Asset Value (NCAV) which is a very
+    conservative estimate of the liquidation value of a company, where only
+    the Current Assets are counted at 100% and no other assets are counted,
+    and then the Total Liabilities are subtracted from this.
+
+    :param df_balance:
+        Pandas DataFrame which is assumed to have the columns:
+        TOTAL_CUR_ASSETS, TOTAL_LIABILITIES
+
+    :return:
+        Pandas Series
+    """
+
+    # Calculate NCAV.
+    df_result = df_balance[TOTAL_CUR_ASSETS] - df_balance[TOTAL_LIABILITIES]
+
+    # Rename the result.
+    df_result.rename(NCAV, inplace=True)
+
+    return df_result
+
+
+def netnet(df_balance):
+    """
+    Calculate the so-called NetNet Working Capital which is an even more
+    conservative estimate of the liquidation value of a company compared to
+    the NCAV, because Cash & Equivalents are counted at 100%, but Receivables
+    are only counted at 75%, Inventories are counted at 50%, and no other
+    assets are counted, and the Total Liabilities are subtracted from this.
+
+    :param df_balance:
+        Pandas DataFrame which is assumed to have the columns:
+        CASH_EQUIV_ST_INVEST, ACC_NOTES_RECV, INVENTORIES, TOTAL_LIABILITIES
+
+    :return:
+        Pandas Series
+    """
+
+    # Calculate NetNet.
+    df_result = df_balance[CASH_EQUIV_ST_INVEST].fillna(0) \
+              + df_balance[ACC_NOTES_RECV].fillna(0) * 0.75 \
+              + df_balance[INVENTORIES].fillna(0) * 0.5 \
+              - df_balance[TOTAL_LIABILITIES]
+
+    # Rename the result.
+    df_result.rename(NETNET, inplace=True)
+
+    return df_result
+
+##########################################################################
+
 def clip(df, lower, upper):
     """
     Limit the values of a DataFrame between the lower and upper bounds.

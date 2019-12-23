@@ -386,7 +386,7 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
     # Reindex to the same daily data-points as the share-prices.
     if df_prices is not None:
         df_signals = reindex(df_src=df_signals, df_target=df_prices,
-                             method=fill_method)
+                             method=fill_method, group_index=group_index)
 
     # Sort the columns by their names.
     df_signals.sort_index(axis='columns', inplace=True)
@@ -558,7 +558,7 @@ def growth_signals(df_income_ttm, df_income_qrt,
     # Reindex to the same daily data-points as the share-prices.
     if df_prices is not None:
         df_signals = reindex(df_src=df_signals, df_target=df_prices,
-                             method=fill_method)
+                             method=fill_method, group_index=group_index)
 
     # Sort the columns by their names.
     df_signals.sort_index(axis='columns', inplace=True)

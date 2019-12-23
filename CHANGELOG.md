@@ -7,6 +7,9 @@ experienced users of SimFin.
 
 ### Changes
 
+-   Added `sf.StockHub` for easy loading and processing of stock data,
+    and wrote a new tutorial on this.
+
 -   Added function `sf.rel_change()` for calculating stock returns and
     various growth-rates. Added `sf.mean_log_change()` for calculating
     mean-log stock returns e.g. for all 1-3 year periods. Also wrote a

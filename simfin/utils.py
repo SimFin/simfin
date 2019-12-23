@@ -266,3 +266,11 @@ def is_str_or_list_str(s):
           (isinstance(s, list) and all(isinstance(x, str) for x in s))
 
 ##########################################################################
+
+def func_name(func):
+    """
+    Return the name of the function, or None if `func` is None.
+    """
+    return None if func is None else func.__name__
+
+##########################################################################

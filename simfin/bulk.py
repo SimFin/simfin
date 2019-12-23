@@ -58,7 +58,7 @@ def _compose_filename(dataset, market=None, variant=None, extension=None):
     return filename
 
 
-def _compose_path(*args, **kwargs):
+def compose_dataset_path(**kwargs):
     """
     Compose the full path for a dataset CSV-file on disk.
 
@@ -69,7 +69,7 @@ def _compose_path(*args, **kwargs):
     """
 
     # Compose the filename.
-    filename = _compose_filename(extension='csv', *args, **kwargs)
+    filename = _compose_filename(extension='csv', **kwargs)
 
     # Compose the full path.
     path = os.path.join(get_data_dir(), filename)
@@ -77,7 +77,7 @@ def _compose_path(*args, **kwargs):
     return path
 
 
-def _compose_download_path(*args, **kwargs):
+def _compose_download_path(**kwargs):
     """
     Compose the full path for the downloaded dataset zip-file.
 
@@ -88,7 +88,7 @@ def _compose_download_path(*args, **kwargs):
     """
 
     # Compose the filename.
-    filename = _compose_filename(extension="zip", *args, **kwargs)
+    filename = _compose_filename(extension="zip", **kwargs)
 
     # Compose the full path.
     path = os.path.join(get_download_dir(), filename)
@@ -134,7 +134,6 @@ def _compose_url(dataset, market=None, variant=None):
 
     return url
 
-
 ##########################################################################
 # Download functions.
 
@@ -171,7 +170,7 @@ def _print_download_progress(downloaded_size, total_size):
     sys.stdout.flush()
 
 
-def _download(*args, **kwargs):
+def _download(**kwargs):
     """
     Download a dataset from the SimFin server.
 
@@ -183,10 +182,10 @@ def _download(*args, **kwargs):
     """
 
     # URL to SimFin's server where the file is located.
-    url = _compose_url(*args, **kwargs)
+    url = _compose_url(**kwargs)
 
     # Local path for the downloaded file.
-    download_path = _compose_download_path(*args, **kwargs)
+    download_path = _compose_download_path(**kwargs)
 
     # Open a streaming connection to the SimFin server.
     with requests.get(url, stream=True) as response:
@@ -233,7 +232,7 @@ def _download(*args, **kwargs):
     return download_path
 
 
-def _maybe_download(refresh_days, *args, **kwargs):
+def _maybe_download(refresh_days, **kwargs):
     """
     If the given dataset does not exist on disk or if it is too old, then
     download the new dataset from the SimFin server and save it to disk.
@@ -256,10 +255,10 @@ def _maybe_download(refresh_days, *args, **kwargs):
     """
 
     # Name of the dataset.
-    dataset_name = _compose_filename(*args, **kwargs)
+    dataset_name = _compose_filename(**kwargs)
 
     # Full path for the local data-file.
-    path = _compose_path(*args, **kwargs)
+    path = compose_dataset_path(**kwargs)
 
     # Determine if the file must be downloaded.
     if os.path.exists(path):
@@ -296,7 +295,7 @@ def _maybe_download(refresh_days, *args, **kwargs):
 
     if download:
         # Download the file from the SimFin server.
-        download_path = _download(*args, **kwargs)
+        download_path = _download(**kwargs)
 
         # Print status message.
         print('\n- Extracting zip-file ... ', end='')
@@ -423,7 +422,7 @@ def load(dataset, variant=None, market=None,
                     refresh_days=refresh_days)
 
     # Full path for the CSV-file on disk.
-    path = _compose_path(dataset=dataset, variant=variant, market=market)
+    path = compose_dataset_path(dataset=dataset, variant=variant, market=market)
 
     # Lambda function for converting strings to dates. Format: YYYY-MM-DD
     date_parser = lambda x: pd.to_datetime(x, yearfirst=True, dayfirst=False)

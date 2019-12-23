@@ -16,7 +16,7 @@ from simfin.hubs import StockHub
 from simfin.rel_change import rel_change, mean_log_change
 from simfin.resample import resample, resample_daily, asfreq, asfreq_daily
 from simfin.resample import reindex, index_union
-from simfin.signals import price_signals, trig_signals, volume_signals
+from simfin.signals import price_signals, trade_signals, volume_signals
 from simfin.signals import fin_signals, growth_signals, val_signals
 from simfin.transform import clip, winsorize, free_cash_flow, ebitda
 from simfin.transform import avg_ttm, avg_ttm_2y, avg_ttm_3y

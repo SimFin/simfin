@@ -87,7 +87,7 @@ def price_signals(df_prices, group_index=TICKER):
 ##########################################################################
 
 @cache
-def trig_signals(df, signal1, signal2, group_index=TICKER):
+def trade_signals(df, signal1, signal2, group_index=TICKER):
     """
     Create Buy / Sell / Hold signals from two signals in the given DataFrame.
 

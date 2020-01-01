@@ -12,8 +12,8 @@
 from functools import lru_cache, partialmethod
 import hashlib
 
-from simfin.bulk import load_shareprices, load_fundamental, load_companies
-from simfin.bulk import compose_dataset_path
+from simfin.load import load_shareprices, load_fundamental, load_companies
+from simfin.paths import _path_dataset
 from simfin.rel_change import rel_change, mean_log_change
 from simfin.signals import price_signals, volume_signals, growth_signals
 from simfin.signals import fin_signals, val_signals
@@ -177,9 +177,9 @@ class StockHub:
         """
 
         # Create list of file-paths for the datasets.
-        dataset_paths = [compose_dataset_path(dataset=dataset+self._dataset_extension,
-                                              variant=variant,
-                                              market=self._market)
+        dataset_paths = [_path_dataset(dataset=dataset + self._dataset_extension,
+                                       variant=variant,
+                                       market=self._market)
                          for dataset, variant in datasets]
 
         # List of arguments used to uniquely identify the cache-file.

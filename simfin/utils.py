@@ -186,8 +186,14 @@ def file_age(path):
 
     To get the file's age as the number of days call `file_age(path).days`
 
-    :param path: String with full path of the file.
-    :return: `datetime.timedelta` object.
+    Note that the file is assumed to exist, otherwise an exception is raised.
+    Use `os.path.exists(path)` to check this before calling this function.
+
+    :param path:
+        String with full path of the file.
+
+    :return:
+        `datetime.timedelta` object.
     """
 
     # Last time the file was modified.

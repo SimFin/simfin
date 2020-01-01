@@ -9,6 +9,7 @@
 ##########################################################################
 
 import pandas as pd
+import numpy as np
 
 from simfin.names import *
 
@@ -205,6 +206,8 @@ def winsorize(df, quantile=0.05, columns=None):
     For example, when quantile=0.05 we limit all values between the
     0.05 and 0.95 quantiles.
 
+    Note that inf and nan values are ignored when finding the quantiles.
+
     :param df:
         Pandas DataFrame with the data to be limited.
 
@@ -212,7 +215,8 @@ def winsorize(df, quantile=0.05, columns=None):
         Float between 0.0 and 1.0
 
     :param columns:
-        List of strings with names of the columns in `df` to winsorize.
+        List of strings with names of the columns in `df` to winsorize,
+        and the rest of the columns are merely copied from `df`.
         If None then winsorize all columns in `df`.
 
     :return:
@@ -230,9 +234,15 @@ def winsorize(df, quantile=0.05, columns=None):
     else:
         # Winsorize ALL of the columns in the DataFrame.
 
+        # Boolean mask used to ignore inf values.
+        mask = np.isfinite(df)
+
         # Lower and upper quantiles for all columns in the data.
-        lower = df.quantile(q=quantile)
-        upper = df.quantile(q=1.0 - quantile)
+        # We use the boolean mask to select only the finite values,
+        # and the infinite values are set to NaN, which are ignored
+        # by the quantile-function.
+        lower = df[mask].quantile(q=quantile)
+        upper = df[mask].quantile(q=1.0 - quantile)
 
         # Limit / clip all column-values between these quantiles.
         df_clipped = df.clip(lower=lower, upper=upper, axis='columns')

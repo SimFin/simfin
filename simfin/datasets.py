@@ -1,8 +1,7 @@
 ##########################################################################
 #
-# Lists with the names of all valid datasets, variants and markets
-# available for bulk download from SimFin. Also a few helper-functions
-# for iterating and loading all the datasets.
+# Functions and classes for iterating over and loading all datasets,
+# variants and markets that are available for bulk download from SimFin.
 #
 ##########################################################################
 # SimFin - Simple financial data for Python.
@@ -11,140 +10,77 @@
 ##########################################################################
 
 import simfin as sf
+from simfin.load_info import load_info_datasets
 
 from collections import defaultdict
+from functools import partial, lru_cache
 import sys
 
 ##########################################################################
-# Datasets.
+# Lists of dataset names.
 
-# All dataset names for Income Statements.
-datasets_income = ['income', 'income-banks', 'income-insurance']
+@lru_cache()
+def datasets_all():
+    """
+    Return a list of strings with the names of all available datasets.
+    """
 
-# All dataset names for Balance Sheets.
-datasets_balance = ['balance', 'balance-banks', 'balance-insurance']
+    # Load dict with info about all the datasets.
+    info_datasets = load_info_datasets()
 
-# All dataset names for Cash-Flow Statements.
-datasets_cashflow = ['cashflow', 'cashflow-banks', 'cashflow-insurance']
+    # Create a list of just the dataset names.
+    datasets = list(info_datasets)
 
-# All dataset names for fundamental data.
-datasets_fundamental = datasets_income + datasets_balance + datasets_cashflow
+    return datasets
 
-# All dataset names for shareprice data.
-datasets_shareprices = ['shareprices']
 
-# All other dataset names.
-datasets_other = ['companies', 'industries', 'markets']
+@lru_cache()
+def datasets_startswith(names):
+    """
+    Return a list of strings with dataset names that begin with the given
+    names.
 
-# All dataset names.
-datasets_all = datasets_income + datasets_balance + datasets_cashflow + \
-               datasets_shareprices + datasets_other
+    :param names:
+        String or tuple of strings.
+
+    :return:
+        List of strings.
+    """
+
+    # Load dict with info about all the datasets.
+    info_datasets = load_info_datasets()
+
+    # Create a list of just the dataset names.
+    datasets = list(info_datasets)
+
+    # Filter the datasets so we only get the ones that start with these names.
+    datasets = list(filter(lambda s: s.startswith(names), datasets))
+
+    return datasets
+
+# List of dataset names that begin with 'income'.
+datasets_income = partial(datasets_startswith, names='income')
+datasets_income.__doc__ = 'List of dataset names that begin with \'income\'.'
+
+# List of dataset names that begin with 'balance'.
+datasets_balance = partial(datasets_startswith, names='balance')
+datasets_balance.__doc__ = 'List of dataset names that begin with \'balance\'.'
+
+# List of dataset names that begin with 'cashflow'.
+datasets_cashflow = partial(datasets_startswith, names='cashflow')
+datasets_cashflow.__doc__ = 'List of dataset names that begin with \'cashflow\'.'
+
+# List of dataset names that begin with either 'income', 'balance' or 'cashflow'.
+datasets_fundamental = partial(datasets_startswith,
+                               names=('income', 'balance', 'cashflow'))
+datasets_fundamental.__doc__ = 'List of dataset names with fundamental data.'
+
+# List of dataset names that begin with 'shareprices'.
+datasets_shareprices = partial(datasets_startswith, names='shareprices')
+datasets_shareprices.__doc__ = 'List of dataset names that begin with \'shareprices\'.'
 
 ##########################################################################
-# Markets.
-
-# Lists of the market-choices. This is the default list that can be
-# updated from the SimFin server using the helper-functions below.
-markets_all = ['us', 'de', 'sg']
-markets_none = [None]
-
-
-def _gen_valid_markets():
-    """
-    Create a dict for easy lookup of valid markets for different datasets.
-
-    The reason we have a helper-function for this, is that it needs to
-    be updated when `markets_all` has been updated from the SimFin server.
-    """
-
-    valid_markets = \
-        {
-            'income': markets_all,
-            'income-banks': markets_all,
-            'income-insurance': markets_all,
-
-            'balance': markets_all,
-            'balance-banks': markets_all,
-            'balance-insurance': markets_all,
-
-            'cashflow': markets_all,
-            'cashflow-banks': markets_all,
-            'cashflow-insurance': markets_all,
-
-            'shareprices': markets_all,
-            'companies': markets_all,
-
-            'industries': markets_none,
-            'markets': markets_none
-        }
-
-    return valid_markets
-
-
-# Dict for easy lookup of the valid markets for a given dataset.
-# This will be updated when _load_market_list() is called.
-valid_markets = _gen_valid_markets()
-
-
-def _load_market_list():
-    """
-    Load all available markets from the SimFin server and update
-    the global variables `markets_all` and `valid_markets`.
-
-    Note that we cannot call this function until the data-dir has been set,
-    so it cannot simply set `markets_all` and `valid_markets` upon import.
-    """
-    global markets_all
-    global valid_markets
-
-    try:
-        # Load list with all the markets from the SimFin server.
-        df = sf.load_markets(refresh_days=0)
-
-        # Update the list of all available markets.
-        markets_all = list(df.index.values)
-
-        # Update the dict of valid markets for different datasets.
-        valid_markets = _gen_valid_markets()
-    except Exception as e:
-        # Print the exception and continue.
-        print(e, file=sys.stderr)
-        print("Using default market-list.", file=sys.stderr)
-
-
-##########################################################################
-# Variants.
-
-# Lists of the variant-choices for different types of datasets.
-variants_fundamental = ['annual', 'annual-full',
-                        'quarterly', 'quarterly-full',
-                        'ttm', 'ttm-full']
-variants_shareprices = ['latest', 'daily']
-variants_none = [None]
-
-# Dict for easy lookup of the valid variants for a given dataset.
-valid_variants = \
-    {
-        'income': variants_fundamental,
-        'income-banks': variants_fundamental,
-        'income-insurance': variants_fundamental,
-
-        'balance': variants_fundamental,
-        'balance-banks': variants_fundamental,
-        'balance-insurance': variants_fundamental,
-
-        'cashflow': variants_fundamental,
-        'cashflow-banks': variants_fundamental,
-        'cashflow-insurance': variants_fundamental,
-
-        'shareprices': variants_shareprices,
-        'companies': variants_none,
-        'industries': variants_none,
-        'markets': variants_none,
-    }
-
-##########################################################################
-# Helper functions.
+# Functions for iterating over and loading all datasets.
 
 def iter_all_datasets():
     """
@@ -159,14 +95,31 @@ def iter_all_datasets():
         print(dataset, variant, market)
     """
 
+    # Load dict with info about all the datasets.
+    info_datasets = load_info_datasets()
+
     # Yield all valid combinations of datasets, variants and markets.
-    for dataset in datasets_all:
-        for variant in valid_variants[dataset]:
-            for market in valid_markets[dataset]:
+    for dataset, x in info_datasets.items():
+        # If the list of variants is empty, use a list with None,
+        # otherwise the for-loop below would not yield anything.
+        if len(x['variants']) > 0:
+            variants = x['variants']
+        else:
+            variants = [None]
+
+        # If the list of markets is empty, use a list with None,
+        # otherwise the for-loop below would not yield anything.
+        if len(x['markets']) > 0:
+            markets = x['markets']
+        else:
+            markets = [None]
+
+        for variant in variants:
+            for market in markets:
                 yield dataset, variant, market
 
 
-def load_all_datasets(*args, **kwargs):
+def load_all_datasets(**kwargs):
     """
     Load all datasets and variants. Create and return a nested
     dict for fast lookup given dataset, variant and market names.
@@ -183,9 +136,6 @@ def load_all_datasets(*args, **kwargs):
                  annual Income Statements for the US market.
     """
 
-    # Update the list of available markets from the SimFin server.
-    _load_market_list()
-
     # Initialize a dict that can be nested to any depth.
     dfs = defaultdict(lambda: defaultdict(dict))
 
@@ -194,7 +144,7 @@ def load_all_datasets(*args, **kwargs):
         try:
             # Load the dataset and variant as a Pandas DataFrame.
             df = sf.load(dataset=dataset, variant=variant, market=market,
-                         *args, **kwargs)
+                         **kwargs)
 
             # Add the Pandas DataFrame to the nested dict.
             dfs[dataset][variant][market] = df
@@ -222,7 +172,7 @@ class AllDatasets:
     Also provide functions for easy lookup and iteration over datasets.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         """
         Accepts the same args as the `sf.load()` function, except for
         dataset, variant and market. For example, `refresh_days` can be
@@ -230,7 +180,7 @@ class AllDatasets:
         useful for testing purposes.
         """
         # Load all datasets into a nested dict-dict.
-        self._dfs = load_all_datasets(*args, **kwargs)
+        self._dfs = load_all_datasets(**kwargs)
 
     def get(self, dataset, variant=None, market=None):
         """
@@ -271,6 +221,9 @@ class AllDatasets:
             dataset (string), variant (string), market (string), df (Pandas DataFrame)
         """
 
+        # Load dict with info about all the datasets.
+        info_datasets = load_info_datasets()
+
         # Use provided or all datasets?
         if datasets is None:
             datasets = datasets_all
@@ -281,21 +234,21 @@ class AllDatasets:
             if variants is not None:
                 _variants = variants
             else:
-                _variants = valid_variants[dataset]
+                _variants = info_datasets[dataset]['variants']
 
             # Use provided or all valid markets for this dataset?
             if markets is not None:
                 _markets = markets
             else:
-                _markets = valid_markets[dataset]
+                _markets = info_datasets[dataset]['markets']
 
-            # For all the selected variants and markets
+            # For all the selected variants and markets.
             for variant in _variants:
                 for market in _markets:
-                    # Get the DataFrame with the actual data.
+                    # Get the Pandas DataFrame with the actual data.
                     df = self.get(dataset=dataset, variant=variant, market=market)
 
-                    # Yield all the strings and the DataFrame.
+                    # Yield all the strings and the Pandas DataFrame.
                     yield dataset, variant, market, df
 
 ##########################################################################

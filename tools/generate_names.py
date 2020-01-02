@@ -24,10 +24,9 @@ import sys
 
 from textwrap import TextWrapper
 
-##########################################################################
+from simfin.download import _url_info
 
-# URL for the json-file that will be converted into names.py
-_url = 'https://simfin.com/api/bulk_info/bulk_names.php'
+##########################################################################
 
 # Name of the output-file.
 _output_filename = 'names.py'
@@ -110,8 +109,13 @@ def _process():
     output to the file names.py
     """
 
+    # URL for the json-file that will be converted into names.py
+    url = _url_info(name='columns')
+
     # Download the json-file from the web-server.
-    response = requests.get(url=_url)
+    # We do not use the function load_info_columns() because it would
+    # save the json-file to disk and require us to set a data-dir.
+    response = requests.get(url=url)
     data = response.json()
 
     # Data-structure for the organized data after handling duplicate names etc.

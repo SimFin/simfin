@@ -28,7 +28,7 @@ refresh_days = 30
 
 def _create_kwargs(variant, market):
     """
-    Create a dict with keyword args for sf.() functions that take
+    Create a dict with keyword args for sf.load() functions that take
     variant, market and refresh_days as kwargs.
     """
     kwargs = \

@@ -82,7 +82,7 @@ datasets_shareprices.__doc__ = 'List of dataset names that begin with \'sharepri
 ##########################################################################
 # Functions for iterating over and loading all datasets.
 
-def iter_all_datasets():
+def iter_all_datasets(datasets=None):
     """
     Create a generator for iterating over all valid datasets, variants and
     markets. This only yields the names of the datasets, variants and
@@ -93,10 +93,20 @@ def iter_all_datasets():
 
     for dataset, variant, market in iter_all_datasets():
         print(dataset, variant, market)
+
+    :param datasets:
+        If None then iterate over all datasets. Otherwise if this is a string
+        or list of strings, then only iterate over these datasets.
     """
 
     # Load dict with info about all the datasets.
     info_datasets = load_info_datasets()
+
+    # Only use the given datasets?
+    if datasets is not None:
+        # Create a new dict which only contains the given datasets.
+        info_datasets = {k: v for k, v in info_datasets.items()
+                         if k in datasets}
 
     # Yield all valid combinations of datasets, variants and markets.
     for dataset, x in info_datasets.items():

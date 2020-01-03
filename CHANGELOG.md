@@ -26,8 +26,12 @@ experienced users of SimFin.
 -   Added wrapper-function ` @sf.cache` for caching the result of slow
     functions to disk. Added its use in all signal-functions. Wrote
     Tutorial 06 on this.
-
--   Added function `sf.ebitda` for calculating EBITDA.
+    
+-   Extended bulk-data system to support json-files with meta-info.
+    Added functions `sf.load_info_datasets` and `sf.load_info_columns`
+    and used them in `datasets.py` and `test_bulk_data.py`. Also added
+    functions `sf.info_datasets` and `sf.info_columns` and used them
+    in Tutorial 01.
 
 
 ## Version 0.2.0 (2019-11-09)

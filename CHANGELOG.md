@@ -1,9 +1,11 @@
 # Changes to the SimFin Python package
 
-## Version 0.3.0 (2019-MM-DD)
+## Version 0.3.0 (2020-01-03)
 
-"Private" beta version only intended for a small number of friends and
-experienced users of SimFin.
+Early public beta version.
+
+In this version, we were mainly trying to decide which colour the icons
+should be: https://youtu.be/UMXs9i201AQ
 
 ### Changes
 
@@ -40,7 +42,7 @@ experienced users of SimFin.
 experienced users of SimFin.
 
 It took us a while to make these changes, because we consider our moves
-very carefully: https://www.youtube.com/watch?v=HxWCAJS7Co8
+very carefully: https://youtu.be/HxWCAJS7Co8
 
 ### Changes
 

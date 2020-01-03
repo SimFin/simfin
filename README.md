@@ -1,10 +1,17 @@
-# WARNING!
+# Beta Warning
 
-This is currently under development and is only intended for the people
-directly involved in the development. If something is broken, please
-open an issue with a detailed error report. Please do NOT make Pull
-Requests. Please withhold feature suggestions until this warning is
-removed.
+This is an early beta version which may set your computer on fire, cause
+40 years of darkness, earth-quakes and volcanoes, the dead rising from
+the grave, human sacrifice, dogs and cats living together.
+[Mass hysteria!](https://www.youtube.com/watch?v=9S4cldkdCjE)
+
+If you experience any problems, you could try and install the simfin
+package using the following command, to get the latest developer version:
+
+    pip install git+https://github.com/simfin/simfin.git
+
+If you still experience problems - and your computer still works - then
+please open a GitHub issue with a detailed error report.
 
 
 # SimFin - Simple financial data for Python
@@ -65,6 +72,12 @@ See the [tutorials](https://www.github.com/simfin/simfin-tutorials/) for more
 detailed examples of how to use the simfin API and data.
 
 
+## Datasets
+
+See the list of available [datasets](https://simfin.com/data/bulk) with
+details about their contents, and instructions on how to download and use them.
+
+
 ## Installation
 
 The best way to install simfin and use it in your own project, is to
@@ -81,7 +94,8 @@ Then you can install the simfin package inside that virtual environment:
     source activate simfin-env
     pip install simfin
 
-If the last command fails then you can try the following instead:
+If the last command fails, or if you want to install the latest development
+version from this GitHub repository, then you can run the following instead:
 
     pip install git+https://github.com/simfin/simfin.git
 
@@ -158,7 +172,7 @@ simfin package to execute both the unit-tests and data-tests:
 
 The following command only runs the data-tests:
 
-    pytest --nbval-lax tests/test_bulk_data.ipynb
+    pytest --nbval-lax -v tests/test_bulk_data.ipynb
 
 
 ### More Tests

@@ -8,6 +8,7 @@ from simfin.config import set_api_key, load_api_key, get_api_key
 from simfin.config import set_data_dir, get_data_dir, get_download_dir
 from simfin.exceptions import ServerException
 from simfin.hubs import StockHub
+from simfin.info import info_columns, info_datasets
 from simfin.load import load, load_shareprices, load_companies, load_industries
 from simfin.load import load_markets
 from simfin.load import load_income, load_income_banks, load_income_insurance

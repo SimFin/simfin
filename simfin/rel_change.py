@@ -302,6 +302,12 @@ def mean_log_change(df, freq, future,
     by using vectorized math operations directly supported in Pandas and Numpy.
     But using the logarithm also means that negative values are not supported.
 
+    We use the natural logarithm, which is almost linear for changes between
+    ±20%, but beyond that range it underestimates both the gains and losses
+    compared to the non-log changes. For practical purposes, you may often
+    consider the mean-log changes to be roughly equivalent to the normal
+    percentage changes.
+
     See Tutorial 03 for a detailed explanation and derivation of the math used
     in this function, and examples on how to use this function.
 

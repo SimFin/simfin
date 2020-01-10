@@ -353,11 +353,11 @@ def max_drawdown(df, window=None, group_index=TICKER):
     if window is None:
         # Calculate Max Drawdown from the beginning.
         def _max_drawdown(df):
-            return df / df.cummax()
+            return df / df.cummax() - 1.0
     else:
         # Calculate Max Drawdown for a rolling window.
         def _max_drawdown(df):
-            return df / df.rolling(window=window).max()
+            return df / df.rolling(window=window).max() - 1.0
 
     # Calculate Max Drawdown. Use Pandas groupby if `df` has multiple stocks.
     df_result = apply(df=df, func=_max_drawdown, group_index=group_index)

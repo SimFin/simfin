@@ -471,11 +471,6 @@ def growth_signals(df_income_ttm, df_income_qrt,
     :param date_index:
         Name of the date-column for the financial data e.g. REPORT_DATE.
 
-    :param shares_index:
-        String with the column-name for the share-counts. SHARES_DILUTED
-        takes the potential diluting impact of stock-options into account, so
-        it results in more conservative valuation ratios than SHARES_BASIC.
-
     :param group_index:
         If the DataFrames have a MultiIndex then group data using this
         index-column. By default this is TICKER but it could also be e.g.

@@ -11,6 +11,7 @@
 import pandas as pd
 import numpy as np
 
+from simfin.utils import apply
 from simfin.names import *
 
 ##########################################################################
@@ -321,6 +322,45 @@ def avg_ttm(df, years):
 
     # Take the average.
     df_result /= years
+
+    return df_result
+
+##########################################################################
+
+def max_drawdown(df, window=None, group_index=TICKER):
+    """
+    Calculate the Maximum Drawdown for all stocks in the given DataFrame.
+
+    :param df:
+        Pandas DataFrame typically with share-prices but could have any data.
+        The DataFrame may contain data for one or more stocks.
+
+    :param window:
+        If None then calculate the Max Drawdown from the beginning.
+        If an integer then calculate the Max Drawdown for a rolling window
+        of that length.
+
+    :param group_index:
+        If the DataFrame has a MultiIndex then group data using this
+        index-column. By default this is TICKER but it could also be e.g.
+        SIMFIN_ID if you are using that as an index in your DataFrame.
+
+    :return:
+        Pandas DataFrame with the Max Drawdown.
+    """
+
+    # Helper-function for calculating the Max Drawdown for a single stock.
+    if window is None:
+        # Calculate Max Drawdown from the beginning.
+        def _max_drawdown(df):
+            return df / df.cummax()
+    else:
+        # Calculate Max Drawdown for a rolling window.
+        def _max_drawdown(df):
+            return df / df.rolling(window=window).max()
+
+    # Calculate Max Drawdown. Use Pandas groupby if `df` has multiple stocks.
+    df_result = apply(df=df, func=_max_drawdown, group_index=group_index)
 
     return df_result
 

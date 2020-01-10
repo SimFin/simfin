@@ -1,5 +1,14 @@
 # Changes to the SimFin Python package
 
+## Version 0.4.0 (2020-MM-DD)
+
+Public beta version.
+
+### Changes
+
+-   Added function `sf.max_drawdown()`
+
+
 ## Version 0.3.0 (2020-01-03)
 
 Early public beta version.

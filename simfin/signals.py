@@ -358,6 +358,9 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
         # Return on Equity = Net Income / Total Equity from 1 year ago.
         df_signals[ROE] = df[NET_INCOME] / df[TOTAL_EQUITY].shift(4)
 
+        # Asset Turnover = Revenue / Total Assets from 1 year ago.
+        df_signals[ASSET_TURNOVER] = df[REVENUE] / df[TOTAL_ASSETS].shift(4)
+
         return df_signals
 
     # Get relevant data from Income Statements.

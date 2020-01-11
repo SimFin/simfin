@@ -14,7 +14,7 @@ import os
 from functools import wraps
 
 from simfin.config import get_cache_dir
-from simfin.utils import file_age, is_file_older, is_str_or_list_str
+from simfin.utils import _file_age, _is_file_older, _is_str_or_list_str
 
 ##########################################################################
 # Private helper-functions.
@@ -213,7 +213,7 @@ def cache(func):
             # Check if cache-file exists on disk.
             if os.path.exists(cache_path):
                 # Cache-file exists on disk, so get its age in days.
-                cache_file_age_days = file_age(cache_path).days
+                cache_file_age_days = _file_age(cache_path).days
 
                 # Print status.
                 msg = 'Cache-file \'{0}\' on disk ({1} days old).'
@@ -228,11 +228,11 @@ def cache(func):
                     # Use cache_refresh as the number of days before refresh.
                     compute = (cache_refresh == 0) or \
                               (cache_file_age_days > cache_refresh)
-                elif is_str_or_list_str(cache_refresh):
+                elif _is_str_or_list_str(cache_refresh):
                     # Use cache_refresh as a file-path or list of file-paths.
                     # Refresh if the cache-file is older than the other files.
-                    compute = is_file_older(path=cache_path,
-                                            other_paths=cache_refresh)
+                    compute = _is_file_older(path=cache_path,
+                                             other_paths=cache_refresh)
                 else:
                     # Raise exception for invalid argument.
                     msg = 'invalid arg cache_refresh={0}'

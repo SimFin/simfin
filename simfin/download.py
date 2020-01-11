@@ -17,7 +17,7 @@ from simfin.config import get_data_dir, get_api_key
 from simfin.exceptions import ServerException
 from simfin.paths import _filename_dataset, _path_dataset, _path_download_dataset
 from simfin.paths import _path_info, _path_download_info
-from simfin.utils import file_age
+from simfin.utils import _file_age
 
 ##########################################################################
 
@@ -209,7 +209,7 @@ def _maybe_download(name, url, path, download_path, refresh_days):
     # Determine if the file must be downloaded.
     if os.path.exists(path):
         # File's age in days.
-        file_age_days = file_age(path).days
+        file_age_days = _file_age(path).days
 
         # Boolean whether to download the file again, if it is too old.
         must_download = (file_age_days >= refresh_days)

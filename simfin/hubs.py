@@ -17,7 +17,7 @@ from simfin.paths import _path_dataset
 from simfin.rel_change import rel_change, mean_log_change
 from simfin.signals import price_signals, volume_signals, growth_signals
 from simfin.signals import fin_signals, val_signals
-from simfin.utils import func_name
+from simfin.utils import _func_name
 
 from simfin.names import DATE, TICKER, REPORT_DATE
 from simfin.names import SHARES_BASIC, SHARES_DILUTED, TOTAL_RETURN
@@ -518,7 +518,7 @@ class StockHub:
                     ('cashflow', 'quarterly')]
 
         # List of arguments used to uniquely identify the cache-file.
-        cache_ids = [variant, func_name(func=func)]
+        cache_ids = [variant, _func_name(func=func)]
 
         # Load dataset with shareprices?
         if variant in ['daily', 'latest']:
@@ -598,7 +598,7 @@ class StockHub:
             raise ValueError(msg)
 
         # List of arguments used to uniquely identify the cache-file.
-        cache_ids = [variant, func_name(func=func)]
+        cache_ids = [variant, _func_name(func=func)]
 
         # Create dict with disk-cache arguments.
         cache_args = self._cache_args(datasets=datasets,
@@ -656,7 +656,7 @@ class StockHub:
                     ('cashflow', 'ttm')]
 
         # List of arguments used to uniquely identify the cache-file.
-        cache_ids = [variant, func_name(func=func), shares_index]
+        cache_ids = [variant, _func_name(func=func), shares_index]
 
         # Create dict with disk-cache arguments.
         cache_args = self._cache_args(datasets=datasets,

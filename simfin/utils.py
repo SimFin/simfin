@@ -147,7 +147,7 @@ def rename_columns(df, new_names, inplace=False):
     :param new_names:
         If `df` is a DataFrame then this is e.g. a dict mapping old
         names to new, such as:
-            {'Old Name 1': 'New Name 1', 'Old Name 2': 'New Name 2'}
+        {'Old Name 1': 'New Name 1', 'Old Name 2': 'New Name 2'}
 
         If `df` is a Series then this is expected to be a single string.
 
@@ -179,7 +179,7 @@ def rename_columns(df, new_names, inplace=False):
 ##########################################################################
 # Functions for file-dates.
 
-def file_age(path):
+def _file_age(path):
     """
     Return the age of the file with the given path, as the difference
     between the current time minus the file's last modification time.
@@ -206,7 +206,7 @@ def file_age(path):
     return time_dif
 
 
-def is_file_newer(path, other_paths, no_exist=True):
+def _is_file_newer(path, other_paths, no_exist=True):
     """
     Check whether the file located in `path` is newer than all the files
     located in `other_paths`.
@@ -252,7 +252,7 @@ def is_file_newer(path, other_paths, no_exist=True):
     return is_newer
 
 
-def is_file_older(**kwargs):
+def _is_file_older(**kwargs):
     """
     Check whether the file located in `path` is older than all the files
     located in `other_paths`. This is a simple wrapper for `is_file_newer`.
@@ -260,11 +260,11 @@ def is_file_older(**kwargs):
     :param kwargs: Keyword args passed to `is_file_newer`.
     :return: Boolean.
     """
-    return not is_file_newer(**kwargs)
+    return not _is_file_newer(**kwargs)
 
 ##########################################################################
 
-def is_str_or_list_str(s):
+def _is_str_or_list_str(s):
     """
     Return boolean whether `s` is a string or list of strings.
     """
@@ -273,7 +273,7 @@ def is_str_or_list_str(s):
 
 ##########################################################################
 
-def func_name(func):
+def _func_name(func):
     """
     Return the name of the function, or None if `func` is None.
     """

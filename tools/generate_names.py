@@ -172,6 +172,7 @@ def _process():
     # want to write the data to the names.py file.
 
     # Text-wrapper to ensure comment-lines are kept within the given length.
+    # Note that #: is used by sphinx autodoc to create docs for a variable.
     wrapper = TextWrapper(width=80,
                           initial_indent='#: ',
                           subsequent_indent='#: ')

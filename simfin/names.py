@@ -51,8 +51,8 @@ ACQ_INT_ASSETS = 'Acquisition of Intangible Assets'
 
 ADD_PAID_IN_CAPITAL = 'Additional Paid in Capital'
 
-# Daily share-price close adjusted for BOTH stock-splits AND dividends aka.
-# Total Return.
+#: Daily share-price close adjusted for BOTH stock-splits AND dividends aka.
+#: Total Return.
 ADJ_CLOSE = SHARE_PRICE_ADJ_CLOSE = TOTAL_RETURN = 'Adj. Close'
 
 ASSET_WRITEDOWN = 'Asset Write-Down'
@@ -99,9 +99,9 @@ CHG_WORKING_CAPITAL = 'Change in Working Capital'
 
 CLAIMS_LOSSES = 'Claims & Losses'
 
-# Daily share-price close. Adjusted for stock-splits but NOT dividends. This is
-# used as the default share-price.
-CLOSE = SHARE_PRICE = SHARE_PRICE_CLOSE = 'Close'
+#: Daily share-price close. Adjusted for stock-splits but NOT dividends. This is
+#: used as the default share-price.
+CLOSE = SHARE_PRICE_CLOSE = 'Close'
 
 COMM_REAL_ESTATE_LOANS = 'Commercial Real Estate Loans'
 
@@ -111,7 +111,7 @@ COMM_FEES_PAID = 'Commissions & Fees Paid'
 
 COMMON_STOCK = 'Common Stock'
 
-# Name of a company e.g. 'Microsoft'.
+#: Name of a company e.g. 'Microsoft'.
 COMPANY_NAME = 'Company Name'
 
 COST_FINANCING_REVENUE = 'Cost of Financing Revenue'
@@ -126,7 +126,7 @@ CREDIT_CARD_LOANS = 'Credit Card Loans'
 
 CREDIT_VALUE_ADJ = 'Credit Valuation Adjustment'
 
-# Currency for the data e.g. 'USD' for U.S. Dollar.
+#: Currency for the data e.g. 'USD' for U.S. Dollar.
 CURRENCY = 'Currency'
 
 TAX_CURRENT = 'Current Income Tax'
@@ -135,7 +135,7 @@ CUR_PORT_LT_DEBT = 'Current Portion of Long Term Debt'
 
 CUSTOMER_ACC_LIAB = 'Customer Acceptances & Liabilities'
 
-# Date associated with the given data e.g. share-prices.
+#: Date associated with the given data e.g. share-prices.
 DATE = 'Date'
 
 DEBT_VALUE_ADJ = 'Debt Valuation Adjustment'
@@ -182,17 +182,17 @@ DERIV_HEDG_ASSETS = 'Derivatives & Hedging (Assets)'
 
 DERIV_HEDG_LIAB = 'Derivatives & Hedging (Liabilities)'
 
-# Net income from discontinued operations, net of taxes
+#: Net income from discontinued operations, net of taxes
 DISCOP = 'Discontinued Operations'
 
 DISCOP_ASSETS = 'Discontinued Operations (Assets)'
 
 DISCOP_LIAB = 'Discontinued Operations (Liabilities)'
 
-# Non-current assets of discontinued operations
+#: Non-current assets of discontinued operations
 DISCOP_LT = 'Discontinued Operations (Long Term)'
 
-# Current assets of discontinued operations
+#: Current assets of discontinued operations
 DISCOP_ST = 'Discontinued Operations (Short Term)'
 
 DISPOSAL_ASSETS = 'Disposal of Assets'
@@ -203,8 +203,8 @@ DISP_FIX_ASSETS_INT = 'Disposition of Fixed Assets & Intangibles'
 
 DISP_INT_ASSETS = 'Disposition of Intangible Assets'
 
-# Dividends paid per share, before taxes. Adjusted for stock-splits.
-DIVIDENDS = SHARE_DIVIDENDS = 'Dividends'
+#: Dividends paid per share, before taxes. Adjusted for stock-splits.
+DIVIDENDS = SHARE_DIVIDENDS = 'Dividend'
 
 DIVIDENDS_PAID = 'Dividends Paid'
 
@@ -224,10 +224,10 @@ FINANCING_REVENUE = 'Financing Revenue'
 
 FINISHED_GOODS = 'Finished Goods'
 
-# Fiscal period for a financial report e.g. 'Q1' for the 1st Quarter.
+#: Fiscal period for a financial report e.g. 'Q1' for the 1st Quarter.
 FISCAL_PERIOD = 'Fiscal Period'
 
-# Fiscal year for a financial report. This may not equal the calendar year.
+#: Fiscal year for a financial report. This may not equal the calendar year.
 FISCAL_YEAR = 'Fiscal Year'
 
 FIX_INCOME_HTM = 'Fixed Income Securities HTM'
@@ -248,7 +248,7 @@ GOODWILL = 'Goodwill'
 
 GROSS_PROFIT = 'Gross Profit'
 
-# Daily share-price high. Adjusted for stock-splits but NOT dividends.
+#: Daily share-price high. Adjusted for stock-splits but NOT dividends.
 HIGH = SHARE_PRICE_HIGH = 'High'
 
 HOME_EQUITY_LOANS = 'Home Equity Loans'
@@ -279,10 +279,10 @@ INCR_INVEST = 'Increase in Investments'
 
 INCR_LT_INVEST = 'Increase in Long Term Investment'
 
-# Industry associated with IndustryId.
+#: Industry associated with IndustryId.
 INDUSTRY = 'Industry'
 
-# Industry code of company. See 'industries' dataset for details.
+#: Industry code of company. See 'industries' dataset for details.
 INDUSTRY_ID = 'IndustryId'
 
 INSURANCE_RESERVES = 'Insurance Reserves'
@@ -345,13 +345,13 @@ LT_MARKET_SEC = 'Long Term Marketable Securities'
 
 LT_RECV = 'Long Term Receivables'
 
-# Daily share-price low. Adjusted for stock-splits but NOT dividends.
+#: Daily share-price low. Adjusted for stock-splits but NOT dividends.
 LOW = SHARE_PRICE_LOW = 'Low'
 
-# Name of market associated with MarketId
+#: Name of market associated with MarketId
 MARKET_NAME = 'Market Name'
 
-# Market ID
+#: Market ID
 MARKET_ID = 'MarketId'
 
 MERGER_ACQ_EXPENSE = 'Merger & Acquisition Expense'
@@ -446,7 +446,7 @@ NON_OPERATING_INCOME = NON_OP_INCOME = 'Non-Operating Income (Loss)'
 
 NOTES_RECV_NET = 'Notes Receivable, Net'
 
-# Daily share-price open. Adjusted for stock-splits but NOT dividends.
+#: Daily share-price open. Adjusted for stock-splits but NOT dividends.
 OPEN = SHARE_PRICE_OPEN = 'Open'
 
 OPERATING_EXPENSES = OP_EXP = 'Operating Expenses'
@@ -511,9 +511,9 @@ OTHER_OP_ASSETS_LIAB = 'Other Operating Assets/Liabilities'
 
 OTHER_OP_EXPENSE = 'Other Operating Expenses'
 
-# (1) Other operating income includes revenue from all other operating
-# activities which are not related to the principal activities of the company.
-# (2) Other revenue
+#: (1) Other operating income includes revenue from all other operating
+#: activities which are not related to the principal activities of the company.
+#: (2) Other revenue
 OTHER_OP_INCOME = 'Other Operating Income'
 
 OTHER_PAYABLES = 'Other Payables & Accruals'
@@ -566,13 +566,13 @@ PROV_DOUBT_ACC = 'Provision for Doubtful Accounts'
 
 PROV_LOAN_LOSSES = 'Provision for Loan Losses'
 
-# Date that a financial report was available to the market. Some financial
-# reports are restated and the standard datasets only use the newest data. For
-# example, if a financial report for the fiscal period 2012-12-31 is originally
-# published on e.g. 2013-01-21 but then restated on 2015-07-17 then this latter
-# date will be the one associated with the standard date. If you want the
-# original report and all restatements, you need to access the special dataset
-# designed for that.
+#: Date that a financial report was available to the market. Some financial
+#: reports are restated and the standard datasets only use the newest data. For
+#: example, if a financial report for the fiscal period 2012-12-31 is originally
+#: published on e.g. 2013-01-21 but then restated on 2015-07-17 then this latter
+#: date will be the one associated with the standard date. If you want the
+#: original report and all restatements, you need to access the special dataset
+#: designed for that.
 PUBLISH_DATE = 'Publish Date'
 
 PURCH_FIX_ASSETS = 'Purchase of Fixed Assets'
@@ -583,8 +583,8 @@ REAL_ESTATE_INVEST = 'Real Estate Investments'
 
 REPAY_LT_DEBT = 'Repayments of Long Term Debt'
 
-# Date printed in a financial report e.g. 2018-12-31. This is not the date the
-# information was available to the market, see PUBLISH_DATE for that.
+#: Date printed in a financial report e.g. 2018-12-31. This is not the date the
+#: information was available to the market, see PUBLISH_DATE for that.
 REPORT_DATE = 'Report Date'
 
 RD = RESEARCH_DEV = 'Research & Development'
@@ -609,7 +609,7 @@ SALES_SERVICES_REVENUE = 'Sales & Services Revenue'
 
 SAVING_DEPOSITS = 'Saving Deposits'
 
-# Sector associated with IndustryId.
+#: Sector associated with IndustryId.
 SECTOR = 'Sector'
 
 SEC_SOLD_REPO = 'Securities Sold Under Repo'
@@ -620,12 +620,12 @@ SELLING_GEN_ADMIN = SGA = 'Selling, General & Administrative'
 
 SHARE_CAPITAL_ADD = 'Share Capital & Additional Paid-In Capital'
 
-# Shares outstanding NOT adjusted for dilution from stock-options etc. Weighted
-# average for the period. Adjusted for stock-splits.
+#: Shares outstanding NOT adjusted for dilution from stock-options etc. Weighted
+#: average for the period. Adjusted for stock-splits.
 SHARES_BASIC = 'Shares (Basic)'
 
-# Shares outstanding adjusted for dilution from stock-options etc. Weighted
-# average for the period. Adjusted for stock-splits.
+#: Shares outstanding adjusted for dilution from stock-options etc. Weighted
+#: average for the period. Adjusted for stock-splits.
 SHARES_DILUTED = 'Shares (Diluted)'
 
 ST_LT_INVEST = 'Short & Long Term Investments'
@@ -638,12 +638,12 @@ ST_DEBT = 'Short Term Debt'
 
 ST_INVEST = 'Short Term Investments'
 
-# Unique ID for a company in the SimFin database. Useful if multiple companies
-# have the same ticker at different points in time, or if a company does not
-# have a ticker.
+#: Unique ID for a company in the SimFin database. Useful if multiple companies
+#: have the same ticker at different points in time, or if a company does not
+#: have a ticker.
 SIMFIN_ID = 'SimFinId'
 
-# Link to source of the financial statement.
+#: Link to source of the financial statement.
 SOURCE = 'Source'
 
 STOCK_COMP = 'Stock-Based Compensation'
@@ -652,7 +652,7 @@ STUDENT_LOANS = 'Student Loans'
 
 TAX_ALLOWANCE = 'Tax Allowance/Credit'
 
-# Ticker for identifying a stock e.g. MSFT for Microsoft.
+#: Ticker for identifying a stock e.g. MSFT for Microsoft.
 TICKER = 'Ticker'
 
 TIME_DEPOSITS = 'Time Deposits'
@@ -711,7 +711,7 @@ UNBILLED_REVENUE = 'Unbilled Revenues'
 
 UWRIT_EXP_ACQ_COST = 'Underwriting Expense & Acquisition Cost'
 
-# Number of shares traded during the day. Adjusted for stock-splits.
+#: Number of shares traded during the day. Adjusted for stock-splits.
 SHARE_VOLUME = VOLUME = 'Volume'
 
 WORK_IN_PROCESS = 'Work In Process'

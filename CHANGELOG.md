@@ -8,6 +8,9 @@ Public beta version.
 
 -   Added function `sf.max_drawdown()`
 
+-   Added documentation using the sphinx system and setup automatic generation
+    of the docs at: https://simfin.readthedocs.io/
+
 
 ## Version 0.3.0 (2020-01-03)
 

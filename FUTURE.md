@@ -8,7 +8,7 @@ A beta version that is ready for the general public.
 
 ### Tasks
 
--   **Magnus:** Generate docs using sphinx or another system.  
+-   <del>**Magnus:** Generate docs using sphinx or another system.</del>  
 
 -   **Thomas:** Fix erroneous share-counts in the data.
 

@@ -66,16 +66,13 @@ This produces the following output:
     2019-06-30   1.258430e+11  39240000000
 
 
-## Tutorials
+## Documentation
 
-See the [tutorials](https://www.github.com/simfin/simfin-tutorials/) for more
-detailed examples of how to use the simfin API and data.
-
-
-## Datasets
-
-See the list of available [datasets](https://simfin.com/data/bulk) with
-details about their contents, and instructions on how to download and use them.
+-   [Tutorials](https://www.github.com/simfin/simfin-tutorials/) with
+    detailed examples.
+-   [Datasets](https://simfin.com/data/bulk) that are available.
+-   [Docs](https://simfin.readthedocs.io/en/latest/) for the
+    Python API.
 
 
 ## Installation

@@ -173,8 +173,8 @@ def _process():
 
     # Text-wrapper to ensure comment-lines are kept within the given length.
     wrapper = TextWrapper(width=80,
-                          initial_indent='# ',
-                          subsequent_indent='# ')
+                          initial_indent='#: ',
+                          subsequent_indent='#: ')
 
     # Create the output file.
     with open(_output_filename, mode='wt') as file:

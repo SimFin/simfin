@@ -19,6 +19,7 @@ Table of Contents
     Tutorials <https://github.com/simfin/simfin-tutorials/>
     Datasets <https://simfin.com/data/bulk>
 
+    names
     config
     load
     hubs

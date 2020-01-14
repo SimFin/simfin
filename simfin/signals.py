@@ -714,7 +714,9 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
     # Calculate FCF Yield (inverse of the P/FCF ratio).
     df_signals[FCF_YIELD] = df_daily[FCF] / df_price
 
-    # Calculate Dividend Yield using Cash-Flow data.
+    # Calculate Dividend Yield using TTM Cash-Flow data, which is easier than
+    # using df_prices[DIVIDEND] because the actual payment dates may differ
+    # slightly from one year to the next, making it difficult to calculate TTM.
     # Note the negation because DIVIDENDS_PAID is negative.
     df_signals[DIV_YIELD] = -df_daily[DIVIDENDS_PAID] / df_price
 

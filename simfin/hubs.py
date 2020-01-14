@@ -31,7 +31,7 @@ class StockHub:
     When you create a new `StockHub` object, you define which market you are
     interested in, along with various settings for loading and processing
     the data. This makes it much easier to load datasets, calculate signals
-    and returns, etc.
+    and stock-returns, etc.
 
     This class also ensures the disk-caches are updated when new datasets are
     downloaded from the SimFin server. The cache-filenames are hashed strings
@@ -43,8 +43,8 @@ class StockHub:
     the second time they are called. If you want to clear the RAM-cache, then
     you just have to create a new `StockHub` object.
 
-    Because of the RAM-cache, you should *NEVER* modify the data returned by
-    the functions in this class. You should *ALWAYS* make a copy of the
+    Because of the RAM-cache, you should **NEVER** modify the data returned by
+    the functions in this class. You should **ALWAYS** make a copy of the
     returned data before you modify it.
 
     See Tutorial 05 for examples and more details on how to use this class.
@@ -56,8 +56,6 @@ class StockHub:
                  group_index=TICKER, date_index=REPORT_DATE,
                  offset=None, fill_method='ffill', cache_format='pickle'):
         """
-        Create a new `StockHub` object instance.
-
         :param market:
             String for the stock-market e.g. 'us' or 'de'.
 
@@ -100,19 +98,19 @@ class StockHub:
             financial reports with Income Statements, Balance Sheets, and
             Cash-Flow Statements, because the REPORT_DATE is not when it was
             actually made available to the public, which can be 1, 2 or even
-            3 months after the REPORT_DATE. See `sf.add_date_offset` for more
-            details.
+            3 months after the REPORT_DATE.
+            See :obj:`~simfin.utils.add_date_offset` for more details.
 
         :param fill_method:
             String or callable for the method of filling in empty values when
-            reindexing financial data to daily data-points. See `sf.reindex`
-            for valid options.
+            reindexing financial data to daily data-points.
+            See :obj:`~simfin.resample.reindex` for valid options.
 
         :param cache_format:
             String with the format of the cache-file. Default is 'pickle' which
             is very fast but creates large, uncompressed files. Compression can
             be enabled with the option 'pickle.gz' which is slightly slower.
-            See the `sf.cache` wrapper-function for more options.
+            See :obj:`~simfin.cache.cache` for more options.
         """
 
         # Copy args to self.
@@ -279,7 +277,7 @@ class StockHub:
 
         :param name:
             Use this as the name of the resulting Pandas Series. Otherwise it
-            will be named `TOTAL_RETURN`.
+            will be named TOTAL_RETURN.
 
         :param future:
             Boolean whether to calculate the future returns (True)
@@ -344,7 +342,7 @@ class StockHub:
 
         :param name:
             Use this as the name of the resulting Pandas Series. Otherwise it
-            will be named `TOTAL_RETURN`.
+            will be named TOTAL_RETURN.
 
         :param future:
             Boolean whether to calculate the future returns (True)
@@ -487,6 +485,7 @@ class StockHub:
 
         :param variant:
             String with the frequency of the results. Valid options:
+
             - 'quarterly': The result has 4 data-points per year.
             - 'daily': The result has daily data-points, same as share-prices.
             - 'latest' The result is only for the latest share-price dates.
@@ -556,6 +555,7 @@ class StockHub:
 
         :param variant:
             String with the frequency of the results. Valid options:
+
             - 'quarterly': The result has 4 data-points per year.
             - 'daily': The result has daily data-points, same as share-prices.
             - 'latest' The result is only for the latest share-price dates.
@@ -620,6 +620,7 @@ class StockHub:
 
         :param variant:
             String with the frequency of the results. Valid options:
+
             - 'daily': The result has daily data-points, same as share-prices.
             - 'latest' The result is only for the latest share-price dates.
 

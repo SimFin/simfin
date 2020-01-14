@@ -24,7 +24,7 @@ def set_api_key(api_key='free'):
     Set the API key.
 
     :param api_key: String with the API key.
-    :return: None.
+    :return: `None`
     """
     global _api_key
     _api_key = api_key
@@ -41,7 +41,7 @@ def load_api_key(path='~/simfin_api_key.txt', default_key='free'):
         String with the default key if it could not be loaded from file.
 
     :return:
-        None.
+        `None`
     """
     try:
         # Expand the path if it begins with ~
@@ -60,7 +60,7 @@ def load_api_key(path='~/simfin_api_key.txt', default_key='free'):
 
 def get_api_key():
     """
-    Return the API key.
+    Get the API key.
 
     :return: String with the API key.
     """
@@ -88,7 +88,7 @@ def set_data_dir(data_dir='~/simfin_data/'):
     and create the directory if it does not exist.
 
     :param data_dir: String with the directory-name.
-    :return: None.
+    :return: `None`
     """
     global _data_dir, _download_dir, _cache_dir, _info_dir
 
@@ -121,7 +121,7 @@ def set_data_dir(data_dir='~/simfin_data/'):
 
 def get_data_dir():
     """
-    Return the full path for the main data-directory where
+    Get the full path for the main data-directory where
     datasets are saved on disk.
 
     :return: String with the path for the data-directory.
@@ -131,7 +131,7 @@ def get_data_dir():
 
 def get_download_dir():
     """
-    Return the full path for the download directory where
+    Get the full path for the download directory where
     the zip-files with datasets are temporarily stored.
 
     :return: String with the path for the download directory.
@@ -141,7 +141,7 @@ def get_download_dir():
 
 def get_cache_dir():
     """
-    Return the full path for the directory where cache-files are saved.
+    Get the full path for the directory where cache-files are saved.
 
     :return: String with the path for the cache directory.
     """
@@ -150,7 +150,7 @@ def get_cache_dir():
 
 def get_info_dir():
     """
-    Return the full path for the directory where info-files are saved.
+    Get the full path for the directory where info-files are saved.
 
     :return: String with the path for the info directory.
     """

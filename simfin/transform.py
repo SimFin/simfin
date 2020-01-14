@@ -20,6 +20,7 @@ def free_cash_flow(df_cashflow):
     """
     Calculate Free Cash Flow from columns in the given DataFrame using the
     formula:
+
         FCF = Net Cash from Operations - Capital Expenditures
 
     :param df_cashflow:
@@ -50,10 +51,10 @@ def ebitda(df_income, df_cashflow, formula=NET_INCOME):
     aka. EBITDA from columns in the given DataFrames. Two different EBITDA
     formulas are supported:
 
-    If `formula=NET_INCOME` then the formula is:
+    - If `formula=NET_INCOME` then:
         EBITDA = Net Income + Interest + Taxes + Depreciation + Amortization
 
-    If `formula=OP_INCOME` then the formula is:
+    - If `formula=OP_INCOME` then:
         EBITDA = Operating Income + Depreciation + Amortization
 
     :param df_income:
@@ -150,20 +151,20 @@ def netnet(df_balance):
 def clip(df, lower, upper):
     """
     Limit the values of a DataFrame between the lower and upper bounds.
-    This is very similar to Pandas' clip-function, except that if you
-    only provide bounds for some of the columns, Pandas' clip-function will
-    set all the other columns to NaN-values, while this function will just
+    This is very similar to Pandas' `clip`-function, except that if you
+    only provide bounds for some of the columns, Pandas' `clip`-function will
+    set all the other columns to `NaN`-values, while this function will just
     use the values from the original DataFrame.
 
     For example, if `df` contains the columns PE, PFCF, PSALES and PBOOK, but
     you only want to clip the values for PE and PFCF, you can pass dicts with
     bounds for only those columns:
 
-        `lower = {PE: 5, PFCF: 6}`
-        `upper = {PE: 30, PFCF: 40}`
+    - `lower = {PE: 5, PFCF: 6}`
+    - `upper = {PE: 30, PFCF: 40}`
 
-    Using Pandas' clip-function (v. 0.25) this would result in the other
-    columns for PSALES and PBOOK to have only NaN-values, while this function
+    Using Pandas' `clip`-function (v. 0.25) this would result in the other
+    columns for PSALES and PBOOK to have only `NaN`-values, while this function
     copies the original values from `df` for those columns.
 
     :param df:
@@ -201,13 +202,13 @@ def clip(df, lower, upper):
 
 def winsorize(df, quantile=0.05, columns=None):
     """
-    Limit the values in the DataFrame between quantile and (1-quantile).
+    Limit the values in the DataFrame between `quantile` and `(1-quantile)`.
     This is useful for removing outliers without specifying the exact bounds.
 
-    For example, when quantile=0.05 we limit all values between the
+    For example, when `quantile=0.05` we limit all values between the
     0.05 and 0.95 quantiles.
 
-    Note that inf and nan values are ignored when finding the quantiles.
+    Note that `inf` and `NaN` values are ignored when finding the quantiles.
 
     :param df:
         Pandas DataFrame with the data to be limited.
@@ -216,12 +217,12 @@ def winsorize(df, quantile=0.05, columns=None):
         Float between 0.0 and 1.0
 
     :param columns:
-        List of strings with names of the columns in `df` to winsorize,
+        List of strings with names of the columns in `df` to Winsorize,
         and the rest of the columns are merely copied from `df`.
-        If None then winsorize all columns in `df`.
+        If `None` then Winsorize all columns in `df`.
 
     :return:
-        Pandas DataFrame similar to `df` but with winsorized values.
+        Pandas DataFrame similar to `df` but with Winsorized values.
     """
 
     if columns is not None:
@@ -230,7 +231,7 @@ def winsorize(df, quantile=0.05, columns=None):
         # Create a copy of the original data.
         df_clipped = df.copy()
 
-        # Recursively call this function to winsorize and update those columns.
+        # Recursively call this function to Winsorize and update those columns.
         df_clipped[columns] = winsorize(df=df[columns], quantile=quantile)
     else:
         # Winsorize ALL of the columns in the DataFrame.
@@ -261,7 +262,8 @@ def avg_ttm_2y(df):
     over-weighs the most recent quarters in the average.
 
     This function should only be used on DataFrames for a single stock.
-    Use `sf.apply` with this function on DataFrames for multiple stocks.
+    Use :obj:`~simfin.utils.apply` with this function on DataFrames for
+    multiple stocks.
 
     :param df:
         Pandas DataFrame with TTM financial data sorted ascendingly by date.
@@ -281,7 +283,8 @@ def avg_ttm_3y(df):
     over-weighs the most recent quarters in the average.
 
     This function should only be used on DataFrames for a single stock.
-    Use `sf.apply` with this function on DataFrames for multiple stocks.
+    Use :obj:`~simfin.utils.apply` with this function on DataFrames for
+    multiple stocks.
 
     :param df:
         Pandas DataFrame with TTM financial data sorted ascendingly by date.
@@ -301,7 +304,8 @@ def avg_ttm(df, years):
     over-weighs the most recent quarters in the average.
 
     This function should only be used on DataFrames for a single stock.
-    Use `sf.apply` with this function on DataFrames for multiple stocks.
+    Use :obj:`~simfin.utils.apply` with this function on DataFrames for
+    multiple stocks.
 
     :param df:
         Pandas DataFrame with TTM financial data sorted ascendingly by date.
@@ -336,7 +340,7 @@ def max_drawdown(df, window=None, group_index=TICKER):
         The DataFrame may contain data for one or more stocks.
 
     :param window:
-        If None then calculate the Max Drawdown from the beginning.
+        If `None` then calculate the Max Drawdown from the beginning.
         If an integer then calculate the Max Drawdown for a rolling window
         of that length.
 

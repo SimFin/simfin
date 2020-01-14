@@ -3,10 +3,10 @@
 SimFin Python API
 =================
 
-SimFin makes it easy to obtain and use financial data in Python.
-It automatically downloads data from the `SimFin <https://www.simfin.com/>`_
-server, saves the data to disk for future use, and loads the data into
-Pandas DataFrames. This is the documentation for the Python API.
+This is the documentation for the SimFin Python API, which makes it easy to
+obtain and use financial data in Python. It automatically downloads data from
+the `SimFin <https://www.simfin.com/>`_ server, saves the data to disk for
+future use, and loads the data into Pandas DataFrames.
 
 
 Table of Contents

@@ -84,27 +84,27 @@ def _read_cache(path, cache_format):
 
 def cache(func):
     """
-    Wrapper / decorator for a function that returns a Pandas DataFrame.
-    The result of the function is a Pandas DataFrame which is cached to a
-    file on disk, so the next time you call the function, it first checks if
-    the cache-file exists and is recent, in which case it loads the cache-file,
-    otherwise the wrapped function is called and the result is saved to the
-    cache-file on disk for the next time the function is called.
+    Wrapper / decorator for a function that returns a Pandas DataFrame. The
+    wrapper saves the DataFrame to a file on disk, so the next time you call
+    the wrapped function, it first checks if the cache-file exists and is
+    recent, in which case it loads the cache-file, otherwise the wrapped
+    function is called and the result is saved to the cache-file on disk for
+    the next time the function is called.
 
     This is used e.g. in the signal-functions because they can take several
     minutes to compute, while it only takes a second to load a cache-file.
 
-    WARNING: You *MUST* use keyword arguments when calling the wrapped
-    function, otherwise the first unnamed arguments would get passed to this
-    `cache` wrapper instead.
+    .. warning:: You **MUST** use keyword arguments when calling the wrapped
+        function, otherwise the first unnamed arguments would get passed to
+        this `cache` wrapper instead.
 
     The following arguments are added to the wrapped function:
 
-    - cache_name:
+    - `cache_name`:
         String with the name of the cache-file. The full filename is the
         function's name + '-' + `cache_name` + '.' + `cache_format`
 
-    - cache_refresh:
+    - `cache_refresh`:
         Determines if `func` should be called and the results saved to the
         cache-file. Different conditions are supported, depending on the
         type and value of this argument:
@@ -122,7 +122,7 @@ def cache(func):
           of those files, then `func` is called and the cache-file is
           refreshed.
 
-    - cache_format:
+    - `cache_format`:
         String with the format of the cache-file. Default is 'pickle' which
         is very fast but creates large, uncompressed files. Compression can
         be enabled with the option 'pickle.gz' which is slightly slower.

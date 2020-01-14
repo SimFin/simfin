@@ -40,7 +40,7 @@ def add_date_offset(df, date_index=REPORT_DATE, offset=pd.DateOffset(days=90)):
 
     :param df:
         Pandas DataFrame assumed to have a MultiIndex
-        containing dates in a column named `index_date`.
+        containing dates in a column named `date_index`.
 
     :param date_index:
         Name of the date-column e.g. REPORT_DATE.
@@ -76,7 +76,7 @@ def apply(df, func, group_index=TICKER, **kwargs):
 
     You write your function to work for a DataFrame with a single stock,
     and this function lets you apply it to both DataFrames with a single
-    or multiple stocks. The function automatically uses Pandas groupby to
+    or multiple stocks. The function automatically uses Pandas `groupby` to
     split-apply-merge on DataFrames with multiple stocks.
 
     :param df:
@@ -87,6 +87,8 @@ def apply(df, func, group_index=TICKER, **kwargs):
     :param func:
         Function to apply on a per-stock or per-group basis.
         The function is assumed to be of the form:
+
+        .. code-block:: python
 
             def func(df_grp):
                 # df_grp is a Pandas DataFrame with data for a single stock.
@@ -147,7 +149,7 @@ def rename_columns(df, new_names, inplace=False):
     :param new_names:
         If `df` is a DataFrame then this is e.g. a dict mapping old
         names to new, such as:
-        {'Old Name 1': 'New Name 1', 'Old Name 2': 'New Name 2'}
+        `{'Old Name 1': 'New Name 1', 'Old Name 2': 'New Name 2'}`
 
         If `df` is a Series then this is expected to be a single string.
 
@@ -158,7 +160,7 @@ def rename_columns(df, new_names, inplace=False):
         Pandas DataFrame or Series. Same as `df` except with the new names.
 
         There seems to be a bug in Pandas. If `df` is a DataFrame then
-        it returns None if `inplace=True`, but if `df` is a Series then
+        it returns `None` if `inplace=True`, but if `df` is a Series then
         it returns the same Series if `inplace=True`.
         https://github.com/pandas-dev/pandas/issues/30211
     """

@@ -85,17 +85,19 @@ datasets_shareprices.__doc__ = 'List of dataset names that begin with \'sharepri
 def iter_all_datasets(datasets=None):
     """
     Create a generator for iterating over all valid datasets, variants and
-    markets. This only yields the names of the datasets, variants and
-    markets, not the actual Pandas DataFrames, use load_all_datasets() or
-    the AllDatasets-class for that.
+    markets. For example:
 
-    Example:
+    .. code-block:: python
 
-    for dataset, variant, market in iter_all_datasets():
-        print(dataset, variant, market)
+        for dataset, variant, market in iter_all_datasets():
+            print(dataset, variant, market)
+
+    This only yields the names of the datasets, variants and markets, not the
+    actual Pandas DataFrames, use :obj:`~simfin.datasets.load_all_datasets`
+    or the :obj:`~simfin.datasets.AllDatasets` class for that.
 
     :param datasets:
-        If None then iterate over all datasets. Otherwise if this is a string
+        If `None` then iterate over all datasets. Otherwise if this is a string
         or list of strings, then only iterate over these datasets.
     """
 
@@ -134,16 +136,15 @@ def load_all_datasets(**kwargs):
     Load all datasets and variants. Create and return a nested
     dict for fast lookup given dataset, variant and market names.
 
-    Accepts the same args as the `sf.load()` function, except for
+    Accepts the same args as the :obj:`~simfin.load.load` function, except for
     dataset, variant and market. For example, `refresh_days` can be set
     to 0 to ensure all datasets are downloaded again, which is
     useful for testing purposes.
 
     :return:
         Nested dict `dfs` with all datasets, variants and markets.
-
-        Example: dfs['income']['annual']['us'] is the dataset for
-                 annual Income Statements for the US market.
+        Example: `dfs['income']['annual']['us']` is the dataset for
+        annual Income Statements for the US market.
     """
 
     # Initialize a dict that can be nested to any depth.
@@ -184,8 +185,8 @@ class AllDatasets:
 
     def __init__(self, **kwargs):
         """
-        Accepts the same args as the `sf.load()` function, except for
-        dataset, variant and market. For example, `refresh_days` can be
+        Accepts the same args as the :obj:`~simfin.load.load` function, except
+        for dataset, variant and market. For example, `refresh_days` can be
         set to 0 to ensure all datasets are downloaded again, which is
         useful for testing purposes.
         """
@@ -206,24 +207,24 @@ class AllDatasets:
     def iter(self, datasets=None, variants=None, markets=None):
         """
         Iterate over all valid datasets, variants and markets,
-        or only use the ones specified.
+        or only use the ones specified. For example:
 
-        Example:
+        .. code-block:: python
 
-        for dataset, variant, market, df in iter():
-            # dataset, variant and market are strings with the names.
-            # df is a Pandas DataFrame with the actual data.
+            for dataset, variant, market, df in all_datasets.iter():
+                # dataset, variant and market are strings with the names.
+                # df is a Pandas DataFrame with the actual data.
 
         :param datasets:
-            Default is None which uses all valid datasets.
+            Default is `None` which uses all valid datasets.
             Otherwise a list of strings with the dataset-names to use.
 
         :param variants:
-            Default is None which uses all valid variants for a dataset.
+            Default is `None` which uses all valid variants for a dataset.
             Otherwise a list of strings with the variant-names to use.
 
         :param markets:
-            Default is None which uses all valid markets for a dataset.
+            Default is `None` which uses all valid markets for a dataset.
             Otherwise a list of strings with the market-names to use.
 
         :return:

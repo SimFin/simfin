@@ -150,53 +150,51 @@ def rel_change(df, freq, future, bdays=0, days=0, weeks=0, months=0,
     depending on the DataFrame's frequency. The relative change is calculated
     from the original and shifted DataFrame.
 
-    WARNING: The DataFrame `df` is assumed to be sorted in ascending order
-    on its date-index. Furthermore, the DataFrame is assumed to be complete
-    in the sense that data is present for all time-steps at the given
-    frequency. This function does not check that. The SimFin database ensures
-    that quarterly and annual financial data such as Income Statements are
-    all complete in this sense, but if you are using other data-sources,
-    then you must ensure this yourself.
+    If `annualized==False` then the function calculates the following:
 
-    It calculates the following when `future=True`:
+    - If `future==True` then `df_result[t] = df[t+periods] / df[t] - 1`
+    - If `future==False` then `df_result[t] = df[t] / df[t-periods] - 1`
 
-    df_result[t] = df[t+periods] / df[t] - 1
+    If `annualized==True` then the function calculates the annualized change
+    instead, which is particularly useful when the time-interval is several
+    years. For example, this can be used to calculate the Annualized Total
+    Return on stocks. The variable `shifted_years` is the number of years
+    corresponding to `periods`. So the function calculates:
 
-    It calculates the following when `future=False`:
+    - If `future==True` then
+      `df_result[t] = (df[t+periods] / df[t]) ** (1 / shifted_years) - 1`
+    - If `future==False` then
+      `df_result[t] = (df[t] / df[t-periods]) ** (1 / shifted_years) - 1`
 
-    df_result[t] = df[t] / df[t-periods] - 1
-
-    Furthermore, we may calculate the annualized change instead, which is
-    particularly useful when the time-interval is several years. For example,
-    this can be used to calculate the Annualized Total Return on stocks.
-    The variable `shifted_years` is the number of years corresponding to
-    `periods` so the formula is as follows when `future=True`:
-
-    df_result[t] = (df[t+periods] / df[t]) ** (1 / shifted_years) - 1
-
-    And the formula is as follows when `future=False`:
-
-    df_result[t] = (df[t] / df[t-periods]) ** (1 / shifted_years) - 1
-
-    See Tutorial 03 for detailed examples on how to use this function.
+    See `Tutorial 03`_ for detailed examples on how to use this function.
 
     This function can take a while to compute, so it will create a cache-file
     if you pass the arg `cache_refresh`. The next time you call this function,
     the cache-file will get loaded if it is more recent than specified by
     `cache_refresh`, otherwise the function will get computed again and the
     result saved in the cache-file for future use. See the documentation for
-    the `cache` wrapper-function for details on its arguments.
+    the :obj:`~simfin.cache.cache` function for details on its arguments.
 
-    WARNING: You *MUST* use keyword arguments to this function, otherwise the
-    first unnamed arguments would get passed to the `cache` wrapper instead.
+    .. warning:: You **MUST** use keyword arguments to this function, otherwise
+        the first unnamed arguments would get passed to the `cache` wrapper
+        instead.
 
     :param df:
         Pandas DataFrame or Series assumed to have either a DatetimeIndex
         or a MultiIndex with 2 indices, one of which is a DatetimeIndex
         and the other is given by the arg `group_index`.
 
+        .. warning:: `df` is assumed to be sorted in ascending order on its
+            date-index. Furthermore, the DataFrame is assumed to be complete
+            in the sense that data is present for all time-steps at the given
+            frequency. This function does not check that. The SimFin database
+            ensures that quarterly and annual financial data such as Income
+            Statements are all complete in this sense, but if you are using
+            other data-sources, then you must ensure this yourself.
+
     :param freq:
         String for the frequency of the DataFrame `df`. Valid options:
+
         - 'bdays' or 'b' for business or trading-days data.
         - 'days' or 'd' for data that has all 7 week-days.
         - 'weeks' or 'w' for weekly data.
@@ -205,9 +203,8 @@ def rel_change(df, freq, future, bdays=0, days=0, weeks=0, months=0,
         - 'years', 'y', 'annual', 'a' for yearly or annual data.
 
     :param future:
-        Boolean whether to calculate the future (True) or past (False) change.
-        If True then df_result[t] = df[t+periods] / df[t] - 1
-        If False then df_result[t] = df[t] / df[t-periods] - 1
+        Boolean whether to calculate the future change (True)
+        or past change (False).
 
     :param bdays: Number of business or trading-days.
     :param days: Number of days in a 7-day week.
@@ -308,34 +305,36 @@ def mean_log_change(df, freq, future,
     consider the mean-log changes to be roughly equivalent to the normal
     percentage changes.
 
-    See Tutorial 03 for a detailed explanation and derivation of the math used
-    in this function, and examples on how to use this function.
-
-    WARNING: The DataFrame `df` is assumed to be sorted in ascending order
-    on its date-index. Furthermore, the DataFrame is assumed to be complete
-    in the sense that data is present for all time-steps at the given
-    frequency. This function does not check that. The SimFin database ensures
-    that quarterly and annual financial data such as Income Statements are
-    all complete in this sense, but if you are using other data-sources,
-    then you must ensure this yourself.
+    See `Tutorial 03`_ for a detailed explanation and derivation of the math
+    used in this function, and examples on how to use this function.
 
     This function can take a while to compute, so it will create a cache-file
     if you pass the arg `cache_refresh`. The next time you call this function,
     the cache-file will get loaded if it is more recent than specified by
     `cache_refresh`, otherwise the function will get computed again and the
     result saved in the cache-file for future use. See the documentation for
-    the `cache` wrapper-function for details on its arguments.
+    the :obj:`~simfin.cache.cache` function for details on its arguments.
 
-    WARNING: You *MUST* use keyword arguments to this function, otherwise the
-    first unnamed arguments would get passed to the `cache` wrapper instead.
+    .. warning:: You **MUST** use keyword arguments to this function, otherwise
+        the first unnamed arguments would get passed to the `cache` wrapper
+        instead.
 
     :param df:
         Pandas DataFrame or Series assumed to have either a DatetimeIndex
         or a MultiIndex with 2 indices, one of which is a DatetimeIndex
         and the other is given by the arg `group_index`.
 
+        .. warning:: `df` is assumed to be sorted in ascending order on its
+            date-index. Furthermore, the DataFrame is assumed to be complete
+            in the sense that data is present for all time-steps at the given
+            frequency. This function does not check that. The SimFin database
+            ensures that quarterly and annual financial data such as Income
+            Statements are all complete in this sense, but if you are using
+            other data-sources, then you must ensure this yourself.
+
     :param freq:
         String for the frequency of the DataFrame `df`. Valid options:
+
         - 'bdays' or 'b' for business or trading-days data.
         - 'days' or 'd' for data that has all 7 week-days.
         - 'weeks' or 'w' for weekly data.
@@ -363,7 +362,6 @@ def mean_log_change(df, freq, future,
     :param annualized:
         Boolean whether to calculate the annualized change (True),
         or the geometric mean for the original frequency of the data (False).
-
         For example, if you want to calculate the change over several years,
         it is often useful to calculate the annualized change by setting this
         to True. But if you want to calculate the change over shorter periods

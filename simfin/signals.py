@@ -31,10 +31,11 @@ def price_signals(df_prices, group_index=TICKER):
     the cache-file will get loaded if it is more recent than specified by
     `cache_refresh`, otherwise the function will get computed again and the
     result saved in the cache-file for future use. See the documentation for
-    the `cache` wrapper-function for details on its arguments.
+    the :obj:`~simfin.cache.cache` wrapper for details on its arguments.
 
-    WARNING: You *MUST* use keyword arguments to this function, otherwise the
-    first unnamed arguments would get passed to the `cache` wrapper instead.
+    .. warning:: You **MUST** use keyword arguments to this function,
+        otherwise the first unnamed arguments would get passed to the
+        :obj:`~simfin.cache.cache` wrapper instead.
 
     :param df_prices:
         Pandas DataFrame with share-prices for multiple stocks.
@@ -91,19 +92,20 @@ def trade_signals(df, signal1, signal2, group_index=TICKER):
     """
     Create Buy / Sell / Hold signals from two signals in the given DataFrame.
 
-    If df[signal1] >= df[signal2] create a Hold signal.
-    If df[signal1] crosses above df[signal2] create a Buy signal.
-    if df[signal1] crosses below df[signal2] create a Sell signal.
+    - If `df[signal1] >= df[signal2]` create a Hold signal.
+    - If `df[signal1]` crosses above `df[signal2]` create a Buy signal.
+    - if `df[signal1]` crosses below `df[signal2]` create a Sell signal.
 
     This function can take a while to compute, so it will create a cache-file
     if you pass the arg `cache_refresh`. The next time you call this function,
     the cache-file will get loaded if it is more recent than specified by
     `cache_refresh`, otherwise the function will get computed again and the
     result saved in the cache-file for future use. See the documentation for
-    the `cache` wrapper-function for details on its arguments.
+    the :obj:`~simfin.cache.cache` wrapper for details on its arguments.
 
-    WARNING: You *MUST* use keyword arguments to this function, otherwise the
-    first unnamed arguments would get passed to the `cache` wrapper instead.
+    .. warning:: You **MUST** use keyword arguments to this function,
+        otherwise the first unnamed arguments would get passed to the
+        :obj:`~simfin.cache.cache` wrapper instead.
 
     :param df:
         Pandas DataFrame with columns `signal1` and `signal2`.
@@ -160,9 +162,9 @@ def volume_signals(df_prices, df_shares, window=20, fill_method='ffill',
     """
     Calculate signals for the daily trading-volume of stocks, such as:
 
-        REL_VOL: The daily trading-volume relative to its moving average.
-        VOLUME_MCAP: The Market-Capitalization of the daily trading volume.
-        VOLUME_TURNOVER: Trading-volume relative to the shares outstanding.
+    - REL_VOL: The daily trading-volume relative to its moving average.
+    - VOLUME_MCAP: The Market-Capitalization of the daily trading volume.
+    - VOLUME_TURNOVER: Trading-volume relative to the shares outstanding.
 
     The moving-average is calculated in different ways for the signals.
     For REL_VOL it is a part of the formula definition. For VOLUME_MCAP
@@ -173,10 +175,11 @@ def volume_signals(df_prices, df_shares, window=20, fill_method='ffill',
     the cache-file will get loaded if it is more recent than specified by
     `cache_refresh`, otherwise the function will get computed again and the
     result saved in the cache-file for future use. See the documentation for
-    the `cache` wrapper-function for details on its arguments.
+    the :obj:`~simfin.cache.cache` wrapper for details on its arguments.
 
-    WARNING: You *MUST* use keyword arguments to this function, otherwise the
-    first unnamed arguments would get passed to the `cache` wrapper instead.
+    .. warning:: You **MUST** use keyword arguments to this function,
+        otherwise the first unnamed arguments would get passed to the
+        :obj:`~simfin.cache.cache` wrapper instead.
 
     :param df_prices:
         Pandas DataFrame with share-prices for multiple stocks.
@@ -190,12 +193,13 @@ def volume_signals(df_prices, df_shares, window=20, fill_method='ffill',
 
     :param fill_method:
         String or callable for the method of filling in empty values when
-        reindexing financial data to daily data-points. See `sf.reindex`
-        for valid options.
+        reindexing financial data to daily data-points.
+        See :obj:`~simfin.resample.reindex` for valid options.
 
     :param offset:
         Pandas DateOffset added to the date-index of `df_shares`. Example:
-        `pd.DateOffset(days=60)` See `sf.add_date_offset` for more details.
+        `pd.DateOffset(days=60)`
+        See :obj:`~simfin.utils.add_date_offset` for more details.
 
     :param date_index:
         Name of the date-column for `df_shares` e.g. REPORT_DATE.
@@ -281,14 +285,15 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
     the cache-file will get loaded if it is more recent than specified by
     `cache_refresh`, otherwise the function will get computed again and the
     result saved in the cache-file for future use. See the documentation for
-    the `cache` wrapper-function for details on its arguments.
+    the :obj:`~simfin.cache.cache` wrapper for details on its arguments.
 
-    WARNING: You *MUST* use keyword arguments to this function, otherwise the
-    first unnamed arguments would get passed to the `cache` wrapper instead.
+    .. warning:: You **MUST** use keyword arguments to this function,
+        otherwise the first unnamed arguments would get passed to the
+        :obj:`~simfin.cache.cache` wrapper instead.
 
     :param df_prices:
         Optional Pandas DataFrame with share-prices for one or more stocks.
-        If not None, then the signals will be reindexed to the same daily
+        If not `None`, then the signals will be reindexed to the same daily
         data-points as `df_prices`, otherwise the signals will be quarterly.
 
     :param df_income_ttm:
@@ -305,13 +310,12 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
         calculated, but before they have been reindexed to daily data-points.
         This is useful e.g. to calculate multi-year averages.
         For example, to calculate the 2-year averages of TTM data:
-
-            `func = lambda df: 0.5 * (df + df.shift(4))`
+        `func = lambda df: 0.5 * (df + df.shift(4))`
 
     :param fill_method:
         String or callable for the method of filling in empty values when
-        reindexing financial data to daily data-points. See `sf.reindex`
-        for valid options.
+        reindexing financial data to daily data-points.
+        See :obj:`~simfin.resample.reindex` for valid options.
 
     :param offset:
         Pandas DateOffset added to the date-index of the Pandas DataFrames with
@@ -320,7 +324,7 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
         with Income Statements, Balance Sheets, and Cash-Flow Statements, because
         the REPORT_DATE is not when it was actually made available to the public,
         which can be 1, 2 or even 3 months after the REPORT_DATE.
-        See `sf.add_date_offset` for more details.
+        See :obj:`~simfin.utils.add_date_offset` for more details.
 
     :param date_index:
         Name of the date-column for the financial data e.g. REPORT_DATE.
@@ -424,14 +428,15 @@ def growth_signals(df_income_ttm, df_income_qrt,
     the cache-file will get loaded if it is more recent than specified by
     `cache_refresh`, otherwise the function will get computed again and the
     result saved in the cache-file for future use. See the documentation for
-    the `cache` wrapper-function for details on its arguments.
+    the :obj:`~simfin.cache.cache` wrapper for details on its arguments.
 
-    WARNING: You *MUST* use keyword arguments to this function, otherwise the
-    first unnamed arguments would get passed to the `cache` wrapper instead.
+    .. warning:: You **MUST** use keyword arguments to this function,
+        otherwise the first unnamed arguments would get passed to the
+        :obj:`~simfin.cache.cache` wrapper instead.
 
     :param df_prices:
         Optional Pandas DataFrame with share-prices for one or more stocks.
-        If not None, then the signals will be reindexed to the same daily
+        If not `None`, then the signals will be reindexed to the same daily
         data-points as `df_prices`, otherwise the signals will be quarterly.
 
     :param df_income_ttm:
@@ -454,13 +459,12 @@ def growth_signals(df_income_ttm, df_income_qrt,
         calculated, but before they have been reindexed to daily data-points.
         This is useful e.g. to calculate multi-year averages.
         For example, to calculate the 2-year averages of TTM data:
-
-            `func = lambda df: 0.5 * (df + df.shift(4))`
+        `func = lambda df: 0.5 * (df + df.shift(4))`
 
     :param fill_method:
         String or callable for the method of filling in empty values when
-        reindexing financial data to daily data-points. See `sf.reindex`
-        for valid options.
+        reindexing financial data to daily data-points.
+        See :obj:`~simfin.resample.reindex` for valid options.
 
     :param offset:
         Pandas DateOffset added to the date-index of the Pandas DataFrames with
@@ -469,7 +473,7 @@ def growth_signals(df_income_ttm, df_income_qrt,
         with Income Statements, Balance Sheets, and Cash-Flow Statements, because
         the REPORT_DATE is not when it was actually made available to the public,
         which can be 1, 2 or even 3 months after the REPORT_DATE.
-        See `sf.add_date_offset` for more details.
+        See :obj:`~simfin.utils.add_date_offset` for more details.
 
     :param date_index:
         Name of the date-column for the financial data e.g. REPORT_DATE.
@@ -579,10 +583,11 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
     the cache-file will get loaded if it is more recent than specified by
     `cache_refresh`, otherwise the function will get computed again and the
     result saved in the cache-file for future use. See the documentation for
-    the `cache` wrapper-function for details on its arguments.
+    the :obj:`~simfin.cache.cache` wrapper for details on its arguments.
 
-    WARNING: You *MUST* use keyword arguments to this function, otherwise the
-    first unnamed arguments would get passed to the `cache` wrapper instead.
+    .. warning:: You **MUST** use keyword arguments to this function,
+        otherwise the first unnamed arguments would get passed to the
+        :obj:`~simfin.cache.cache` wrapper instead.
 
     :param df_prices:
         Pandas DataFrame with share-prices for one or more stocks.
@@ -598,8 +603,8 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
 
     :param fill_method:
         String or callable for the method of filling in empty values when
-        reindexing financial data to daily data-points. See `sf.reindex`
-        for valid options.
+        reindexing financial data to daily data-points.
+        See :obj:`~simfin.resample.reindex` for valid options.
 
     :param offset:
         Pandas DateOffset added to the date-index of the Pandas DataFrames with
@@ -608,7 +613,7 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
         with Income Statements, Balance Sheets, and Cash-Flow Statements, because
         the REPORT_DATE is not when it was actually made available to the public,
         which can be 1, 2 or even 3 months after the REPORT_DATE.
-        See `sf.add_date_offset` for more details.
+        See :obj:`~simfin.utils.add_date_offset` for more details.
 
     :param func:
         Function to apply on a per-stock basis on the financial data, before
@@ -616,8 +621,7 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
         multi-year averages of the Net Income and Revenue and use those when
         calculating P/E and P/Sales ratios.
         For example, to calculate the 2-year averages of TTM data:
-
-            `func = lambda df: 0.5 * (df + df.shift(4))`
+        `func = lambda df: 0.5 * (df + df.shift(4))`
 
     :param date_index:
         Name of the date-column for the financial data e.g. REPORT_DATE.

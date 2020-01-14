@@ -101,7 +101,7 @@ CLAIMS_LOSSES = 'Claims & Losses'
 
 #: Daily share-price close. Adjusted for stock-splits but NOT dividends. This is
 #: used as the default share-price.
-CLOSE = SHARE_PRICE_CLOSE = 'Close'
+CLOSE = SHARE_PRICE = SHARE_PRICE_CLOSE = 'Close'
 
 COMM_REAL_ESTATE_LOANS = 'Commercial Real Estate Loans'
 

@@ -69,7 +69,7 @@ def asfreq(df, freq, method=None, group_index=TICKER, **kwargs):
 
     This only provides options for forward- and backward-fill of new
     data-points. If you need other filling methods, then you should use
-    the `resample` function.
+    the :obj:`~simfin.resample.resample` function.
 
     :param df:
         Pandas DataFrame or Series assumed to have either a DatetimeIndex
@@ -78,17 +78,15 @@ def asfreq(df, freq, method=None, group_index=TICKER, **kwargs):
 
     :param freq:
         Resampling frequency e.g. 'D' for daily.
-
         This is passed directly to the Pandas function which has more options:
         https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#dateoffset-objects
 
     :param method:
-        String for the method of filling in empty values.
+        String for the method of filling in empty values. Valid options:
 
-        Valid options:
-        None, do not fill in the empty values.
-        'ffill' is forward-fill with last known values.
-        'bfill' is backward-fill using future values.
+        - `None`, do not fill in the empty values.
+        - 'ffill' is forward-fill with last known values.
+        - 'bfill' is backward-fill using future values.
 
         This is passed directly to the Pandas function which has more options:
         https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.asfreq.html
@@ -99,8 +97,7 @@ def asfreq(df, freq, method=None, group_index=TICKER, **kwargs):
         you are using that as an index in your DataFrame.
 
     :param **kwargs:
-        Optional keyword-arguments passed directly to Pandas asfreq function.
-
+        Optional keyword-arguments passed directly to Pandas `asfreq` function.
         Valid arguments:
         https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.asfreq.html
 
@@ -123,7 +120,7 @@ asfreq_daily = functools.partial(asfreq, freq='D')
 asfreq_daily.__doc__ = 'Resample (asfreq) a Pandas DataFrame or Series to ' \
                        'daily data. This is typically used for upsampling ' \
                        'quarterly or annual financial data. ' \
-                       'See simfin.asfreq() for valid args.'
+                       'See :obj:`~simfin.resample.asfreq` for valid args.'
 
 ##########################################################################
 
@@ -134,10 +131,11 @@ def resample(df, rule, method='ffill', group_index=TICKER, **kwargs):
     single company, or resample data for multiple companies in a
     single DataFrame.
 
-    Unlike the `asfreq()` function which only allows forward- and
-    backward-fill, this function allows for the use of arbitrary functions,
-    either using string keywords for the most common filling functions,
-    or user-supplied functions for arbitrary filling and summarization.
+    Unlike the :obj:`~simfin.resample.asfreq` function which only allows
+    forward- and backward-fill, this function allows for the use of
+    arbitrary functions, either using string keywords for the most common
+    filling functions, or user-supplied functions for arbitrary filling
+    and summarization.
 
     :param df:
         Pandas DataFrame or Series assumed to have either a DatetimeIndex
@@ -146,22 +144,21 @@ def resample(df, rule, method='ffill', group_index=TICKER, **kwargs):
 
     :param rule:
         Resampling frequency e.g. 'D' for daily.
-
         This is passed directly to the Pandas function which has more options:
         https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#dateoffset-objects
 
     :param method:
         String or callable for the method of filling in empty values.
-
         Valid options:
-        'ffill' is forward-fill with last known values.
-        'bfill' is backward-fill using future values.
-        'linear' is linear interpolation between known values.
-        'quadratic' is quadratic interpolation between known values.
-        'mean' is averaging for use when downsampling.
+
+        - 'ffill' is forward-fill with last known values.
+        - 'bfill' is backward-fill using future values.
+        - 'linear' is linear interpolation between known values.
+        - 'quadratic' is quadratic interpolation between known values.
+        - 'mean' is averaging for use when downsampling.
 
         Can also be a callable function or lambda-function which is called
-        after the resampling, e.g.: method=lambda x: x.nearest(limit=100)
+        after the resampling, e.g.: `method=lambda x: x.nearest(limit=100)`
 
     :param group_index:
         If `df` has a MultiIndex then group data using this index-column.
@@ -170,7 +167,6 @@ def resample(df, rule, method='ffill', group_index=TICKER, **kwargs):
 
     :param **kwargs:
         Optional keyword-arguments passed directly to Pandas resample function.
-
         Valid arguments:
         https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.resample.html
 
@@ -198,7 +194,7 @@ resample_daily = functools.partial(resample, rule='D')
 resample_daily.__doc__ = 'Resample a Pandas DataFrame or Series to daily ' \
                          'data. This is typically used for upsampling ' \
                          'quarterly or annual financial data. ' \
-                         'See simfin.resample() for valid args.'
+                         'See :obj:`~simfin.resample.resample` for valid args.'
 
 ##########################################################################
 # Functions for creating and combining DataFrame indices.
@@ -248,17 +244,18 @@ def reindex(df_src, df_target, group_index=TICKER, union=True,
     This can be used to resample financial data for a single company, or
     resample data for multiple companies in a single DataFrame.
 
-    It differs from the `resample()` function because the resampled data
-    has the same index as the target DataFrame. This is useful e.g. when
-    upsampling annual or quarterly financial data to daily data that matches
-    the share-price data, even beyond the last date of the financial data.
+    It differs from the :obj:`~simfin.resample.resample` function because
+    the resampled data has the same index as the target DataFrame. This is
+    useful e.g. when upsampling annual or quarterly financial data to daily
+    data that matches the share-price data, even beyond the last date of the
+    financial data.
 
     By default this function uses a union of the indices of the source and
     target DataFrames, because otherwise data-points from the source might
     be lost if those particular dates do not exist in the target DataFrame.
     We can still ensure the resulting DataFrame only has the index of the
     target DataFrame, by setting `only_target_index=True`.
-    This is explained in more detail in Tutorial 02 on resampling.
+    This is explained in more detail in `Tutorial 02`_ on resampling.
 
     :param df_src:
         Pandas DataFrame or Series assumed to have either a DatetimeIndex
@@ -280,17 +277,16 @@ def reindex(df_src, df_target, group_index=TICKER, union=True,
         String or callable for the method of filling in empty values.
         You should not pass a summarizing method e.g. the string 'mean' or
         a similar lambda-function. You should only use filling methods such
-        as forward-fill or interpolation.
+        as forward-fill or interpolation. Valid options:
 
-        Valid options:
-        'ffill' is forward-fill with last known values.
-        'bfill' is backward-fill using future values.
-        'linear' is linear interpolation between known values.
-        'quadratic' is quadratic interpolation between known values.
+        - 'ffill' is forward-fill with last known values.
+        - 'bfill' is backward-fill using future values.
+        - 'linear' is linear interpolation between known values.
+        - 'quadratic' is quadratic interpolation between known values.
 
         Can also be a callable function or lambda-function which is called
         after the reindexing, e.g.:
-        method=lambda x: x.interpolate(method='nearest')
+        `method=lambda x: x.interpolate(method='nearest')`
 
     :param union:
         Boolean. If True then use the union of the indices from `df_src` and
@@ -303,9 +299,8 @@ def reindex(df_src, df_target, group_index=TICKER, union=True,
         that do not exist in the index of `df_target`.
 
     :param **kwargs:
-        Optional keyword-arguments passed directly to Pandas reindex function.
-
-        Valid arguments:
+        Optional keyword-arguments passed directly to Pandas `reindex`
+        function. Valid arguments:
         https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.reindex.html
 
     :return:

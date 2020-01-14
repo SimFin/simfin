@@ -26,12 +26,13 @@ def load_info(name, refresh_days=30):
 
     This function uses the `@lru_cache` wrapper to keep the data in a
     RAM-cache, so it can be returned nearly instantly the second time this
-    function is called. You should *NOT* modify the data returned by this
+    function is called. You should **NOT** modify the data returned by this
     function, because then it would modify the contents of the RAM-cache.
     You first need to make a copy of the data if you want to modify it.
 
     :param name:
         String with the name of the info-data to load. Valid options:
+
         - 'datasets': Load info about all available datasets.
         - 'columns': Load info about all available data-columns.
 

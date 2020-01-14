@@ -27,7 +27,7 @@ def info_datasets(dataset=None, show_columns=True):
         Boolean whether to show the columns of the given dataset.
 
     :return:
-        None
+        `None`
     """
 
     # Load dict with info about all the datasets.
@@ -137,7 +137,7 @@ def info_columns(search):
         Case insensitive.
 
     :return:
-        None
+        `None`
     """
 
     # Has a valid search-text been provided?

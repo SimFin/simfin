@@ -29,8 +29,9 @@ def load(dataset, variant=None, market=None,
 
     This is the main function for downloading and loading datasets. It is
     specialized in several so-called partial function definitions below,
-    such as load_income() and load_shareprices(), which merely set some of
-    the arguments in this function for convenience.
+    such as :obj:`~simfin.load.load_income` and
+    :obj:`~simfin.load.load_shareprices`, which merely set some of the
+    arguments in this function for convenience.
 
     A dataset is specified by its name e.g. 'income' for Income Statements,
     its variant e.g. 'annual' for annual reports, and the market e.g. 'us'
@@ -55,26 +56,26 @@ def load(dataset, variant=None, market=None,
         String with the name of the dataset (always lowercase).
 
         Examples:
-            'income': Income statements.
-            'balance': Balance sheets.
-            'cashflow': Cash-flow statements.
-            'shareprices': Share-prices.
-            'companies': Company details.
-            'industries': Sector and industry details.
-            'markets': Market details.
+            - 'income': Income statements.
+            - 'balance': Balance sheets.
+            - 'cashflow': Cash-flow statements.
+            - 'shareprices': Share-prices.
+            - 'companies': Company details.
+            - 'industries': Sector and industry details.
+            - 'markets': Market details.
 
     :param variant:
         String with the dataset's variant (always lowercase).
-        The valid options depends on the dataset.
+        The valid options depend on the dataset.
 
         Examples for datasets 'income', 'balance', and 'cashflow':
-            'annual': Annual financial reports.
-            'quarterly': Quarterly financial reports.
-            'ttm': Trailing-Twelve-Months (TTM) reports.
+            - 'annual': Annual financial reports.
+            - 'quarterly': Quarterly financial reports.
+            - 'ttm': Trailing-Twelve-Months (TTM) reports.
 
         Valid options for dataset 'shareprices':
-            'latest': Latest share-prices (small data-file).
-            'daily': Daily share-prices (large data-file).
+            - 'latest': Latest share-prices (small data-file).
+            - 'daily': Daily share-prices (large data-file).
 
     :param market:
         String for the dataset's market (always lowercase).
@@ -83,9 +84,9 @@ def load(dataset, variant=None, market=None,
         for individual markets such as USA, Germany, etc.
 
         Examples of valid options:
-            'us': USA
-            'de': Germany
-            'sg': Singapore
+            - 'us': USA
+            - 'de': Germany
+            - 'sg': Singapore
 
         Some datasets such as 'industries' do not support the market-keyword
         and will generate a server-error if the market is set.
@@ -165,7 +166,7 @@ def load(dataset, variant=None, market=None,
 # changed when the user calls the specialized functions.
 
 # Common doc-string for all the specialized load-functions.
-_DOC_LOAD = ' See simfin.load() for valid args.'
+_DOC_LOAD = ' See the :obj:`~simfin.load.load` function for valid args.'
 
 # Load fundamental data i.e. Income Statements, Balance Sheets, Cash-Flow Stmt.
 # This is used by load_income(), load_balance(), load_cashflow(), etc. because

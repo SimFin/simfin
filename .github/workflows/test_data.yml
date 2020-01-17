@@ -1,0 +1,57 @@
+##############################################################################
+# This runs the unit-tests and data-quality tests that use real data from
+# the SimFin server. These are combined into a single test, so we only have
+# to download the data once from the SimFin server.
+##############################################################################
+
+name: Test Data
+
+# Run this GitHub action on a schedule using the cron.
+on: 
+  schedule:
+    # Every day at 08:00 UTC, one hour after datasets are updated on server.
+    #- cron: "0 8 * * *"
+
+    # Every 5 minutes for testing, as it cannot be triggered manually.
+    - cron: "*/5 * * * *"
+
+jobs:
+  test:
+    # We currently only test with the latest ubuntu version.
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repo from GitHub to a temporary work-directory.
+    - name: Checkout GitHub repository
+      uses: actions/checkout@v1
+
+    # Run with a Python version that we know works.
+    - name: Setup Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+
+    # Install all requirements to run these tests.
+    # Note: The pip cache is not used, because we want a new simfin install.
+    - name: Install requirements
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest nbval
+
+    # Install the simfin package that was cloned from GitHub.
+    - name: Install simfin package
+        run: pip install .
+
+    # Ensure the simfin data-dir is removed. This should not be necessary.
+    - name: Delete simfin data-dir
+      run: rm -rf ~simfin_data
+
+    # Run the unit-tests that use real data from the SimFin server.
+    - name: Unit-Tests With Real Data
+      run: pytest tests/test_load.py
+
+    # Run data-quality tests.
+    - name: Data Quality Tests
+      run: pytest --nbval-lax -v tests/test_bulk_data.ipynb
+
+##############################################################################

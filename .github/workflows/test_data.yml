@@ -10,10 +10,10 @@ name: Test Data
 on: 
   schedule:
     # Every day at 08:00 UTC, one hour after datasets are updated on server.
-    - cron: "0 8 * * *"
+    #- cron: "0 8 * * *"
 
     # Every 5 minutes for testing, as it cannot be triggered manually.
-    #- cron: "*/5 * * * *"
+    - cron: "*/5 * * * *"
 
 jobs:
   test:
@@ -46,12 +46,20 @@ jobs:
     - name: Delete simfin data-dir
       run: rm -rf ~simfin_data
 
+    # Write encrypted SimFin API-key to the key-file used by the test-scripts.
+    # This allows for download of all SimFin premium datasets. Without this
+    # API-key it would raise a SimFin server-error for the premium datasets,
+    # which would cause the tests to fail. The API-key should be hidden from
+    # everyone except the admins of the main GitHub repository.
+    - name: Set SimFin API-key
+      run: echo ${{ secrets.SIMFIN_API_KEY }} > ~/simfin_api_key.txt
+
     # Run the unit-tests that use real data from the SimFin server.
-    - name: Unit-Tests With Real Data
+    - name: Unit-tests with real data
       run: pytest tests/test_load.py
 
     # Run data-quality tests.
-    - name: Data Quality Tests
+    - name: Data-quality tests
       run: pytest --nbval-lax -v tests/test_bulk_data.ipynb
 
 ##############################################################################

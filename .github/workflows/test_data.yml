@@ -40,7 +40,7 @@ jobs:
 
     # Install the simfin package that was cloned from GitHub.
     - name: Install simfin package
-        run: pip install .
+      run: pip install .
 
     # Ensure the simfin data-dir is removed. This should not be necessary.
     - name: Delete simfin data-dir

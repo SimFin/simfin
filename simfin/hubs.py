@@ -260,13 +260,16 @@ class StockHub:
 
         return df
 
-    #: Load Income Statements.
+    #: Load Income Statements for the chosen market.
+    #: See :obj:`~simfin.hubs.StockHub.load_fundamental` for valid args.
     load_income = partialmethod(load_fundamental, dataset='income')
 
-    #: Load Balance Sheets.
+    #: Load Balance Sheets for the chosen market.
+    #: See :obj:`~simfin.hubs.StockHub.load_fundamental` for valid args.
     load_balance = partialmethod(load_fundamental, dataset='balance')
 
-    #: Load Cash-Flow Statements.
+    #: Load Cash-Flow Statements for the chosen market.
+    #: See :obj:`~simfin.hubs.StockHub.load_fundamental` for valid args.
     load_cashflow = partialmethod(load_fundamental, dataset='cashflow')
 
     @lru_cache()

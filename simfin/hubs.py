@@ -260,13 +260,13 @@ class StockHub:
 
         return df
 
-    # Load Income Statements.
+    #: Load Income Statements.
     load_income = partialmethod(load_fundamental, dataset='income')
 
-    # Load Balance Sheets.
+    #: Load Balance Sheets.
     load_balance = partialmethod(load_fundamental, dataset='balance')
 
-    # Load Cash-Flow Statements.
+    #: Load Cash-Flow Statements.
     load_cashflow = partialmethod(load_fundamental, dataset='cashflow')
 
     @lru_cache()

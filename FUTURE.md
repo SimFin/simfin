@@ -10,10 +10,38 @@ A beta version that is ready for the general public.
 
 -   <del>**Magnus:** Generate docs using sphinx or another system.</del>  
 
+-   <del>**Magnus:** Setup automatic testing using GitHub Actions.</del>
+
 -   **Thomas:** Fix erroneous share-counts in the data.
+    Or "blacklist" the companies until they can be checked and fixed.
+
+-   **Thomas:** Make datasets with signals (P/E ratios etc.)
+    **Magnus:** create `load`-functions for them. **NOTE:** I have mixed
+    feelings about this. It is a good idea, but the json/database-system
+    for defining the data-columns and their shortcuts and descriptions is
+    pretty F'd up, so I am worried if it is going to destroy something,
+    as happened with `SHARE_PRICE` last week that was suddenly just gone.
+
+-   **Thomas:** You ought to change www.simfin.com so the API-page does not
+    require login. This may help getting more users. You should use the
+    design suggestions I wrote in a previous e-mail.
+    
+-   **Thomas:** You ought to change the subscription to only have a single paid
+    level and price it at EUR 20 per month. This may help getting more paying
+    users.
+
+-   **Thomas:** Consider delaying the free data for 12 months instead of only
+    4, to make a greater incitement for users to pay the EUR 20 per month.
+
+-   **Thomas**: Log all bulk downloads and create a simple statistics page.
+    You can create the statistics page later, but you should start logging
+    now.
 
 -   **Thomas:** Merge financial data for GOOG and GOOG_OLD, so it is just
-    one company in the database. Is it the same problem for other companies? 
+    one company in the database. Is it the same problem for other companies?
+    GOOG is such an important company that a lot of people would expect
+    is in the database. It is weird that it is split into two companies
+    in the database, just because it changed its name. 
 
 -   **Thomas:** Write descriptions for the most important data-column names in:
     https://simfin.com/api/bulk_info/columns.php
@@ -29,6 +57,12 @@ A beta version that is ready for the general public.
 
 -   Write descriptions for the remaining data-columns in:
     https://simfin.com/api/bulk_info/columns.php
+
+-   Make more unit-tests, especially for `resample.py` and `rel_change.py`
+    using synthetic data, so it can be tested that it computes correctly.
+    Setup GitHub Actions for automated unit-testing. This should be triggered
+    on both Push and Pull Requests. Because it only uses synthetic data,
+    it should be very fast.
 
 -   Implement function sf.mean_change() which is similar to mean_log_change()
     except it can calculate actual annualized returns, instead of log-returns.

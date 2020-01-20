@@ -41,12 +41,12 @@ and print the Revenue and Net Income for Microsoft.
     # The dir will be created if it does not already exist.
     sf.set_data_dir('~/simfin_data/')
 
-    # Load the annual Income Statements for all companies.
+    # Load the annual Income Statements for all companies in USA.
     # The data is automatically downloaded if you don't have it already.
-    df = sf.load_income(variant='annual')
+    df = sf.load_income(variant='annual', market='us')
 
     # Print all Revenue and Net Income for Microsoft (ticker MSFT).
-    print(df.loc['MSFT'][[REVENUE, NET_INCOME]])
+    print(df.loc['MSFT', [REVENUE, NET_INCOME]])
 
 This produces the following output:
 
@@ -64,6 +64,20 @@ This produces the following output:
     2017-06-30   9.657100e+10  25489000000
     2018-06-30   1.103600e+11  16571000000
     2019-06-30   1.258430e+11  39240000000
+
+We can also load the daily share-prices and plot the closing share-price for
+Microsoft (ticker MSFT):
+
+    # Load daily share-prices for all companies in USA.
+    # The data is automatically downloaded if you don't have it already.
+    df_prices = sf.load_shareprices(market='us', variant='daily')
+    
+    # Plot the closing share-prices for ticker MSFT.
+    df_prices.loc['MSFT', CLOSE].plot(grid=True, figsize=(20,10), title='MSFT Close')
+
+This produces the following image:
+
+![Share-price for MSFT](images/shareprice_MSFT.png)
 
 
 ## Documentation

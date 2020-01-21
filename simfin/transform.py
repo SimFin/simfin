@@ -200,7 +200,7 @@ def clip(df, lower, upper):
 
 ##########################################################################
 
-def winsorize(df, quantile=0.05, columns=None):
+def winsorize(df, quantile=0.05, clip=True, columns=None):
     """
     Limit the values in the DataFrame between `quantile` and `(1-quantile)`.
     This is useful for removing outliers without specifying the exact bounds.
@@ -215,6 +215,13 @@ def winsorize(df, quantile=0.05, columns=None):
 
     :param quantile:
         Float between 0.0 and 1.0
+
+    :param clip:
+        Boolean whether to clip/limit all values outside the quantiles (True),
+        or if the values should be set to NaN (False). Note: When the values
+        are clipped it can distort statistical analysis of the data. But when
+        the values are set to NaN, it reduces the amount of data-points
+        available for the statistical analysis. You should try both options.
 
     :param columns:
         List of strings with names of the columns in `df` to Winsorize,
@@ -232,7 +239,8 @@ def winsorize(df, quantile=0.05, columns=None):
         df_clipped = df.copy()
 
         # Recursively call this function to Winsorize and update those columns.
-        df_clipped[columns] = winsorize(df=df[columns], quantile=quantile)
+        df_clipped[columns] = winsorize(df=df[columns], quantile=quantile,
+                                        clip=clip)
     else:
         # Winsorize ALL of the columns in the DataFrame.
 
@@ -246,8 +254,17 @@ def winsorize(df, quantile=0.05, columns=None):
         lower = df[mask].quantile(q=quantile)
         upper = df[mask].quantile(q=1.0 - quantile)
 
-        # Limit / clip all column-values between these quantiles.
-        df_clipped = df.clip(lower=lower, upper=upper, axis='columns')
+        # Clip the values outside these quantiles, or set them to NaN?
+        if clip:
+            # Clip / limit the values outside these quantiles.
+            df_clipped = df.clip(lower=lower, upper=upper, axis='columns')
+        else:
+            # Boolean mask for the values that are outside these quantiles.
+            mask_outside = (df < lower) | (df > upper)
+
+            # Set the values outside the quantiles to NaN.
+            df_clipped = df.copy()
+            df_clipped[mask_outside] = np.nan
 
     return df_clipped
 

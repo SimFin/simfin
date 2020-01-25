@@ -1,5 +1,5 @@
 # This is also defined in setup.py and must be updated in both places.
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 # Expose the following as top-level imports.
 

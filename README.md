@@ -1,19 +1,3 @@
-# Beta Warning
-
-This is an early beta version which may set your computer on fire, cause
-40 years of darkness, earth-quakes and volcanoes, the dead rising from
-the grave, human sacrifice, dogs and cats living together.
-[Mass hysteria!](https://www.youtube.com/watch?v=9S4cldkdCjE)
-
-If you experience any problems, you could try and install the simfin
-package using the following command, to get the latest developer version:
-
-    pip install git+https://github.com/simfin/simfin.git
-
-If you still experience problems - and your computer still works - then
-please open a GitHub issue with a detailed error report.
-
-
 # SimFin - Simple financial data for Python
 
 SimFin makes it easy to obtain and use financial data in Python.

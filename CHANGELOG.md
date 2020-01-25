@@ -1,8 +1,12 @@
 # Changes to the SimFin Python package
 
-## Version 0.4.0 (2020-MM-DD)
+## Version 0.4.0 (2020-01-25)
 
 Public beta version.
+
+Please be patient if you experience any problems. Although the system may look
+fully automated, there is actually a little man sitting inside the server to
+handle all of your requests: https://youtu.be/8cXF88XzALk
 
 ### Changes
 
@@ -10,6 +14,9 @@ Public beta version.
 
 -   Added documentation using the sphinx system and setup automatic generation
     of the docs at: https://simfin.readthedocs.io/
+    
+-   Setup automatic daily testing using GitHub Actions for both the simfin
+    package and the tutorials.
 
 
 ## Version 0.3.0 (2020-01-03)

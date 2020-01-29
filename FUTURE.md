@@ -1,41 +1,29 @@
 # The Future of SimFin
 
-## v. 0.4.0 (Public Beta)
+## v. 0.5.0 (Public Beta)
 
 ### Goal
 
-A beta version that is ready for the general public.
+Improve the public beta.
 
 ### Tasks
 
--   <del>**Magnus:** Generate docs using sphinx or another system.</del>  
+-   **Thomas:** Make datasets with signals (P/E ratios etc.) that require
+    paid subscription. Generate them using the signal-functions from the
+    `StockHub` class. The datasets and their columns should be visible on
+    the bulk-overview page: https://simfin.com/data/bulk
+    **NOTE:** Make sure this does not cause problems with the way
+    data-columns are defined in json-files and the database, similar to the
+    problem we had where the shortcut `SHARE_PRICE` was suddenly missing.
+    **Magnus:** create `load`-functions for them in the Python API.
 
--   <del>**Magnus:** Setup automatic testing using GitHub Actions.</del>
+-   **Thomas:** Make web-pages with questions when new users register; when
+    they pay for SF+; and when they un-subscribe from SF+. See the
+    suggestions in the e-mail I sent you.
 
--   **Thomas:** Fix erroneous share-counts in the data.
-    Or "blacklist" the companies until they can be checked and fixed.
-
--   **Thomas:** Make datasets with signals (P/E ratios etc.)
-    **Magnus:** create `load`-functions for them. **NOTE:** I have mixed
-    feelings about this. It is a good idea, but the json/database-system
-    for defining the data-columns and their shortcuts and descriptions is
-    pretty F'd up, so I am worried if it is going to destroy something,
-    as happened with `SHARE_PRICE` last week that was suddenly just gone.
-
--   **Thomas:** You ought to change www.simfin.com so the API-page does not
-    require login. This may help getting more users. You should use the
-    design suggestions I wrote in a previous e-mail.
-    
--   **Thomas:** You ought to change the subscription to only have a single paid
-    level and price it at EUR 20 per month. This may help getting more paying
-    users.
-
--   **Thomas:** Consider delaying the free data for 12 months instead of only
-    4, to make a greater incitement for users to pay the EUR 20 per month.
-
--   **Thomas**: Log all bulk downloads and create a simple statistics page.
-    You can create the statistics page later, but you should start logging
-    now.
+-   **Thomas**: Create a simple statistics page so we can see changes in
+    user-counts, paying subscribers, how many daily users there are (both
+    subscribers and the anonymous IP's that use the 'free' data).
 
 -   **Thomas:** Merge financial data for GOOG and GOOG_OLD, so it is just
     one company in the database. Is it the same problem for other companies?

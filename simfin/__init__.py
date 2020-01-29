@@ -6,6 +6,7 @@ __version__ = "0.4.0"
 from simfin.cache import cache
 from simfin.config import set_api_key, load_api_key, get_api_key
 from simfin.config import set_data_dir, get_data_dir, get_download_dir
+from simfin.derived import ebitda, free_cash_flow
 from simfin.exceptions import ServerException
 from simfin.hubs import StockHub
 from simfin.info import info_columns, info_datasets
@@ -21,6 +22,5 @@ from simfin.resample import reindex, index_union
 from simfin.signals import price_signals, trade_signals, volume_signals
 from simfin.signals import fin_signals, growth_signals, val_signals
 from simfin.transform import clip, winsorize, max_drawdown
-from simfin.transform import free_cash_flow, ebitda
 from simfin.transform import avg_ttm, avg_ttm_2y, avg_ttm_3y
 from simfin.utils import add_date_offset, apply

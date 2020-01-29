@@ -11,11 +11,11 @@
 import pandas as pd
 import numpy as np
 
-from simfin.resample import reindex
-from simfin.rel_change import rel_change
-from simfin.utils import apply, add_date_offset
-from simfin.transform import free_cash_flow, ncav, netnet
 from simfin.cache import cache
+from simfin.derived import free_cash_flow, ncav, netnet
+from simfin.rel_change import rel_change
+from simfin.resample import reindex
+from simfin.utils import apply, add_date_offset
 from simfin.names import *
 
 ##########################################################################

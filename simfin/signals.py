@@ -356,14 +356,21 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
         # Debt Ratio = (Short-term Debt + Long-term Debt) / Total Assets.
         df_signals[DEBT_RATIO] = (df[ST_DEBT] + df[LT_DEBT]) / df[TOTAL_ASSETS]
 
-        # Return on Assets = Net Income / Total Assets from 1 year ago.
-        df_signals[ROA] = df[NET_INCOME] / df[TOTAL_ASSETS].shift(4)
+        # NOTE: There are different ways of calculating ROA, ROE,
+        # ASSET_TURNOVER, etc. See Tutorial 04. For example, we could use the
+        # Assets or Equity from last year instead of from the current year,
+        # but the resulting ROA, ROE, etc. are usually very similar, and using
+        # last year's Assets or Equity would cause us to loose one year of
+        # data-points for the signals we are calculating here.
 
-        # Return on Equity = Net Income / Total Equity from 1 year ago.
-        df_signals[ROE] = df[NET_INCOME] / df[TOTAL_EQUITY].shift(4)
+        # Return on Assets = Net Income / Total Assets. See note above.
+        df_signals[ROA] = df[NET_INCOME] / df[TOTAL_ASSETS]
 
-        # Asset Turnover = Revenue / Total Assets from 1 year ago.
-        df_signals[ASSET_TURNOVER] = df[REVENUE] / df[TOTAL_ASSETS].shift(4)
+        # Return on Equity = Net Income / Total Equity. See note above.
+        df_signals[ROE] = df[NET_INCOME] / df[TOTAL_EQUITY]
+
+        # Asset Turnover = Revenue / Total Assets. See note above.
+        df_signals[ASSET_TURNOVER] = df[REVENUE] / df[TOTAL_ASSETS]
 
         return df_signals
 

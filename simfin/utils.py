@@ -170,6 +170,7 @@ def convert_to_periods(freq, bdays=0, days=0, weeks=0,
         - 'weeks' or 'w' for weekly data.
         - 'months' or 'm' for monthly data.
         - 'quarters' or 'q' for quarterly data.
+        - 'ttm' for trailing-twelve-months data.
         - 'years', 'y', 'annual', 'a' for yearly or annual data.
 
     :param bdays: Number of business or trading-days.
@@ -229,8 +230,8 @@ def convert_to_periods(freq, bdays=0, days=0, weeks=0,
         periods = round(_MONTHS_PER_YEAR * total_years)
         shifted_years = periods / _MONTHS_PER_YEAR
 
-    # DataFrame's frequency is Quarters.
-    elif freq in ['quarters', 'q']:
+    # DataFrame's frequency is Quarters / TTM.
+    elif freq in ['quarters', 'q', 'ttm']:
         periods = round(_QUARTERS_PER_YEAR * total_years)
         shifted_years = periods / _QUARTERS_PER_YEAR
 

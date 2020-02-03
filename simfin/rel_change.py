@@ -10,126 +10,11 @@
 # See README.md for instructions and LICENSE.txt for license details.
 ##########################################################################
 
-import pandas as pd
 import numpy as np
 
 from simfin.cache import cache
-from simfin.utils import apply, rename_columns
+from simfin.utils import apply, convert_to_periods, rename_columns
 from simfin.names import TICKER
-
-##########################################################################
-# Constants.
-
-# Average number of business- or trading-days in a year.
-BDAYS_PER_YEAR = 251.67
-
-# Average number of week-days in a year. Normal years have 365 days,
-# but every 4th year is a leap-year with 366 days.
-DAYS_PER_YEAR = 365.25
-
-# Number of weeks per year.
-WEEKS_PER_YEAR = 52
-
-# Number of months per year.
-MONTHS_PER_YEAR = 12
-
-# Number of quarters per year.
-QUARTERS_PER_YEAR = 4
-
-##########################################################################
-# Private helper-functions.
-
-def _convert_to_periods(freq, bdays, days, weeks, months, quarters, years):
-    """
-    Convert the number of days, weeks, months, quarters and years
-    into the equivalent number of periods that a DataFrame must be
-    shifted, when the DataFrame has the given frequency.
-
-    :param freq:
-        String for the frequency of the DataFrame. Valid options:
-        - 'bdays' or 'b' for business or trading-days data.
-        - 'days' or 'd' for data that has all 7 week-days.
-        - 'weeks' or 'w' for weekly data.
-        - 'months' or 'm' for monthly data.
-        - 'quarters' or 'q' for quarterly data.
-        - 'years', 'y', 'annual', 'a' for yearly or annual data.
-
-    :param bdays: Number of business or trading-days.
-    :param days: Number of days in a 7-day week.
-    :param weeks: Number of weeks.
-    :param months: Number of months.
-    :param quarters: Number of quarters.
-    :param years: Number of years.
-
-    :return:
-        periods (int): Number of steps to shift the DataFrame.
-        shifted_years (float): Number of years the DataFrame is shifted.
-    """
-
-    # First we calculate the total number of years from all the arguments.
-    total_years = bdays / BDAYS_PER_YEAR \
-                  + days / DAYS_PER_YEAR \
-                  + weeks / WEEKS_PER_YEAR \
-                  + months / MONTHS_PER_YEAR \
-                  + quarters / QUARTERS_PER_YEAR \
-                  + years
-
-    # Then we will convert total_years into the equivalent number of
-    # periods (or steps) for a DataFrame with the given frequency.
-    # For each type of freq we will calculate the following:
-    #   - periods: This is the number of steps to shift the DataFrame.
-    #   - shifted_years: This is the actual number of years the
-    #     DataFrame is shifted, which may be different from
-    #     total_years due to rounding of the number of periods.
-    #     This is used when calculating the annualized change.
-    #     For example, if quarters=7 and freq='years' then
-    #     total_years==1.75, but the data would actually get
-    #     shifted 2 years due to rounding, so we need to use
-    #     2 years instead of 1.75 years when calculating the
-    #     annualized change in the rel_change() function.
-
-    # Ensure the string with the freq argument is lower-case.
-    freq = freq.lower()
-
-    # DataFrame's frequency is Business or Trading Days.
-    if freq in ['bdays', 'b']:
-        periods = round(BDAYS_PER_YEAR * total_years)
-        shifted_years = periods / BDAYS_PER_YEAR
-
-    # DataFrame's frequency is Days (all 7 week-days).
-    elif freq in ['days', 'd']:
-        periods = round(DAYS_PER_YEAR * total_years)
-        shifted_years = periods / DAYS_PER_YEAR
-
-    # DataFrame's frequency is Weeks.
-    elif freq in ['weeks', 'w']:
-        periods = round(WEEKS_PER_YEAR * total_years)
-        shifted_years = periods / WEEKS_PER_YEAR
-
-    # DataFrame's frequency is Months.
-    elif freq in ['months', 'm']:
-        periods = round(MONTHS_PER_YEAR * total_years)
-        shifted_years = periods / MONTHS_PER_YEAR
-
-    # DataFrame's frequency is Quarters.
-    elif freq in ['quarters', 'q']:
-        periods = round(QUARTERS_PER_YEAR * total_years)
-        shifted_years = periods / QUARTERS_PER_YEAR
-
-    # DataFrame's frequency is Years.
-    elif freq in ['years', 'y', 'annual', 'a']:
-        periods = round(total_years)
-        shifted_years = periods
-
-    # Error.
-    else:
-        msg = 'Unsupported arg freq=\'{}\''.format(freq)
-        raise ValueError(msg)
-
-    # Convert periods to int, it should already be rounded to nearest number.
-    periods = int(periods)
-
-    return periods, shifted_years
 
 ##########################################################################
 
@@ -235,11 +120,11 @@ def rel_change(df, freq, future, bdays=0, days=0, weeks=0, months=0,
     # Convert the arguments to the equivalent number of periods (int) that
     # the DataFrame must be shifted, and the total number of years (float)
     # that it corresponds to, which is used in the annualized formula below.
-    periods, shifted_years = _convert_to_periods(freq=freq, bdays=bdays,
-                                                 days=days, weeks=weeks,
-                                                 months=months,
-                                                 quarters=quarters,
-                                                 years=years)
+    periods, shifted_years = convert_to_periods(freq=freq, bdays=bdays,
+                                                days=days, weeks=weeks,
+                                                months=months,
+                                                quarters=quarters,
+                                                years=years)
 
     # Function to apply on a DataFrame with a single stock.
     def _rel_change(df_grp):
@@ -391,15 +276,15 @@ def mean_log_change(df, freq, future,
 
     # Convert arguments for min_periods.
     min_periods, min_shifted_years = \
-        _convert_to_periods(freq=freq, bdays=min_bdays, days=min_days,
-                            weeks=min_weeks, months=min_months,
-                            quarters=min_quarters, years=min_years)
+        convert_to_periods(freq=freq, bdays=min_bdays, days=min_days,
+                           weeks=min_weeks, months=min_months,
+                           quarters=min_quarters, years=min_years)
 
     # Convert arguments for max_periods.
     max_periods, max_shifted_years = \
-        _convert_to_periods(freq=freq, bdays=max_bdays, days=max_days,
-                            weeks=max_weeks, months=max_months,
-                            quarters=max_quarters, years=max_years)
+        convert_to_periods(freq=freq, bdays=max_bdays, days=max_days,
+                           weeks=max_weeks, months=max_months,
+                           quarters=max_quarters, years=max_years)
 
     assert min_periods < max_periods
 

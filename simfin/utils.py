@@ -19,20 +19,20 @@ from simfin.names import REPORT_DATE, TICKER
 # Constants.
 
 # Average number of business- or trading-days in a year.
-_BDAYS_PER_YEAR = 251.67
+BDAYS_PER_YEAR = 251.67
 
 # Average number of week-days in a year. Normal years have 365 days,
 # but every 4th year is a leap-year with 366 days.
-_DAYS_PER_YEAR = 365.25
+DAYS_PER_YEAR = 365.25
 
 # Number of weeks per year.
-_WEEKS_PER_YEAR = 52
+WEEKS_PER_YEAR = 52
 
 # Number of months per year.
-_MONTHS_PER_YEAR = 12
+MONTHS_PER_YEAR = 12
 
 # Number of quarters per year.
-_QUARTERS_PER_YEAR = 4
+QUARTERS_PER_YEAR = 4
 
 ##########################################################################
 
@@ -186,11 +186,11 @@ def convert_to_periods(freq, bdays=0, days=0, weeks=0,
     """
 
     # First we calculate the total number of years from all the arguments.
-    total_years = bdays / _BDAYS_PER_YEAR \
-                  + days / _DAYS_PER_YEAR \
-                  + weeks / _WEEKS_PER_YEAR \
-                  + months / _MONTHS_PER_YEAR \
-                  + quarters / _QUARTERS_PER_YEAR \
+    total_years = bdays / BDAYS_PER_YEAR \
+                  + days / DAYS_PER_YEAR \
+                  + weeks / WEEKS_PER_YEAR \
+                  + months / MONTHS_PER_YEAR \
+                  + quarters / QUARTERS_PER_YEAR \
                   + years
 
     # Then we will convert total_years into the equivalent number of
@@ -212,28 +212,28 @@ def convert_to_periods(freq, bdays=0, days=0, weeks=0,
 
     # DataFrame's frequency is Business or Trading Days.
     if freq in ['bdays', 'b']:
-        periods = round(_BDAYS_PER_YEAR * total_years)
-        shifted_years = periods / _BDAYS_PER_YEAR
+        periods = round(BDAYS_PER_YEAR * total_years)
+        shifted_years = periods / BDAYS_PER_YEAR
 
     # DataFrame's frequency is Days (all 7 week-days).
     elif freq in ['days', 'd']:
-        periods = round(_DAYS_PER_YEAR * total_years)
-        shifted_years = periods / _DAYS_PER_YEAR
+        periods = round(DAYS_PER_YEAR * total_years)
+        shifted_years = periods / DAYS_PER_YEAR
 
     # DataFrame's frequency is Weeks.
     elif freq in ['weeks', 'w']:
-        periods = round(_WEEKS_PER_YEAR * total_years)
-        shifted_years = periods / _WEEKS_PER_YEAR
+        periods = round(WEEKS_PER_YEAR * total_years)
+        shifted_years = periods / WEEKS_PER_YEAR
 
     # DataFrame's frequency is Months.
     elif freq in ['months', 'm']:
-        periods = round(_MONTHS_PER_YEAR * total_years)
-        shifted_years = periods / _MONTHS_PER_YEAR
+        periods = round(MONTHS_PER_YEAR * total_years)
+        shifted_years = periods / MONTHS_PER_YEAR
 
     # DataFrame's frequency is Quarters / TTM.
     elif freq in ['quarters', 'q', 'ttm']:
-        periods = round(_QUARTERS_PER_YEAR * total_years)
-        shifted_years = periods / _QUARTERS_PER_YEAR
+        periods = round(QUARTERS_PER_YEAR * total_years)
+        shifted_years = periods / QUARTERS_PER_YEAR
 
     # DataFrame's frequency is Years.
     elif freq in ['years', 'y', 'annual', 'a']:

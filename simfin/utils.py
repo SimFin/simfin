@@ -18,20 +18,20 @@ from simfin.names import REPORT_DATE, TICKER
 ##########################################################################
 # Constants.
 
-# Average number of business- or trading-days in a year.
+#: Average number of business- or trading-days in a year.
 BDAYS_PER_YEAR = 251.67
 
-# Average number of week-days in a year. Normal years have 365 days,
-# but every 4th year is a leap-year with 366 days.
+#: Average number of week-days in a year. Normal years have 365 days,
+#: but every 4th year is a leap-year with 366 days.
 DAYS_PER_YEAR = 365.25
 
-# Number of weeks per year.
+#: Number of weeks per year.
 WEEKS_PER_YEAR = 52
 
-# Number of months per year.
+#: Number of months per year.
 MONTHS_PER_YEAR = 12
 
-# Number of quarters per year.
+#: Number of quarters per year.
 QUARTERS_PER_YEAR = 4
 
 ##########################################################################

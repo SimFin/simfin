@@ -1,7 +1,5 @@
-<p align="center">
-    [![docs](https://readthedocs.org/projects/simfin/badge/?version=latest)](https://simfin.readthedocs.io/)
-    [![downloads](https://img.shields.io/pypi/dm/simfin.svg)](https://pypistats.org/packages/simfin)
-</p>
+[![docs](https://readthedocs.org/projects/simfin/badge/?version=latest)](https://simfin.readthedocs.io/)
+[![downloads](https://img.shields.io/pypi/dm/simfin.svg)](https://pypistats.org/packages/simfin)
 
 
 # SimFin - Simple financial data for Python

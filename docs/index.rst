@@ -27,6 +27,7 @@ Table of Contents
     signals
     resample
     rel_change
+    derived
     transform
     utils
     datasets

@@ -12,7 +12,7 @@ import pandas as pd
 import numpy as np
 
 from simfin.cache import cache
-from simfin.derived import free_cash_flow, ncav, netnet
+from simfin.derived import free_cash_flow, ncav, netnet, shares
 from simfin.rel_change import rel_change
 from simfin.resample import reindex
 from simfin.utils import apply, add_date_offset
@@ -158,7 +158,8 @@ def trade_signals(df, signal1, signal2, group_index=TICKER):
 
 @cache
 def volume_signals(df_prices, df_shares, window=20, fill_method='ffill',
-                   offset=None, date_index=REPORT_DATE, group_index=TICKER):
+                   offset=None, date_index=REPORT_DATE,
+                   shares_index=SHARES_BASIC, group_index=TICKER):
     """
     Calculate signals for the daily trading-volume of stocks, such as:
 
@@ -185,8 +186,8 @@ def volume_signals(df_prices, df_shares, window=20, fill_method='ffill',
         Pandas DataFrame with share-prices for multiple stocks.
 
     :param df_shares:
-        Pandas Series with share-counts. Take this from a DataFrame with
-        fundamental data such as `df_shares=df_income_ttm[SHARES_BASIC]`.
+        Pandas DataFrame with both columns SHARES_BASIC and SHARES_DILUTED
+        e.g. `df_shares=df_income_ttm`
 
     :param window:
         Integer for the number of days to use in moving-average calculations.
@@ -204,6 +205,11 @@ def volume_signals(df_prices, df_shares, window=20, fill_method='ffill',
     :param date_index:
         Name of the date-column for `df_shares` e.g. REPORT_DATE.
 
+    :param shares_index:
+        Name of the column for share-counts in `df_shares`. SHARES_DILUTED
+        takes the potential diluting impact of stock-options into account,
+        while SHARES_BASIC does not take potential dilution into account.
+
     :param group_index:
         If the DataFrame has a MultiIndex then group data using this
         index-column. By default this is TICKER but it could also be e.g.
@@ -213,10 +219,9 @@ def volume_signals(df_prices, df_shares, window=20, fill_method='ffill',
         Pandas DataFrame with volume-signals.
     """
 
-    assert isinstance(df_shares, pd.Series)
-
-    # Get the column-name for the share-counts.
-    shares_index = df_shares.name
+    # Copy the given share-counts (e.g. SHARES_BASIC) and fill in missing
+    # values with the other share-counts (e.g. SHARES_DILUTED).
+    df_shares = shares(df=df_shares, index=shares_index)
 
     # Helper-function for calculating signals for a single stock.
     def _signals(df):
@@ -648,7 +653,7 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
     """
 
     # Get the required data from the Income Statements.
-    columns = [REVENUE, NET_INCOME_COMMON, shares_index]
+    columns = [REVENUE, NET_INCOME_COMMON, SHARES_BASIC, SHARES_DILUTED]
     df_inc = df_income_ttm[columns]
 
     # Get the required data from the Balance Sheets.
@@ -676,8 +681,10 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
         df = add_date_offset(df=df, offset=offset, date_index=date_index)
 
     # Copy the number of shares before applying the user-supplied function,
-    # which might change this number in the DataFrame.
-    df_shares = df[shares_index].copy()
+    # which might change the number of shares in the original DataFrame df.
+    # This tries to use the given share-counts (e.g. SHARES_DILUTED) and
+    # fill in missing values with the other share-counts (e.g. SHARES_BASIC).
+    df_shares = shares(df=df, index=shares_index)
 
     # Reindex the share-counts to daily data-points.
     df_shares_daily = reindex(df_src=df_shares, df_target=df_prices,

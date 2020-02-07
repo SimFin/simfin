@@ -6,7 +6,7 @@ __version__ = "0.4.0"
 from simfin.cache import cache
 from simfin.config import set_api_key, load_api_key, get_api_key
 from simfin.config import set_data_dir, get_data_dir, get_download_dir
-from simfin.derived import ebitda, free_cash_flow
+from simfin.derived import ebitda, free_cash_flow, shares
 from simfin.exceptions import ServerException
 from simfin.hubs import StockHub
 from simfin.info import info_columns, info_datasets

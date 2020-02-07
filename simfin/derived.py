@@ -145,3 +145,46 @@ def netnet(df_balance):
     return df_result
 
 ##########################################################################
+
+def shares(df, index=SHARES_DILUTED):
+    """
+    Get the share-counts from the given DataFrame.
+
+    There are two types of share-counts: SHARES_BASIC and SHARES_DILUTED.
+    Sometimes there are missing values for either or both of these. So this
+    function first tries to use the share-counts given by the `index`, and
+    when some values are missing, it will try and use the other share-counts.
+
+    For example, when calculating valuation signals, you may want to use
+    SHARES_DILUTED because it is more conservative than SHARES_BASIC. But
+    sometimes the SHARES_DILUTED is missing because it was either not
+    reported in the company's financial statements, or because the SimFin
+    data-crawler could not find it for some reason. Instead of having NaN
+    (Not-a-Number) values for a lot of share-counts, this function tries
+    to use the other share-counts instead. This often works quite well.
+
+    NOTE: This function copies the data from the original DataFrame `df`.
+
+    :param df:
+        Pandas DataFrame assumed to have the columns SHARES_BASIC and
+        SHARES_DILUTED.
+
+    :param index:
+        String with the column-name for the share-counts e.g. SHARES_DILUTED.
+
+    :return:
+        Pandas Series with share-counts.
+    """
+
+    # Name for the other column with share-counts.
+    index_other = SHARES_BASIC if index == SHARES_DILUTED else SHARES_DILUTED
+
+    # Copy the desired share-counts and fill in missing values from the other.
+    # It is unclear from the Pandas docs whether fillna() always copies the
+    # data even if nothing is changed. That is why we manually copy the data,
+    # usually this is calculated for annual or quarterly data, so it is fast.
+    df_shares = df[index].fillna(df[index_other]).copy()
+
+    return df_shares
+
+##########################################################################

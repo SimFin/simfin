@@ -444,13 +444,18 @@ class StockHub:
         return df_result
 
     @lru_cache()
-    def volume_signals(self, window=20):
+    def volume_signals(self, window=20, shares_index=SHARES_BASIC):
         """
         Calculate signals for the daily trading-volume of stocks.
 
         :param window:
             Integer for the number of days to use in moving-average
             calculations.
+
+        :param shares_index:
+            String with the column-name for the share-counts. SHARES_DILUTED
+            takes the potential diluting impact of stock-options into account,
+            while SHARES_BASIC does not take potential dilution into account.
 
         :return:
             Pandas DataFrame
@@ -467,15 +472,16 @@ class StockHub:
                     ('income', 'ttm')]
 
         # List of arguments used to uniquely identify the cache-file.
-        cache_ids = [window]
+        cache_ids = [window, shares_index]
 
         # Create dict with disk-cache arguments.
         cache_args = self._cache_args(datasets=datasets,
                                       cache_ids=cache_ids)
 
         # Calculate the signals, or load the DataFrame from the disk-cache.
-        df_result = volume_signals(df_shares=df_income_ttm[SHARES_BASIC],
+        df_result = volume_signals(df_shares=df_income_ttm,
                                    df_prices=df_prices, window=window,
+                                   shares_index=shares_index,
                                    **self._signal_args, **cache_args)
 
         return df_result

@@ -16,7 +16,7 @@ from simfin.names import TICKER
 
 ##########################################################################
 
-def clip(df, lower, upper):
+def clip(df, lower, upper, clip=True):
     """
     Limit the values of a DataFrame between the lower and upper bounds.
     This is very similar to Pandas' `clip`-function, except that if you
@@ -35,6 +35,10 @@ def clip(df, lower, upper):
     columns for PSALES and PBOOK to have only `NaN`-values, while this function
     copies the original values from `df` for those columns.
 
+    Furthermore, this function can also set the values outside the bounds to
+    `NaN` instead of using the boundary values, which can distort statistical
+    analysis.
+
     :param df:
         Pandas DataFrame with the data to be clipped.
 
@@ -45,6 +49,13 @@ def clip(df, lower, upper):
     :param upper:
         Dict or Pandas Series with the upper bounds for some or all of the
         columns in `df`.
+
+    :param clip:
+        Boolean whether to clip/limit all values outside the bounds (True),
+        or if the values should be set to NaN (False). Note: When the values
+        are clipped it can distort statistical analysis of the data. But when
+        the values are set to NaN, it reduces the amount of data-points
+        available for the statistical analysis. You should try both options.
 
     :return:
         Pandas DataFrame similar to `df` but with clipped values.
@@ -57,12 +68,20 @@ def clip(df, lower, upper):
     if isinstance(upper, dict):
         upper = pd.Series(upper)
 
-    # Clip the data between the lower and upper bounds.
-    df_clipped = df.clip(lower=lower, upper=upper, axis='columns')
+    # Clip/limit the values outside these bounds, or set them to NaN?
+    if clip:
+        # Clip/limit the data between the lower and upper bounds.
+        df_clipped = df.clip(lower=lower, upper=upper, axis='columns')
 
-    # If the bounds were only for some columns, Pandas' clip has set all
-    # other columns to NaN, so we copy those values from the original data.
-    df_clipped = df_clipped.fillna(df)
+        # If the bounds were only for some columns, Pandas' clip has set all
+        # other columns to NaN, so we copy those values from the original data.
+        df_clipped = df_clipped.fillna(df)
+    else:
+        # Boolean mask for the values that are outside the bounds.
+        mask_outside = (df < lower) | (df > upper)
+
+        # Copy the original data and set the values outside the bounds to NaN.
+        df_clipped = df.where(~mask_outside)
 
     return df_clipped
 

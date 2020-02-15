@@ -273,3 +273,49 @@ def max_drawdown(df, window=None, group_index=TICKER):
     return df_result
 
 ##########################################################################
+
+def moving_zscore(df, periods, rolling=True, group_index=TICKER):
+    """
+    Calculate the Moving Z-Score for all stocks in the given DataFrame.
+
+    :param df:
+        Pandas DataFrame e.g. with P/Sales ratios but could have any data.
+        The DataFrame may contain data for one or more stocks.
+
+    :param periods:
+        Integer with the number of time-steps to calculate Z-Score for.
+        If `rolling==True` then it is the length of the moving window.
+        If `rolling==False` then it is the minimum window-length before
+        the Z-Score is calculated.
+
+    :param rolling:
+        Boolean whether to use a rolling window (True), or to use all preceding
+        data-points (False).
+
+    :param group_index:
+        If the DataFrame has a MultiIndex then group data using this
+        index-column. By default this is TICKER but it could also be e.g.
+        SIMFIN_ID if you are using that as an index in your DataFrame.
+
+    :return:
+        Pandas DataFrame with the Moving Z-Score.
+    """
+
+    # Helper-function for calculating the Moving Z-Score for a single stock.
+    if rolling:
+        # Calculate Z-Score for a rolling window.
+        def _moving_zscore(df):
+            x = df.rolling(window=periods)
+            return (df - x.mean()) / x.std()
+    else:
+        # Calculate Z-Score from the beginning.
+        def _moving_zscore(df):
+            x = df.expanding(min_periods=periods)
+            return (df - x.mean()) / x.std()
+
+    # Calculate Moving Z-Score. Use Pandas groupby if `df` has multiple stocks.
+    df_result = apply(df=df, func=_moving_zscore, group_index=group_index)
+
+    return df_result
+
+##########################################################################

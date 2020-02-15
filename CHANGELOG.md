@@ -8,6 +8,12 @@
 
 -   Added function `sf.moving_zscore()`
 
+-   Made function `sf.convert_to_periods()` public.
+
+-   Changed calculation of signals: ROA, ROE, ASSET_TURNOVER.
+
+-   Added data quality tests to `test_bulk_data.ipynb`
+
 
 ## Version 0.4.0 (2020-01-25)
 

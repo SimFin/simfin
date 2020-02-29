@@ -11,7 +11,7 @@
 import pandas as pd
 import numpy as np
 
-from simfin.utils import apply
+from simfin.utils import apply, rename_columns
 from simfin.names import TICKER
 
 ##########################################################################
@@ -277,7 +277,8 @@ def max_drawdown(df, window=None, group_index=TICKER):
 
 ##########################################################################
 
-def moving_zscore(df, periods, rolling=True, group_index=TICKER):
+def moving_zscore(df, periods, rolling=True, new_names=None,
+                  group_index=TICKER):
     """
     Calculate the Moving Z-Score for all stocks in the given DataFrame.
 
@@ -294,6 +295,10 @@ def moving_zscore(df, periods, rolling=True, group_index=TICKER):
     :param rolling:
         Boolean whether to use a rolling window (True), or to use all preceding
         data-points (False).
+
+    :param new_names:
+        Dict or function for mapping / converting the column-names.
+        If `df` is a Pandas Series, then this is assumed to be a string.
 
     :param group_index:
         If the DataFrame has a MultiIndex then group data using this
@@ -318,6 +323,10 @@ def moving_zscore(df, periods, rolling=True, group_index=TICKER):
 
     # Calculate Moving Z-Score. Use Pandas groupby if `df` has multiple stocks.
     df_result = apply(df=df, func=_moving_zscore, group_index=group_index)
+
+    # Rename the columns.
+    if new_names is not None:
+        rename_columns(df=df_result, new_names=new_names, inplace=True)
 
     return df_result
 

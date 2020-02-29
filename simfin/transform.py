@@ -98,7 +98,7 @@ def winsorize(df, quantile=0.05, clip=True, columns=None):
     Note that `inf` and `NaN` values are ignored when finding the quantiles.
 
     :param df:
-        Pandas DataFrame with the data to be limited.
+        Pandas DataFrame or Series with the data to be limited.
 
     :param quantile:
         Float between 0.0 and 1.0
@@ -116,7 +116,7 @@ def winsorize(df, quantile=0.05, clip=True, columns=None):
         If `None` then Winsorize all columns in `df`.
 
     :return:
-        Pandas DataFrame similar to `df` but with Winsorized values.
+        Pandas DataFrame or Series similar to `df` but with Winsorized values.
     """
 
     if columns is not None:
@@ -143,8 +143,11 @@ def winsorize(df, quantile=0.05, clip=True, columns=None):
 
         # Clip the values outside these quantiles, or set them to NaN?
         if clip:
+            # Only use the axis-arg for a DataFrame, not for a Series.
+            axis = 'columns' if isinstance(df, pd.DataFrame) else None
+
             # Clip / limit the values outside these quantiles.
-            df_clipped = df.clip(lower=lower, upper=upper, axis='columns')
+            df_clipped = df.clip(lower=lower, upper=upper, axis=axis)
         else:
             # Boolean mask for the values that are outside these quantiles.
             mask_outside = (df < lower) | (df > upper)

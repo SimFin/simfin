@@ -12,6 +12,8 @@
 
 -   Changed calculation of signals: ROA, ROE, ASSET_TURNOVER.
 
+-   Added support for Pandas Series in function `sf.winsorize()`
+
 -   Added data quality tests to `test_bulk_data.ipynb`
 
 

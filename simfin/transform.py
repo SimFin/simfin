@@ -87,7 +87,8 @@ def clip(df, lower, upper, clip=True):
 
 ##########################################################################
 
-def winsorize(df, quantile=0.05, clip=True, columns=None):
+def winsorize(df, quantile=0.05, clip=True,
+              columns=None, exclude_columns=None):
     """
     Limit the values in the DataFrame between `quantile` and `(1-quantile)`.
     This is useful for removing outliers without specifying the exact bounds.
@@ -115,9 +116,25 @@ def winsorize(df, quantile=0.05, clip=True, columns=None):
         and the rest of the columns are merely copied from `df`.
         If `None` then Winsorize all columns in `df`.
 
+    :param exclude_columns:
+        List of strings with names of columns in `df` to exclude from the
+        Winsorization. If `None` then Winsorize all columns in `df`.
+
     :return:
         Pandas DataFrame or Series similar to `df` but with Winsorized values.
+
+    :raises:
+        ValueError: If both `columns` and `exclude_commons` are given.
     """
+
+    # Invalid arguments?
+    if columns is not None and exclude_columns is not None:
+        msg = 'Arguments columns and exclude_columns cannot both be None'
+        raise ValueError(msg)
+
+    if exclude_columns is not None:
+        # Winsorize all columns EXCEPT the ones given.
+        columns = df.columns.difference(exclude_columns)
 
     if columns is not None:
         # Winsorize SOME of the columns in the DataFrame.

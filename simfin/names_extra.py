@@ -91,6 +91,9 @@ NET_PROFIT_MARGIN = 'Net Profit Margin'
 #: Gross Profit / Revenue.
 GROSS_PROFIT_MARGIN = 'Gross Profit Margin'
 
+#: Operating Income / Interest Expense, Net.
+INTEREST_COV = INTEREST_COVERAGE = 'Interest Coverage'
+
 #: Current Assets / Current Liabilities.
 CURRENT_RATIO = 'Current Ratio'
 

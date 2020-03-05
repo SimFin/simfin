@@ -355,6 +355,10 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
         # Gross Profit Margin.
         df_signals[GROSS_PROFIT_MARGIN] = df[GROSS_PROFIT] / df[REVENUE]
 
+        # Interest Coverage.
+        # Note: INTEREST_EXP_NET must be negated.
+        df_signals[INTEREST_COV] = df[OPERATING_INCOME] / -df[INTEREST_EXP_NET]
+
         # Current Ratio = Current Assets / Current Liabilities.
         df_signals[CURRENT_RATIO] = df[TOTAL_CUR_ASSETS] / df[TOTAL_CUR_LIAB]
 
@@ -380,7 +384,8 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
         return df_signals
 
     # Get relevant data from Income Statements.
-    columns = [REVENUE, GROSS_PROFIT, NET_INCOME]
+    columns = [REVENUE, GROSS_PROFIT, OPERATING_INCOME, INTEREST_EXP_NET,
+               NET_INCOME]
     df1 = df_income_ttm[columns]
 
     # Get relevant data from Balance Sheets.

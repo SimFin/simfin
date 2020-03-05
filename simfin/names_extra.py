@@ -127,6 +127,11 @@ FCF_GROWTH = 'FCF Growth'
 FCF_GROWTH_QOQ = 'FCF Growth QOQ'
 FCF_GROWTH_YOY = 'FCF Growth YOY'
 
+#: Total Assets Growth.
+ASSETS_GROWTH = 'Assets Growth'
+ASSETS_GROWTH_QOQ = 'Assets Growth QOQ'
+ASSETS_GROWTH_YOY = 'Assets Growth YOY'
+
 ##########################################################################
 # Price Signals.
 

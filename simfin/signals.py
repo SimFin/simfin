@@ -421,6 +421,7 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
 
 @cache
 def growth_signals(df_income_ttm, df_income_qrt,
+                   df_balance_ttm, df_balance_qrt,
                    df_cashflow_ttm, df_cashflow_qrt,
                    df_prices=None, fill_method='ffill',
                    offset=None, func=None,
@@ -461,6 +462,13 @@ def growth_signals(df_income_ttm, df_income_qrt,
 
     :param df_income_qrt:
         Pandas DataFrame with Income Statement Quarterly data for one or more
+        stocks.
+
+    :param df_balance_ttm:
+        Pandas DataFrame with Balance Sheet TTM data for one or more stocks.
+
+    :param df_balance_qrt:
+        Pandas DataFrame with Balance Sheet Quarterly data for one or more
         stocks.
 
     :param df_cashflow_ttm:
@@ -515,12 +523,14 @@ def growth_signals(df_income_ttm, df_income_qrt,
     # Select and combine the data we need.
     df_ttm1 = df_income_ttm[[REVENUE, NET_INCOME]]
     df_ttm2 = free_cash_flow(df_cashflow_ttm)
-    df_ttm = pd.concat([df_ttm1, df_ttm2], axis=1)
+    df_ttm3 = df_balance_ttm[[TOTAL_ASSETS]]
+    df_ttm = pd.concat([df_ttm1, df_ttm2, df_ttm3], axis=1)
 
     # Dict mapping to the new column-names.
     new_names = {REVENUE: SALES_GROWTH,
                  NET_INCOME: EARNINGS_GROWTH,
-                 FCF: FCF_GROWTH}
+                 FCF: FCF_GROWTH,
+                 TOTAL_ASSETS: ASSETS_GROWTH}
 
     # Calculate the growth-rates.
     df_growth = rel_change(df=df_ttm, freq='q', quarters=4,
@@ -533,12 +543,14 @@ def growth_signals(df_income_ttm, df_income_qrt,
     # Select and combine the data we need.
     df_qrt1 = df_income_qrt[[REVENUE, NET_INCOME]]
     df_qrt2 = free_cash_flow(df_cashflow_qrt)
-    df_qrt = pd.concat([df_qrt1, df_qrt2], axis=1)
+    df_qrt3 = df_balance_qrt[[TOTAL_ASSETS]]
+    df_qrt = pd.concat([df_qrt1, df_qrt2, df_qrt3], axis=1)
 
     # Dict mapping to the new column-names.
     new_names = {REVENUE: SALES_GROWTH_YOY,
                  NET_INCOME: EARNINGS_GROWTH_YOY,
-                 FCF: FCF_GROWTH_YOY}
+                 FCF: FCF_GROWTH_YOY,
+                 TOTAL_ASSETS: ASSETS_GROWTH_YOY}
 
     # Calculate the growth-rates.
     df_growth_yoy = rel_change(df=df_qrt, freq='q', quarters=4,
@@ -552,7 +564,8 @@ def growth_signals(df_income_ttm, df_income_qrt,
     # Dict mapping to the new column-names.
     new_names = {REVENUE: SALES_GROWTH_QOQ,
                  NET_INCOME: EARNINGS_GROWTH_QOQ,
-                 FCF: FCF_GROWTH_QOQ}
+                 FCF: FCF_GROWTH_QOQ,
+                 TOTAL_ASSETS: ASSETS_GROWTH_QOQ}
 
     # Calculate the growth-rates.
     df_growth_qoq = rel_change(df=df_qrt, freq='q', quarters=1,

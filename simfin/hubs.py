@@ -516,12 +516,16 @@ class StockHub:
         # but it is easier to program like this and the overhead is small.
         df_income_ttm = self.load_income(variant='ttm')
         df_income_qrt = self.load_income(variant='quarterly')
+        df_balance_ttm = self.load_balance(variant='ttm')
+        df_balance_qrt = self.load_balance(variant='quarterly')
         df_cashflow_ttm = self.load_cashflow(variant='ttm')
         df_cashflow_qrt = self.load_cashflow(variant='quarterly')
 
         # List of datasets used to determine if disk-cache must be refreshed.
         datasets = [('income', 'ttm'),
                     ('income', 'quarterly'),
+                    ('balance', 'ttm'),
+                    ('balance', 'quarterly'),
                     ('cashflow', 'ttm'),
                     ('cashflow', 'quarterly')]
 
@@ -550,6 +554,8 @@ class StockHub:
         # Calculate the signals, or load the DataFrame from the disk-cache.
         df_result = growth_signals(df_income_ttm=df_income_ttm,
                                    df_income_qrt=df_income_qrt,
+                                   df_balance_ttm=df_balance_ttm,
+                                   df_balance_qrt=df_balance_qrt,
                                    df_cashflow_ttm=df_cashflow_ttm,
                                    df_cashflow_qrt=df_cashflow_qrt,
                                    df_prices=df_prices, func=func,

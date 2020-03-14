@@ -1,18 +1,29 @@
 # Changes to the SimFin Python package
 
-## Version 0.5.0 (2020-MM-DD)
+## Version 0.5.0 (2020-03-14)
 
-???
+Public beta version.
+
+This new version may help clean your bank-account from the bird-flu virus:
+https://youtu.be/JNVjBQucIck
 
 ### Changes
 
--   Added function `sf.moving_zscore()`
-
--   Made function `sf.convert_to_periods()` public.
+-   Extended function `sf.clip()` with argument `clip`. 
 
 -   Changed calculation of signals: ROA, ROE, ASSET_TURNOVER.
 
--   Added support for Pandas Series in function `sf.winsorize()`
+-   Made function `sf.convert_to_periods()` public.
+
+-   Added function `sf.moving_zscore()`
+
+-   Added function `sf.shares()` and its use in various other functions.
+
+-   Added argument `exclude_columns` and support for Pandas Series to function
+    `sf.winsorize()`
+
+-   Added signals for `ASSETS_GROWTH` and changed the syntax for the function
+    `sf.growth_signals()` and updated the `StockHub` to support this.
 
 -   Added data quality tests to `test_bulk_data.ipynb`
 

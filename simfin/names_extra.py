@@ -104,6 +104,15 @@ CURRENT_RATIO = 'Current Ratio'
 #: (Short-Term Debt + Long-Term Debt) / Total Assets
 DEBT_RATIO = 'Debt Ratio'
 
+#: Dividends / Free Cash Flow
+PAYOUT_RATIO = 'Dividends / FCF'
+
+#: (Dividends + Share Buybacks) / Free Cash Flow
+PAYOUT_BUYBACK_RATIO = '(Dividends + Share Buyback) / FCF'
+
+#: Share Buybacks / Free Cash Flow
+BUYBACK_RATIO = 'Share Buyback / FCF'
+
 #: Net Income / Total Assets.
 ROA = 'Return on Assets'
 

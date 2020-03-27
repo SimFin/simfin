@@ -6,7 +6,8 @@
 
 ### Changes
 
--   Added signals: `PCASH`
+-   Added signals: `PCASH`, `PAYOUT_RATIO`, `BUYBACK_RATIO`,
+    `PAYOUT_BUYBACK_RATIO`
 
 -   Added unit-test for `signals.py`
 

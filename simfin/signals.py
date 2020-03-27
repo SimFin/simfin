@@ -278,7 +278,7 @@ def volume_signals(df_prices, df_shares, window=20, fill_method='ffill',
 ##########################################################################
 
 @cache
-def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
+def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
                 offset=None, func=None, fill_method='ffill',
                 date_index=REPORT_DATE, group_index=TICKER):
     """
@@ -381,6 +381,21 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
         # Asset Turnover = Revenue / Total Assets. See note above.
         df_signals[ASSET_TURNOVER] = df[REVENUE] / df[TOTAL_ASSETS]
 
+        # Payout Ratio = Dividends / Free Cash Flow
+        # Note the negation because DIVIDENDS_PAID is negative.
+        df_signals[PAYOUT_RATIO] = -df[DIVIDENDS_PAID].fillna(0) / df[FCF]
+
+        # Buyback Ratio = Share Buyback / Free Cash Flow
+        # Note the negation because CASH_REPURCHASE_EQUITY is negative.
+        df_signals[BUYBACK_RATIO] = \
+            -df[CASH_REPURCHASE_EQUITY].fillna(0) / df[FCF]
+
+        # Payout + Buyback Ratio = (Dividends + Share Buyback) / Free Cash Flow
+        # Note the negation because DIVIDENDS_PAID and CASH_REP.. are negative.
+        df_signals[PAYOUT_BUYBACK_RATIO] = \
+            -(df[DIVIDENDS_PAID].fillna(0) +
+              df[CASH_REPURCHASE_EQUITY].fillna(0)) / df[FCF]
+
         return df_signals
 
     # Get relevant data from Income Statements.
@@ -393,8 +408,15 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_prices=None,
                ST_DEBT, LT_DEBT]
     df2 = df_balance_ttm[columns]
 
+    # Get relevant data from Cash-Flow Statements.
+    columns = [DIVIDENDS_PAID, CASH_REPURCHASE_EQUITY]
+    df3 = df_cashflow_ttm[columns]
+
+    # Calculate Free Cash Flow.
+    df_fcf = free_cash_flow(df_cashflow=df_cashflow_ttm)
+
     # Combine the data into a single DataFrame.
-    df = pd.concat([df1, df2], axis=1)
+    df = pd.concat([df1, df2, df3, df_fcf], axis=1)
 
     # Add offset / lag to the index-dates of the financial data.
     if offset is not None:

@@ -592,10 +592,12 @@ class StockHub:
         # but it is easier to program like this and the overhead is small.
         df_income_ttm = self.load_income(variant='ttm')
         df_balance_ttm = self.load_balance(variant='ttm')
+        df_cashflow_ttm = self.load_cashflow(variant='ttm')
 
         # List of datasets used to determine if disk-cache must be refreshed.
         datasets = [('income', 'ttm'),
-                    ('balance', 'ttm')]
+                    ('balance', 'ttm'),
+                    ('cashflow', 'ttm')]
 
         # Load dataset with shareprices?
         if variant in ['daily', 'latest']:
@@ -622,6 +624,7 @@ class StockHub:
         # Calculate the signals, or load the DataFrame from the disk-cache.
         df_result = fin_signals(df_income_ttm=df_income_ttm,
                                 df_balance_ttm=df_balance_ttm,
+                                df_cashflow_ttm=df_cashflow_ttm,
                                 df_prices=df_prices, func=func,
                                 **self._signal_args, **cache_args)
 

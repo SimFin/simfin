@@ -8,6 +8,8 @@
 
 -   Added signals: `PCASH`
 
+-   Added unit-test for `signals.py`
+
 ## Version 0.5.0 (2020-03-14)
 
 Public beta version.

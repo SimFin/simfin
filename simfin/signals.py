@@ -744,6 +744,10 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
     # a discount to their book-value.
     df_signals[P_NETNET] = df_price / df_daily[NETNET]
 
+    # Calculate Price / (Cash + Equivalents + Short-Term Investments)
+    # This can be used to screen for companies that might be takeover targets.
+    df_signals[P_CASH] = df_price / df_daily[CASH_EQUIV_ST_INVEST]
+
     # Calculate Earnings Yield (inverse of the P/E ratio).
     df_signals[EARNINGS_YIELD] = df_daily[NET_INCOME_COMMON] / df_price
 

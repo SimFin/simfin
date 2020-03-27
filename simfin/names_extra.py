@@ -64,6 +64,10 @@ P_NETNET = PNETNET = P_NNWC = PNNWC = 'P/NetNet'
 #: NetNet Working Capital (see P_NETNET for more explanation).
 NETNET = 'NetNet Working Capital'
 
+#: Price / (Cash + Equivalents + Short-Term Investments)
+#: This can be used to screen for companies that might be takeover targets.
+P_CASH = PCASH = 'P/Cash'
+
 #: Earnings / Price.
 EARNINGS_YIELD = 'Earnings Yield'
 

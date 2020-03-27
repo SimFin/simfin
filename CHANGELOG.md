@@ -1,5 +1,13 @@
 # Changes to the SimFin Python package
 
+## Version 0.6.0 (2020-MM-DD)
+
+???
+
+### Changes
+
+-   Added signals: `PCASH`
+
 ## Version 0.5.0 (2020-03-14)
 
 Public beta version.

@@ -355,6 +355,18 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
         # Gross Profit Margin.
         df_signals[GROSS_PROFIT_MARGIN] = df[GROSS_PROFIT] / df[REVENUE]
 
+        # R&D / Revenue.
+        # Note: RESEARCH_DEV must be negated.
+        df_signals[RD_REVENUE] = -df[RESEARCH_DEV] / df[REVENUE]
+
+        # R&D / Gross Profit.
+        # Note: RESEARCH_DEV must be negated.
+        df_signals[RD_GROSS_PROFIT] = -df[RESEARCH_DEV] / df[GROSS_PROFIT]
+
+        # Return on Research Capital (RORC).
+        # Note: RESEARCH_DEV must be negated.
+        df_signals[RORC] = df[GROSS_PROFIT] / -df[RESEARCH_DEV]
+
         # Interest Coverage.
         # Note: INTEREST_EXP_NET must be negated.
         df_signals[INTEREST_COV] = df[OPERATING_INCOME] / -df[INTEREST_EXP_NET]
@@ -400,7 +412,7 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
 
     # Get relevant data from Income Statements.
     columns = [REVENUE, GROSS_PROFIT, OPERATING_INCOME, INTEREST_EXP_NET,
-               NET_INCOME]
+               NET_INCOME, RESEARCH_DEV]
     df1 = df_income_ttm[columns]
 
     # Get relevant data from Balance Sheets.

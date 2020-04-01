@@ -95,6 +95,15 @@ NET_PROFIT_MARGIN = 'Net Profit Margin'
 #: Gross Profit / Revenue.
 GROSS_PROFIT_MARGIN = 'Gross Profit Margin'
 
+#: Research & Development / Revenue.
+RD_REVENUE = 'R&D / Revenue'
+
+#: Research & Development / Gross Profit.
+RD_GROSS_PROFIT = 'R&D / Gross Profit'
+
+#: Gross Profit / Research & Development.
+RORC = 'Return on Research Capital'
+
 #: Operating Income / Interest Expense, Net.
 INTEREST_COV = INTEREST_COVERAGE = 'Interest Coverage'
 

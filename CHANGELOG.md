@@ -7,7 +7,8 @@
 ### Changes
 
 -   Added signals: `PCASH`, `PAYOUT_RATIO`, `BUYBACK_RATIO`,
-    `PAYOUT_BUYBACK_RATIO`
+    `PAYOUT_BUYBACK_RATIO`, `RD_REVENUE`, `RD_GROSS_PROFIT`, `RORC`,
+    `ACQ_ASSETS_RATIO`
 
 -   Added unit-test for `signals.py`
 

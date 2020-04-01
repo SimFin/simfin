@@ -408,6 +408,11 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
             -(df[DIVIDENDS_PAID].fillna(0) +
               df[CASH_REPURCHASE_EQUITY].fillna(0)) / df[FCF]
 
+        # Net Acquisitions & Divestitures / Total Assets.
+        # Note the negation because NET_CASH_ACQ_DIVEST is usually negative.
+        df_signals[ACQ_ASSETS_RATIO] = \
+            -df[NET_CASH_ACQ_DIVEST] / df[TOTAL_ASSETS]
+
         return df_signals
 
     # Get relevant data from Income Statements.
@@ -421,7 +426,7 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
     df2 = df_balance_ttm[columns]
 
     # Get relevant data from Cash-Flow Statements.
-    columns = [DIVIDENDS_PAID, CASH_REPURCHASE_EQUITY]
+    columns = [DIVIDENDS_PAID, CASH_REPURCHASE_EQUITY, NET_CASH_ACQ_DIVEST]
     df3 = df_cashflow_ttm[columns]
 
     # Calculate Free Cash Flow.

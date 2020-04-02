@@ -393,6 +393,9 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
         # Asset Turnover = Revenue / Total Assets. See note above.
         df_signals[ASSET_TURNOVER] = df[REVENUE] / df[TOTAL_ASSETS]
 
+        # Inventory Turnover = Revenue / Inventory. See note above.
+        df_signals[INVENTORY_TURNOVER] = df[REVENUE] / df[INVENTORIES]
+
         # Payout Ratio = Dividends / Free Cash Flow
         # Note the negation because DIVIDENDS_PAID is negative.
         df_signals[PAYOUT_RATIO] = -df[DIVIDENDS_PAID].fillna(0) / df[FCF]
@@ -422,7 +425,7 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
 
     # Get relevant data from Balance Sheets.
     columns = [TOTAL_ASSETS, TOTAL_CUR_ASSETS, TOTAL_CUR_LIAB, TOTAL_EQUITY,
-               ST_DEBT, LT_DEBT]
+               ST_DEBT, LT_DEBT, INVENTORIES]
     df2 = df_balance_ttm[columns]
 
     # Get relevant data from Cash-Flow Statements.

@@ -131,6 +131,9 @@ ROE = 'Return on Equity'
 #: Revenue / Total Assets.
 ASSET_TURNOVER = 'Asset Turnover'
 
+#: Revenue / Inventory.
+INVENTORY_TURNOVER = 'Inventory Turnover'
+
 #: Net Acquisitions & Divestitures / Total Assets.
 ACQ_ASSETS_RATIO = 'Net Acquisitions / Total Assets'
 

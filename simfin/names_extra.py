@@ -110,6 +110,9 @@ INTEREST_COV = INTEREST_COVERAGE = 'Interest Coverage'
 #: Current Assets / Current Liabilities.
 CURRENT_RATIO = 'Current Ratio'
 
+#: (Cash + Equiv. + Short-Term Inv. + Receivables) / Current Liabilities.
+QUICK_RATIO = 'Quick Ratio'
+
 #: (Short-Term Debt + Long-Term Debt) / Total Assets
 DEBT_RATIO = 'Debt Ratio'
 

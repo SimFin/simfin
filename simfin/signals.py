@@ -374,6 +374,11 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
         # Current Ratio = Current Assets / Current Liabilities.
         df_signals[CURRENT_RATIO] = df[TOTAL_CUR_ASSETS] / df[TOTAL_CUR_LIAB]
 
+        #: Quick Ratio = (Cash + Equiv. + ST Inv. + Recv.) / Current Liab.
+        df_signals[QUICK_RATIO] = \
+            (df[CASH_EQUIV_ST_INVEST] + df[ACC_NOTES_RECV].fillna(0.0)) \
+            / df[TOTAL_CUR_LIAB]
+
         # Debt Ratio = (Short-term Debt + Long-term Debt) / Total Assets.
         df_signals[DEBT_RATIO] = (df[ST_DEBT] + df[LT_DEBT]) / df[TOTAL_ASSETS]
 
@@ -425,7 +430,8 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
 
     # Get relevant data from Balance Sheets.
     columns = [TOTAL_ASSETS, TOTAL_CUR_ASSETS, TOTAL_CUR_LIAB, TOTAL_EQUITY,
-               ST_DEBT, LT_DEBT, INVENTORIES]
+               ST_DEBT, LT_DEBT, INVENTORIES, CASH_EQUIV_ST_INVEST,
+               ACC_NOTES_RECV]
     df2 = df_balance_ttm[columns]
 
     # Get relevant data from Cash-Flow Statements.

@@ -23,4 +23,5 @@ from simfin.signals import price_signals, trade_signals, volume_signals
 from simfin.signals import fin_signals, growth_signals, val_signals
 from simfin.transform import clip, winsorize, max_drawdown, moving_zscore
 from simfin.transform import avg_ttm, avg_ttm_2y, avg_ttm_3y
+from simfin.transform import rel_change_ttm_1y, rel_change_ttm_2y
 from simfin.utils import add_date_offset, apply, convert_to_periods

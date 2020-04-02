@@ -255,6 +255,49 @@ def avg_ttm(df, years):
 
 ##########################################################################
 
+def rel_change_ttm_1y(df):
+    """
+    Calculate 1-year relative change from TTM financial data, which has
+    4 data-points per year, and each data-point covers the Trailing Twelve
+    Months.
+
+    This is a light-weight version of :obj:`~simfin.rel_change.rel_change`
+    intended to be used as the `func` argument in the signal-functions.
+
+    This function can also be used directly on DataFrames for a single stock,
+    or on DataFrames for multiple stocks using :obj:`~simfin.utils.apply`
+
+    :param df:
+        Pandas DataFrame with TTM financial data sorted ascendingly by date.
+
+    :return:
+        Pandas DataFrame with 1-year relative changes.
+    """
+    return df / df.shift(4) - 1
+
+
+def rel_change_ttm_2y(df):
+    """
+    Calculate 2-year relative change from TTM financial data, which has
+    4 data-points per year, and each data-point covers the Trailing Twelve
+    Months.
+
+    This is a light-weight version of :obj:`~simfin.rel_change.rel_change`
+    intended to be used as the `func` argument in the signal-functions.
+
+    This function can also be used directly on DataFrames for a single stock,
+    or on DataFrames for multiple stocks using :obj:`~simfin.utils.apply`
+
+    :param df:
+        Pandas DataFrame with TTM financial data sorted ascendingly by date.
+
+    :return:
+        Pandas DataFrame with 2-year relative changes.
+    """
+    return df / df.shift(8) - 1
+
+##########################################################################
+
 def max_drawdown(df, window=None, group_index=TICKER):
     """
     Calculate the Maximum Drawdown for all stocks in the given DataFrame.

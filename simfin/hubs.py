@@ -581,7 +581,8 @@ class StockHub:
             data-points. This is useful e.g. to calculate multi-year averages.
             This should be a real function (not a lambda-function) because its
             name will be used in the cache-filename.
-            Example: `func=sf.avg_ttm_2y`
+            Example: `func=sf.avg_ttm_2y` to calculate 2-year averages.
+            Example: `func=sf.rel_change_ttm_1y` to calculate 1-year change.
 
         :return:
             Pandas DataFrame

@@ -140,6 +140,9 @@ INVENTORY_TURNOVER = 'Inventory Turnover'
 #: Net Acquisitions & Divestitures / Total Assets.
 ACQ_ASSETS_RATIO = 'Net Acquisitions / Total Assets'
 
+#: Log10(Revenue).
+LOG_REVENUE = 'Log Revenue'
+
 ##########################################################################
 # Growth Signals.
 

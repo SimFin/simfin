@@ -421,6 +421,9 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
         df_signals[ACQ_ASSETS_RATIO] = \
             -df[NET_CASH_ACQ_DIVEST] / df[TOTAL_ASSETS]
 
+        # Log10(Revenue).
+        df_signals[LOG_REVENUE] = np.log10(df[REVENUE])
+
         return df_signals
 
     # Get relevant data from Income Statements.

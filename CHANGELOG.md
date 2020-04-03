@@ -8,7 +8,7 @@
 
 -   Added signals: `PCASH`, `PAYOUT_RATIO`, `BUYBACK_RATIO`,
     `PAYOUT_BUYBACK_RATIO`, `RD_REVENUE`, `RD_GROSS_PROFIT`, `RORC`,
-    `ACQ_ASSETS_RATIO`, `INVENTORY_TURNOVER`, `QUICK_RATIO`
+    `ACQ_ASSETS_RATIO`, `INVENTORY_TURNOVER`, `QUICK_RATIO`, `LOG_REVENUE`,
 
 -   Added functions `sf.rel_change_ttm_1y` and `sf.rel_change_ttm_2y`
     e.g. for use in signal-calculations.

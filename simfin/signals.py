@@ -421,6 +421,10 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
         df_signals[ACQ_ASSETS_RATIO] = \
             -df[NET_CASH_ACQ_DIVEST] / df[TOTAL_ASSETS]
 
+        # Capital Expenditures / (Depreciation + Amortization).
+        # Note the negation because CAPEX is negative.
+        df_signals[CAPEX_DEPR_RATIO] = -df[CAPEX] / df[DEPR_AMOR]
+
         # Log10(Revenue).
         df_signals[LOG_REVENUE] = np.log10(df[REVENUE])
 
@@ -438,7 +442,8 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
     df2 = df_balance_ttm[columns]
 
     # Get relevant data from Cash-Flow Statements.
-    columns = [DIVIDENDS_PAID, CASH_REPURCHASE_EQUITY, NET_CASH_ACQ_DIVEST]
+    columns = [DIVIDENDS_PAID, CASH_REPURCHASE_EQUITY, NET_CASH_ACQ_DIVEST,
+               CAPEX, DEPR_AMOR]
     df3 = df_cashflow_ttm[columns]
 
     # Calculate Free Cash Flow.

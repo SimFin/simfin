@@ -1,8 +1,10 @@
 # Changes to the SimFin Python package
 
-## Version 0.6.0 (2020-MM-DD)
+## Version 0.6.0 (2020-04-12)
 
-???
+Public beta version.
+
+This version is all about signals: https://youtu.be/u15BUoioCZw
 
 ### Changes
 
@@ -15,6 +17,7 @@
     e.g. for use in signal-calculations.
 
 -   Added unit-test for `signals.py`
+
 
 ## Version 0.5.0 (2020-03-14)
 

@@ -10,7 +10,7 @@ name: Test Data
 on: 
   schedule:
     # Every day at 08:00 UTC, one hour after datasets are updated on server.
-    - cron: "0 8 * * *"
+    #- cron: "0 8 * * *"
 
     # Every 5 minutes for testing, as it cannot be triggered manually.
     #- cron: "*/5 * * * *"

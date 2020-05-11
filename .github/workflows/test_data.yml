@@ -7,8 +7,8 @@
 name: Test Data
 
 # Run this GitHub action on a schedule using the cron.
-on: 
-  schedule:
+#on:
+#  schedule:
     # Every day at 08:00 UTC, one hour after datasets are updated on server.
     #- cron: "0 8 * * *"
 

@@ -6,8 +6,14 @@
 
 name: Test Data
 
+on:
+  # Hack to disable this GitHub Action without deleting this file.
+  # From: https://github.community/t5/GitHub-Actions/How-can-I-disable-a-github-action/m-p/46968#M6668
+  push:
+    branches-ignore:
+      - '**'
+
 # Run this GitHub action on a schedule using the cron.
-#on:
 #  schedule:
     # Every day at 08:00 UTC, one hour after datasets are updated on server.
     #- cron: "0 8 * * *"

@@ -129,7 +129,7 @@ def winsorize(df, quantile=0.05, clip=True,
 
     # Invalid arguments?
     if columns is not None and exclude_columns is not None:
-        msg = 'Arguments columns and exclude_columns cannot both be None'
+        msg = 'Arguments columns and exclude_columns cannot both be set'
         raise ValueError(msg)
 
     if exclude_columns is not None:
@@ -140,11 +140,11 @@ def winsorize(df, quantile=0.05, clip=True,
         # Winsorize SOME of the columns in the DataFrame.
 
         # Create a copy of the original data.
-        df_clipped = df.copy()
+        df_result = df.copy()
 
         # Recursively call this function to Winsorize and update those columns.
-        df_clipped[columns] = winsorize(df=df[columns], quantile=quantile,
-                                        clip=clip)
+        df_result[columns] = winsorize(df=df[columns], quantile=quantile,
+                                       clip=clip)
     else:
         # Winsorize ALL of the columns in the DataFrame.
 
@@ -164,16 +164,16 @@ def winsorize(df, quantile=0.05, clip=True,
             axis = 'columns' if isinstance(df, pd.DataFrame) else None
 
             # Clip / limit the values outside these quantiles.
-            df_clipped = df.clip(lower=lower, upper=upper, axis=axis)
+            df_result = df.clip(lower=lower, upper=upper, axis=axis)
         else:
             # Boolean mask for the values that are outside these quantiles.
             mask_outside = (df < lower) | (df > upper)
 
             # Set the values outside the quantiles to NaN.
-            df_clipped = df.copy()
-            df_clipped[mask_outside] = np.nan
+            df_result = df.copy()
+            df_result[mask_outside] = np.nan
 
-    return df_clipped
+    return df_result
 
 ##########################################################################
 

@@ -82,6 +82,17 @@ _cache_dir = None
 _info_dir = None
 
 
+def _check_data_dir():
+    """
+    Raise an exception if the user has not set the data-directory.
+    This is used instead of a really strange Python error-message.
+    """
+    if _data_dir is None:
+        msg = 'The simfin data directory has not been set by the user. ' \
+              'Please call the function sf.set_data_dir() first.'
+        raise Exception(msg)
+
+
 def set_data_dir(data_dir='~/simfin_data/'):
     """
     Set the directory where datasets are stored on disk
@@ -126,6 +137,8 @@ def get_data_dir():
 
     :return: String with the path for the data-directory.
     """
+    # Ensure the data-directory has been set by the user.
+    _check_data_dir()
     return _data_dir
 
 
@@ -136,6 +149,8 @@ def get_download_dir():
 
     :return: String with the path for the download directory.
     """
+    # Ensure the data-directory has been set by the user.
+    _check_data_dir()
     return _download_dir
 
 
@@ -145,6 +160,8 @@ def get_cache_dir():
 
     :return: String with the path for the cache directory.
     """
+    # Ensure the data-directory has been set by the user.
+    _check_data_dir()
     return _cache_dir
 
 
@@ -154,6 +171,8 @@ def get_info_dir():
 
     :return: String with the path for the info directory.
     """
+    # Ensure the data-directory has been set by the user.
+    _check_data_dir()
     return _info_dir
 
 ##########################################################################

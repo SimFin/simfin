@@ -1,5 +1,16 @@
 # Changes to the SimFin Python package
 
+## Version 0.7.0 (2020-MM-DD)
+
+Public beta version.
+
+### Changes
+
+-   Removed package `pyarrow` from `setup.py` because it is a large download
+    and it is only used in `cache.py` if the user explicitly wants it. So now
+    the user has to manually install this package if they want to use it.
+
+
 ## Version 0.6.0 (2020-04-12)
 
 Public beta version.

@@ -185,7 +185,8 @@ def cache(func):
 
             Other valid options are: 'parquet' and 'feather' which put several
             restrictions on the DataFrames, and are mainly useful for sharing
-            the DataFrames with others.
+            the DataFrames with others. Note that you need to manually install
+            the `pyarrow` package if you want to use these options.
 
         :param kwargs:
             Additional keyword arguments to pass to the wrapped function.

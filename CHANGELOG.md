@@ -6,6 +6,9 @@ Public beta version.
 
 ### Changes
 
+-   Added column `RESTATED_DATE` to financial reports and clarified the
+    definition of `REPORT_DATE` and `PUBLISH_DATE`. Also updated Tutorial 01.
+
 -   Removed package `pyarrow` from `setup.py` because it is a large download
     and it is only used in `cache.py` if the user explicitly wants it. So now
     the user has to manually install this package if they want to use it.

@@ -566,13 +566,14 @@ PROV_DOUBT_ACC = 'Provision for Doubtful Accounts'
 
 PROV_LOAN_LOSSES = 'Provision for Loan Losses'
 
-#: Date that a financial report was available to the market. Some financial
-#: reports are restated and the standard datasets only use the newest data. For
-#: example, if a financial report for the fiscal period 2012-12-31 is originally
-#: published on e.g. 2013-01-21 but then restated on 2015-07-17 then this latter
-#: date will be the one associated with the standard date. If you want the
-#: original report and all restatements, you need to access the special dataset
-#: designed for that.
+#: Date that a financial report was first made available to the public. It is
+#: possible that the financial report was later restated, in which case
+#: RESTATED_DATE will reflect that. Note that for US companies, the PUBLISH_DATE
+#: currently only uses the publication date of the Form 10-K and 10-Q for the
+#: annual and quarterly reports, and does not use the publication date of
+#: preliminary reports filed as Form 8-K. So it is possible that the information
+#: was actually made available prior to the PUBLISH_DATE in such a preliminary
+#: report.
 PUBLISH_DATE = 'Publish Date'
 
 PURCH_FIX_ASSETS = 'Purchase of Fixed Assets'
@@ -583,8 +584,10 @@ REAL_ESTATE_INVEST = 'Real Estate Investments'
 
 REPAY_LT_DEBT = 'Repayments of Long Term Debt'
 
-#: Date printed in a financial report e.g. 2018-12-31. This is not the date the
-#: information was available to the market, see PUBLISH_DATE for that.
+#: Date that is stated in the financial report. For example, a date of
+#: 2018-12-31 means that the financial report is for the annual or quarterly
+#: period ending on that date. This is typically NOT the date that the financial
+#: report was made available to the public, see PUBLISH_DATE for that.
 REPORT_DATE = 'Report Date'
 
 RD = RESEARCH_DEV = 'Research & Development'
@@ -592,6 +595,13 @@ RD = RESEARCH_DEV = 'Research & Development'
 RESERVE_LOAN_LOSS = 'Reserve for Loan Losses'
 
 RESERVE_CLAIMS_LOSS = 'Reserve for Outstanding Claims & Losses'
+
+#: Date when a financial report was last restated. It is possible that a
+#: financial report has been restated multiple times, in which case this is the
+#: most recent date that it was restated, and the financial data will be from
+#: the latest restatement of the financial report. If the report was never
+#: restated, then this date will be the same as PUBLISH_DATE.
+RESTATED_DATE = 'Restated Date'
 
 RESTR_CHARGES = 'Restructuring Charges'
 

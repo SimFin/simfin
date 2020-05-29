@@ -94,12 +94,15 @@ class StockHub:
         :param offset:
             Pandas DateOffset added to the date-index of the Pandas DataFrames
             with the fundamental data. Example: `pd.DateOffset(days=60)` This
-            is useful if you want to add a lag of e.g. 60 days to the dates of
-            financial reports with Income Statements, Balance Sheets, and
-            Cash-Flow Statements, because the REPORT_DATE is not when it was
-            actually made available to the public, which can be 1, 2 or even
-            3 months after the REPORT_DATE.
-            See :obj:`~simfin.utils.add_date_offset` for more details.
+            is useful if you are using `date_index=REPORT_DATE` and want to
+            add a lag of e.g. 60 days to the dates of financial reports with
+            Income Statements, Balance Sheets, and Cash-Flow Statements,
+            because the REPORT_DATE is not when it was actually made available
+            to the public, which can be 1, 2 or even 3 months after the
+            REPORT_DATE. See :obj:`~simfin.utils.add_date_offset` for more
+            details on how to set this parameter.
+            You can also use `date_index=PUBLISH_DATE` instead to get the first
+            date that the financial report was published.
 
         :param fill_method:
             String or callable for the method of filling in empty values when

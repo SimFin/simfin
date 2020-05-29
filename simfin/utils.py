@@ -49,13 +49,11 @@ def add_date_offset(df, date_index=REPORT_DATE, offset=pd.DateOffset(days=90)):
     the REPORT_DATE and the actual date of publication. This
     function makes it easy to add such a lag to all reports.
 
-    Although PUBLISH_DATE is supposed to be the actual date of
-    publication, it can be misleading if there has been
-    restatements to a financial report. Sometimes these can
-    occur several years later, and because SimFin uses the
-    newest data available, the PUBLISH_DATE is the date of the
-    latest restatement rather than the first report, so the
-    PUBLISH_DATE is not always useful.
+    SimFin also provides two other dates for financial reports
+    that you could use instead of REPORT_DATE so you can avoid
+    adding a lag: PUBLISH_DATE is the date that a financial report
+    was first made available to the public, and RESTATED_DATE is
+    the most recent date that the financial report was restated.
 
     :param df:
         Pandas DataFrame assumed to have a MultiIndex

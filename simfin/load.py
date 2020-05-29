@@ -14,8 +14,8 @@ from functools import partial
 
 from simfin.paths import _path_dataset
 from simfin.download import _maybe_download_dataset
-from simfin.names import TICKER, DATE, REPORT_DATE, PUBLISH_DATE, INDUSTRY_ID
-from simfin.names import MARKET_ID
+from simfin.names import TICKER, INDUSTRY_ID, MARKET_ID
+from simfin.names import DATE, REPORT_DATE, PUBLISH_DATE, RESTATED_DATE
 
 ##########################################################################
 # Load function.
@@ -94,7 +94,7 @@ def load(dataset, variant=None, market=None,
     :param parse_dates:
         String or list of strings with column-names that contain dates
         to be parsed. This depends on the dataset.
-        For fundamental data it is [REPORT_DATE, PUBLISH_DATE].
+        For fundamental data it is [REPORT_DATE, PUBLISH_DATE, RESTATED_DATE].
         For shareprices it is [DATE].
         Format is always assumed to be YYYY-MM-DD.
 
@@ -172,7 +172,7 @@ _DOC_LOAD = ' See the :obj:`~simfin.load.load` function for valid args.'
 # This is used by load_income(), load_balance(), load_cashflow(), etc. because
 # they all set the same args in load().
 load_fundamental = partial(load, market='us', index=[TICKER, REPORT_DATE],
-                           parse_dates=[REPORT_DATE, PUBLISH_DATE])
+                           parse_dates=[REPORT_DATE, PUBLISH_DATE, RESTATED_DATE])
 load_fundamental.__doc__ = 'Load fundamental data such as Income Statements, ' \
                            'Balance Sheets, or Cash-Flow Statements.' + _DOC_LOAD
 

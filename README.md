@@ -91,7 +91,7 @@ You can also use Anaconda instead of a virtualenv:
 Then you can install the simfin package inside that virtual environment:
 
     source activate simfin-env
-    pip install simfin
+    pip install simfin-python
 
 If the last command fails, or if you want to install the latest development
 version from this GitHub repository, then you can run the following instead:

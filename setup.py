@@ -6,7 +6,7 @@ from setuptools import setup
 MY_VERSION = '0.7.0'
 
 setup(
-    name='simfin',
+    name='simfin-python',
     packages=['simfin'],
     version=MY_VERSION,
     description='Simple financial data for Python',

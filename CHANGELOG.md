@@ -1,6 +1,15 @@
 # Changes to the SimFin Python package
 
-## Version 0.7.0 (2020-MM-DD)
+## Version 0.8.0 (2020-07-08)
+
+Public beta version.
+
+### Changes
+
+-   Added 2 new datasets, 'derived' and 'derived-shareprices'. For more details about the datasets visit: https://simfin.com/data/bulk
+
+
+## Version 0.7.0 (2020-06-04)
 
 Public beta version.
 

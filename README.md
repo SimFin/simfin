@@ -9,10 +9,15 @@ Python. It automatically downloads share-prices and fundamental data from
 the [SimFin](https://www.simfin.com/) server, saves the data to disk for
 future use, and loads the data into Pandas DataFrames.
 
+## Installation
+
+    pip install simfin
+    
+More detailed installation instructions can be found [below](https://github.com/SimFin/simfin#installation-detailed-instructions).
 
 ## Example
 
-Once the simfin package has been installed (see below), the following Python
+Once the simfin package has been installed, the following Python
 program will automatically download all Income Statements for US companies,
 and print the Revenue and Net Income for Microsoft.
 
@@ -77,7 +82,7 @@ This produces the following image:
     Python API.
 
 
-## Installation
+## Installation (Detailed Instructions)
 
 The best way to install simfin and use it in your own project, is to
 use a virtual environment. You write the following in a Linux terminal:

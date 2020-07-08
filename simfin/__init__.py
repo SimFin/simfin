@@ -1,5 +1,5 @@
 # This is also defined in setup.py and must be updated in both places.
-__version__ = "0.7.0"
+__version__ = "0.8.0"
 
 # Expose the following as top-level imports.
 
@@ -15,6 +15,7 @@ from simfin.load import load_markets
 from simfin.load import load_income, load_income_banks, load_income_insurance
 from simfin.load import load_balance, load_balance_banks, load_balance_insurance
 from simfin.load import load_cashflow, load_cashflow_banks, load_cashflow_insurance
+from simfin.load import load_derived, load_derived_banks, load_derived_insurance, load_derived_shareprices
 from simfin.load_info import load_info_columns, load_info_datasets
 from simfin.rel_change import rel_change, mean_log_change
 from simfin.resample import resample, resample_daily, asfreq, asfreq_daily

@@ -12,7 +12,7 @@
 from functools import lru_cache, partialmethod
 import hashlib
 
-from simfin.load import load_shareprices, load_fundamental, load_companies
+from simfin.load import load_shareprices, load_fundamental, load_companies, load_derived_shareprices
 from simfin.paths import _path_dataset
 from simfin.rel_change import rel_change, mean_log_change
 from simfin.signals import price_signals, volume_signals, growth_signals
@@ -239,6 +239,26 @@ class StockHub:
         return df
 
     @lru_cache()
+    def load_derived_shareprices(self, variant):
+        """
+        Load dataset with share price ratios from the chosen market.
+
+        :param variant: String for either the 'daily' or 'latest' ratios.
+        :return: Pandas DataFrame
+        """
+
+        # Load the dataset.
+        df = load_derived_shareprices(variant=variant, market=self._market,
+                              index=[self._group_index, DATE],
+                              refresh_days=self._refresh_days_shareprices)
+
+        # Only use data for the given tickers?
+        if self._tickers is not None:
+            df = df.loc[self._tickers]
+
+        return df
+
+    @lru_cache()
     def load_fundamental(self, dataset, variant):
         """
         Load dataset with fundamental data for companies in the chosen market.
@@ -274,6 +294,10 @@ class StockHub:
     #: Load Cash-Flow Statements for the chosen market.
     #: See :obj:`~simfin.hubs.StockHub.load_fundamental` for valid args.
     load_cashflow = partialmethod(load_fundamental, dataset='cashflow')
+
+    #: Load derived figures for the chosen market.
+    #: See :obj:`~simfin.hubs.StockHub.load_fundamental` for valid args.
+    load_derived = partialmethod(load_fundamental, dataset='derived')
 
     @lru_cache()
     def returns(self, name=None, future=True, annualized=False,

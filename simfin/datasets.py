@@ -79,6 +79,10 @@ datasets_fundamental.__doc__ = 'List of dataset names with fundamental data.'
 datasets_shareprices = partial(datasets_startswith, names='shareprices')
 datasets_shareprices.__doc__ = 'List of dataset names that begin with \'shareprices\'.'
 
+# List of dataset names that begin with 'derived'.
+datasets_derived = partial(datasets_startswith, names='derived')
+datasets_derived.__doc__ = 'List of dataset names that begin with \'derived\'.'
+
 ##########################################################################
 # Functions for iterating over and loading all datasets.
 

@@ -6,7 +6,7 @@ Public beta version.
 
 ### Changes
 
--   Added 2 new datasets, 'derived' and 'derived-daily'. For more details about the datasets visit: https://simfin.com/data/bulk
+-   Added 2 new datasets, 'derived' and 'derived-shareprices'. For more details about the datasets visit: https://simfin.com/data/bulk
 
 
 ## Version 0.7.0 (2020-06-04)

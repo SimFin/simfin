@@ -238,3 +238,22 @@ load_shareprices = partial(load, dataset='shareprices', variant='latest', market
 load_shareprices.__doc__ = 'Load share-prices.' + _DOC_LOAD
 
 ##########################################################################
+
+##########################################################################
+# Specialized functions for the 'derived' and 'derived-daily' datasets.
+
+load_derived = partial(load_fundamental, dataset='derived')
+load_derived.__doc__ = 'Load derived figures & ratios for all companies except banks ' \
+                      'and insurance companies.' + _DOC_LOAD
+
+load_derived_banks = partial(load_fundamental, dataset='derived-banks')
+load_derived_banks.__doc__ = 'Load derived figures & ratios for banks.' + _DOC_LOAD
+
+load_derived_insurance = partial(load_fundamental, dataset='derived-insurance')
+load_derived_insurance.__doc__ = 'Load derived figures & ratios for insurance companies.' + _DOC_LOAD
+
+load_derived_shareprices = partial(load, dataset='derived-shareprices', variant='latest', market='us',
+                           index=[TICKER, DATE], parse_dates=[DATE])
+load_derived_shareprices.__doc__ = 'Load share-price ratios.' + _DOC_LOAD
+
+##########################################################################

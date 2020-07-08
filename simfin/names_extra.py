@@ -18,7 +18,10 @@
 SPS = SALES_PER_SHARE = 'Sales Per Share'
 
 #: Net Income / Number of Shares.
-EPS = EARNINGS_PER_SHARE = 'Earnings Per Share'
+EPS_BASIC = EPS = EARNINGS_PER_SHARE = 'Earnings per Share, Basic'
+
+#: Net Income / Number of Shares.
+EPS_DILUTED = 'Earnings per Share, Diluted'
 
 #: Total Equity / Number of Shares.
 EQ_PS = EQUITY_PER_SHARE = BV_PS = BOOK_VALUE_PER_SHARE = 'Equity Per Share'
@@ -26,20 +29,53 @@ EQ_PS = EQUITY_PER_SHARE = BV_PS = BOOK_VALUE_PER_SHARE = 'Equity Per Share'
 #: Free Cash Flow / Number of Shares.
 FCF_PS = 'Free Cash Flow Per Share'
 
+#: Dividends / Number of Shares.
+DPS = DIVIDENDS_PS = 'Dividends Per Share'
+
 ##########################################################################
 # Valuation Signals.
 
 #: Price / Earnings Ratio.
 P_E = PE = 'P/E'
 
+#: Price / Earnings Ratio., quarterly and ttm variants
+PE_QUARTERLY = 'Price to Earnings Ratio (quarterly)'
+PE_TTM = 'Price to Earnings Ratio (ttm)'
+
+#: Price / Book-Value (aka. Equity).
+P_BOOK = PBOOK = PB = PRICE_BOOK = 'Price to Book Value'
+
+#: Enterprise Value
+EV = ENTERPRISE_VALUE = 'Enterprise Value'
+
+#: Enterprise Value / EBITDA
+EV_EBITDA = 'EV/EBITDA'
+
+#: Enterprise Value / Sales
+EV_SALES = 'EV/Sales'
+
+#: Enterprise Value / FCF
+EV_FCF = 'EV/FCF'
+
+#: Book to market value
+BOOK_MARKET = 'Book to Market Value'
+
+#: Operating Income to EV
+OP_INCOME_EV = 'Operating Income/EV'
+
 #: Price / Sales Ratio.
 P_SALES = PSALES = 'P/Sales'
+
+#: Price / Sales Ratio., quarterly and ttm variants
+PS_QUARTERLY = 'Price to Sales Ratio (quarterly)'
+PS_TTM = 'Price to Sales Ratio (ttm)'
 
 #: Price / Free Cash Flow.
 P_FCF = PFCF = 'P/FCF'
 
-#: Price / Book-Value (aka. Equity).
-P_BOOK = PBOOK = 'P/Book'
+#: Price / Free Cash Flow., quarterly and ttm variants
+PRICE_FCF_QUARTERLY = P_FCF_QUARTERLY = 'Price to Free Cash Flow (quarterly)'
+PRICE_FCF_TTM = P_FCF_TTM = 'Price to Free Cash Flow (ttm)'
 
 #: Price / Net Current Asset Value (NCAV).
 #: Where NCAV = Current Assets - Total Liabilities.
@@ -83,6 +119,9 @@ MCAP = MARKET_CAP = 'Market-Cap'
 ##########################################################################
 # Financial Signals.
 
+#: Total debt: short term debt + long term debt
+TOTAL_DEBT = DEBT = 'Total Debt'
+
 #: Free Cash Flow.
 FCF = 'Free Cash Flow'
 
@@ -90,10 +129,13 @@ FCF = 'Free Cash Flow'
 EBITDA = 'EBITDA'
 
 #: Net Income / Revenue.
-NET_PROFIT_MARGIN = 'Net Profit Margin'
+NET_PROFIT_MARGIN = NP_MARGIN = 'Net Profit Margin'
 
 #: Gross Profit / Revenue.
-GROSS_PROFIT_MARGIN = 'Gross Profit Margin'
+GROSS_PROFIT_MARGIN = GROSS_MARGIN = 'Gross Profit Margin'
+
+#: Operating Margin
+OP_MARGIN = OPERATING_MARGIN = 'Operating Margin'
 
 #: Research & Development / Revenue.
 RD_REVENUE = 'R&D / Revenue'
@@ -114,7 +156,10 @@ CURRENT_RATIO = 'Current Ratio'
 QUICK_RATIO = 'Quick Ratio'
 
 #: (Short-Term Debt + Long-Term Debt) / Total Assets
-DEBT_RATIO = 'Debt Ratio'
+DEBT_RATIO = DEBT_ASSETS = 'Debt Ratio'
+
+#: Liabilities to Equity Ratio
+LIABILITIES_EQUITY = 'Liabilities to Equity Ratio'
 
 #: Dividends / Free Cash Flow
 PAYOUT_RATIO = 'Dividends / FCF'
@@ -145,6 +190,12 @@ CAPEX_DEPR_RATIO = 'CapEx / (Depr + Amor)'
 
 #: Log10(Revenue).
 LOG_REVENUE = 'Log Revenue'
+
+#: Free Cash Flow to Net Income
+FCF_NET_INCOME = "Free Cash Flow to Net Income"
+
+#: Pietroski F-Score
+PIETROSKI = 'Pietroski F-Score'
 
 ##########################################################################
 # Growth Signals.

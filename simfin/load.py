@@ -240,7 +240,7 @@ load_shareprices.__doc__ = 'Load share-prices.' + _DOC_LOAD
 ##########################################################################
 
 ##########################################################################
-# Specialized functions for the 'derived' and 'derived-daily' datasets.
+# Specialized functions for the 'derived' and 'derived-shareprices' datasets.
 
 load_derived = partial(load_fundamental, dataset='derived')
 load_derived.__doc__ = 'Load derived figures & ratios for all companies except banks ' \

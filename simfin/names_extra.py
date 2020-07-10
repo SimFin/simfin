@@ -260,3 +260,6 @@ VOL_MCAP = VOLUME_MCAP = 'Volume Market-Cap'
 VOL_TURN = VOLUME_TURNOVER = 'Volume Turnover'
 
 ##########################################################################
+# Other
+#: Shares outstanding as per last available date for the 'shareprices' dataset.
+SHARES_OUTSTANDING = 'Shares Outstanding'

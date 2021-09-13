@@ -649,11 +649,20 @@ class StockHub:
         cache_args = self._cache_args(datasets=datasets,
                                       cache_ids=cache_ids)
 
+        # Check whether special datasets for banks and insurances should be used.
+        banks = False
+        insurance = False
+        if self._dataset_extension == "-banks":
+            banks = True
+        elif self._dataset_extension == "insurance":
+            insurance = True
+
         # Calculate the signals, or load the DataFrame from the disk-cache.
         df_result = fin_signals(df_income_ttm=df_income_ttm,
                                 df_balance_ttm=df_balance_ttm,
                                 df_cashflow_ttm=df_cashflow_ttm,
                                 df_prices=df_prices, func=func,
+                                banks=banks, insurance=insurance,
                                 **self._signal_args, **cache_args)
 
         return df_result
@@ -709,12 +718,21 @@ class StockHub:
         cache_args = self._cache_args(datasets=datasets,
                                       cache_ids=cache_ids)
 
+        # Check whether special datasets for banks and insurances should be used.
+        banks = False
+        insurance = False
+        if self._dataset_extension == "-banks":
+            banks = True
+        elif self._dataset_extension == "insurance":
+            insurance = True
+
         # Calculate the signals, or load the DataFrame from the disk-cache.
         df_result = val_signals(df_prices=df_prices,
                                 df_income_ttm=df_income_ttm,
                                 df_balance_ttm=df_balance_ttm,
                                 df_cashflow_ttm=df_cashflow_ttm,
                                 shares_index=shares_index, func=func,
+                                banks=banks, insurance=insurance,
                                 **self._signal_args, **cache_args)
 
         return df_result

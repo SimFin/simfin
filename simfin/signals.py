@@ -280,7 +280,7 @@ def volume_signals(df_prices, df_shares, window=20, fill_method='ffill',
 @cache
 def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
                 offset=None, func=None, fill_method='ffill',
-                date_index=REPORT_DATE, group_index=TICKER):
+                date_index=REPORT_DATE, group_index=TICKER, banks=False, insurance=False):
     """
     Calculate financial signals such as Net Profit Margin, Debt Ratio, ROA,
     etc. for all stocks in the given DataFrames.
@@ -339,6 +339,13 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
         index-column. By default this is TICKER but it could also be e.g.
         SIMFIN_ID if you are using that as an index in your DataFrame.
 
+    :param banks:
+    Boolean whether to use the special datasets for banks.
+
+    :param insurance:
+    Boolean whether to use the special datasets for insurance
+    companies.
+
     :return:
         Pandas DataFrame with financial signals.
     """
@@ -353,31 +360,45 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
         df_signals[NET_PROFIT_MARGIN] = df[NET_INCOME] / df[REVENUE]
 
         # Gross Profit Margin.
-        df_signals[GROSS_PROFIT_MARGIN] = df[GROSS_PROFIT] / df[REVENUE]
+        # Note: Not available for banks or insurances.
+        if not banks and not insurance:
+            df_signals[GROSS_PROFIT_MARGIN] = df[GROSS_PROFIT] / df[REVENUE]
 
         # R&D / Revenue.
         # Note: RESEARCH_DEV must be negated.
-        df_signals[RD_REVENUE] = -df[RESEARCH_DEV] / df[REVENUE]
+        # Note: Not available for banks or insurances.
+        if not banks and not insurance:
+            df_signals[RD_REVENUE] = -df[RESEARCH_DEV] / df[REVENUE]
 
         # R&D / Gross Profit.
         # Note: RESEARCH_DEV must be negated.
-        df_signals[RD_GROSS_PROFIT] = -df[RESEARCH_DEV] / df[GROSS_PROFIT]
+        # Note: Not available for banks or insurances.
+        if not banks and not insurance:
+            df_signals[RD_GROSS_PROFIT] = -df[RESEARCH_DEV] / df[GROSS_PROFIT]
 
         # Return on Research Capital (RORC).
         # Note: RESEARCH_DEV must be negated.
-        df_signals[RORC] = df[GROSS_PROFIT] / -df[RESEARCH_DEV]
+        # Note: Not available for banks or insurances.
+        if not banks and not insurance:
+            df_signals[RORC] = df[GROSS_PROFIT] / -df[RESEARCH_DEV]
 
         # Interest Coverage.
         # Note: INTEREST_EXP_NET must be negated.
-        df_signals[INTEREST_COV] = df[OPERATING_INCOME] / -df[INTEREST_EXP_NET]
+        # Note: Not available for banks or insurances.
+        if not banks and not insurance:
+            df_signals[INTEREST_COV] = df[OPERATING_INCOME] / -df[INTEREST_EXP_NET]
 
         # Current Ratio = Current Assets / Current Liabilities.
-        df_signals[CURRENT_RATIO] = df[TOTAL_CUR_ASSETS] / df[TOTAL_CUR_LIAB]
+        # Note: Not available for banks or insurances.
+        if not banks and not insurance:
+            df_signals[CURRENT_RATIO] = df[TOTAL_CUR_ASSETS] / df[TOTAL_CUR_LIAB]
 
         #: Quick Ratio = (Cash + Equiv. + ST Inv. + Recv.) / Current Liab.
-        df_signals[QUICK_RATIO] = \
-            (df[CASH_EQUIV_ST_INVEST] + df[ACC_NOTES_RECV].fillna(0.0)) \
-            / df[TOTAL_CUR_LIAB]
+        # Note: Not available for banks or insurances.
+        if not banks and not insurance:
+            df_signals[QUICK_RATIO] = \
+                (df[CASH_EQUIV_ST_INVEST] + df[ACC_NOTES_RECV].fillna(0.0)) \
+                / df[TOTAL_CUR_LIAB]
 
         # Debt Ratio = (Short-term Debt + Long-term Debt) / Total Assets.
         df_signals[DEBT_RATIO] = (df[ST_DEBT] + df[LT_DEBT]) / df[TOTAL_ASSETS]
@@ -399,7 +420,9 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
         df_signals[ASSET_TURNOVER] = df[REVENUE] / df[TOTAL_ASSETS]
 
         # Inventory Turnover = Revenue / Inventory. See note above.
-        df_signals[INVENTORY_TURNOVER] = df[REVENUE] / df[INVENTORIES]
+        # Note: Not available for banks or insurances.
+        if not banks and not insurance:
+            df_signals[INVENTORY_TURNOVER] = df[REVENUE] / df[INVENTORIES]
 
         # Payout Ratio = Dividends / Free Cash Flow
         # Note the negation because DIVIDENDS_PAID is negative.
@@ -418,8 +441,10 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
 
         # Net Acquisitions & Divestitures / Total Assets.
         # Note the negation because NET_CASH_ACQ_DIVEST is usually negative.
-        df_signals[ACQ_ASSETS_RATIO] = \
-            -df[NET_CASH_ACQ_DIVEST] / df[TOTAL_ASSETS]
+        # Note: Not available for insurances.
+        if not insurance:
+            df_signals[ACQ_ASSETS_RATIO] = \
+                -df[NET_CASH_ACQ_DIVEST] / df[TOTAL_ASSETS]
 
         # Capital Expenditures / (Depreciation + Amortization).
         # Note the negation because CAPEX is negative.
@@ -431,19 +456,34 @@ def fin_signals(df_income_ttm, df_balance_ttm, df_cashflow_ttm, df_prices=None,
         return df_signals
 
     # Get relevant data from Income Statements.
-    columns = [REVENUE, GROSS_PROFIT, OPERATING_INCOME, INTEREST_EXP_NET,
-               NET_INCOME, RESEARCH_DEV]
+    if banks or insurance:
+        columns = [REVENUE, OPERATING_INCOME,
+                   NET_INCOME]
+    else:
+        columns = [REVENUE, GROSS_PROFIT, OPERATING_INCOME, INTEREST_EXP_NET,
+                   NET_INCOME, RESEARCH_DEV]
     df1 = df_income_ttm[columns]
 
     # Get relevant data from Balance Sheets.
-    columns = [TOTAL_ASSETS, TOTAL_CUR_ASSETS, TOTAL_CUR_LIAB, TOTAL_EQUITY,
-               ST_DEBT, LT_DEBT, INVENTORIES, CASH_EQUIV_ST_INVEST,
-               ACC_NOTES_RECV]
+    if banks or insurance:
+        columns = [TOTAL_ASSETS, TOTAL_EQUITY,
+                   ST_DEBT, LT_DEBT]
+    else:
+        columns = [TOTAL_ASSETS, TOTAL_CUR_ASSETS, TOTAL_CUR_LIAB, TOTAL_EQUITY,
+                   ST_DEBT, LT_DEBT, INVENTORIES, CASH_EQUIV_ST_INVEST,
+                   ACC_NOTES_RECV]
     df2 = df_balance_ttm[columns]
 
     # Get relevant data from Cash-Flow Statements.
-    columns = [DIVIDENDS_PAID, CASH_REPURCHASE_EQUITY, NET_CASH_ACQ_DIVEST,
-               CAPEX, DEPR_AMOR]
+    if banks:
+        columns = [DIVIDENDS_PAID, CASH_REPURCHASE_EQUITY, NET_CASH_ACQ_DIVEST,
+                   CAPEX, DEPR_AMOR]
+    elif insurance:
+        columns = [DIVIDENDS_PAID, CASH_REPURCHASE_EQUITY,
+                   CAPEX, DEPR_AMOR]
+    else:
+        columns = [DIVIDENDS_PAID, CASH_REPURCHASE_EQUITY, NET_CASH_ACQ_DIVEST,
+                   CAPEX, DEPR_AMOR]
     df3 = df_cashflow_ttm[columns]
 
     # Calculate Free Cash Flow.
@@ -659,7 +699,7 @@ def growth_signals(df_income_ttm, df_income_qrt,
 def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
                 fill_method='ffill', offset=None, func=None,
                 date_index=REPORT_DATE, shares_index=SHARES_DILUTED,
-                group_index=TICKER):
+                group_index=TICKER, banks=False, insurance=False):
     """
     Calculate valuation signals such as P/E and P/Sales ratios for all stocks
     in the given DataFrames.
@@ -722,6 +762,13 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
         index-column. By default this is TICKER but it could also be e.g.
         SIMFIN_ID if you are using that as an index in your DataFrame.
 
+    :param banks:
+    Boolean whether to use the special datasets for banks.
+
+    :param insurance:
+    Boolean whether to use the special datasets for insurance
+    companies.
+
     :return:
         Pandas DataFrame with valuation signals.
     """
@@ -731,8 +778,11 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
     df_inc = df_income_ttm[columns]
 
     # Get the required data from the Balance Sheets.
-    columns = [TOTAL_CUR_ASSETS, CASH_EQUIV_ST_INVEST, ACC_NOTES_RECV,
-               INVENTORIES, TOTAL_LIABILITIES, TOTAL_EQUITY]
+    if banks or insurance:
+        columns = [TOTAL_ASSETS, TOTAL_LIABILITIES, TOTAL_EQUITY]
+    else:
+        columns = [TOTAL_CUR_ASSETS, CASH_EQUIV_ST_INVEST, ACC_NOTES_RECV,
+                   INVENTORIES, TOTAL_LIABILITIES, TOTAL_EQUITY]
     df_bal = df_balance_ttm[columns]
 
     # Get the required data from the Cash-Flow Statements.
@@ -747,8 +797,12 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
     # This is only TTM data with 4 data-points per year, so it is
     # faster than calculating it for the daily data-points below.
     df[FCF] = free_cash_flow(df_cashflow_ttm)
-    df[NCAV] = ncav(df_balance_ttm)
-    df[NETNET] = netnet(df_balance_ttm)
+    # Note: Not for banks and insurances.
+    if not banks and not insurance:
+        df[NCAV] = ncav(df_balance_ttm)
+    # Note: Not for banks and insurances.
+    if not banks and not insurance:
+        df[NETNET] = netnet(df_balance_ttm)
 
     # Add offset / lag to the index-dates of the financial data.
     if offset is not None:
@@ -792,17 +846,23 @@ def val_signals(df_prices, df_income_ttm, df_balance_ttm, df_cashflow_ttm,
 
     # Calculate Price / Net Current Asset Value (NCAV).
     # This measures the share-price relative to estimated liquidation value.
-    df_signals[P_NCAV] = df_price / df_daily[NCAV]
+    # Note: Not for banks and insurances.
+    if not banks and not insurance:
+        df_signals[P_NCAV] = df_price / df_daily[NCAV]
 
     # Calculate Price / Net-Net Working Capital (NNWC aka. NetNet).
     # This measures the share-price relative to a more conservative estimate
     # of liquidation value, which values the Receivables and Inventories at
     # a discount to their book-value.
-    df_signals[P_NETNET] = df_price / df_daily[NETNET]
+    # Note: Not for banks and insurances.
+    if not banks and not insurance:
+        df_signals[P_NETNET] = df_price / df_daily[NETNET]
 
     # Calculate Price / (Cash + Equivalents + Short-Term Investments)
     # This can be used to screen for companies that might be takeover targets.
-    df_signals[P_CASH] = df_price / df_daily[CASH_EQUIV_ST_INVEST]
+    # Note: Not for banks and insurances.
+    if not banks and not insurance:
+        df_signals[P_CASH] = df_price / df_daily[CASH_EQUIV_ST_INVEST]
 
     # Calculate Earnings Yield (inverse of the P/E ratio).
     df_signals[EARNINGS_YIELD] = df_daily[NET_INCOME_COMMON] / df_price

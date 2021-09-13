@@ -654,7 +654,7 @@ class StockHub:
         insurance = False
         if self._dataset_extension == "-banks":
             banks = True
-        elif self._dataset_extension == "insurance":
+        elif self._dataset_extension == "-insurance":
             insurance = True
 
         # Calculate the signals, or load the DataFrame from the disk-cache.
@@ -723,7 +723,7 @@ class StockHub:
         insurance = False
         if self._dataset_extension == "-banks":
             banks = True
-        elif self._dataset_extension == "insurance":
+        elif self._dataset_extension == "-insurance":
             insurance = True
 
         # Calculate the signals, or load the DataFrame from the disk-cache.

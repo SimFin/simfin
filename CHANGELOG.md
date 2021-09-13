@@ -1,6 +1,6 @@
 # Changes to the SimFin Python package
 
-## Version 0.8.2 (2021-09-13)
+## Version 0.8.3 (2021-09-13)
 
 Added financial signals support for banks and insurance datasets.
 

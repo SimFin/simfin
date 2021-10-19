@@ -15,9 +15,15 @@ future use, and loads the data into Pandas DataFrames.
     
 More detailed installation instructions can be found [below](https://github.com/SimFin/simfin#installation-detailed-instructions).
 
+## API-Key
+
+To download data from SimFin you need an API-key, you can get one for free by registering on [simfin.com](https://simfin.com/login). Once you registered, you can find your API-key [here](https://simfin.com/data/api).
+The free datasets contain less data than the paid [SimFin+](https://simfin.com/simfin-plus) datasets and some datasets are only available to [SimFin+](https://simfin.com/simfin-plus) users.
+Visit [SimFin](https://simfin.com/data/bulk) for a comparison of the free and paid data versions.
+
 ## Example
 
-Once the simfin package has been installed, the following Python
+Once the simfin package has been installed and you got your API-key, the following Python
 program will automatically download all Income Statements for US companies,
 and print the Revenue and Net Income for Microsoft.
 
@@ -25,16 +31,14 @@ and print the Revenue and Net Income for Microsoft.
     from simfin.names import *
 
     # Set your API-key for downloading data.
-    # If the API-key is 'free' then you will get the free data,
-    # otherwise you will get the data you have paid for.
-    # See www.simfin.com for what data is free and how to buy more.
-    sf.set_api_key('free')
+    # Replace YOUR_API_KEY with your actual API-key.
+    sf.set_api_key('YOUR_API_KEY')
 
     # Set the local directory where data-files are stored.
     # The dir will be created if it does not already exist.
     sf.set_data_dir('~/simfin_data/')
 
-    # Load the annual Income Statements for all companies in USA.
+    # Load the annual Income Statements for all companies in the US.
     # The data is automatically downloaded if you don't have it already.
     df = sf.load_income(variant='annual', market='us')
 

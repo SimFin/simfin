@@ -15,7 +15,6 @@ import os
 # API Key.
 
 # The user's API key obtained when registering on www.simfin.com
-# The default API key gives access to the free datasets.
 _api_key = 'free'
 
 

@@ -196,6 +196,7 @@ FCF_NET_INCOME = "Free Cash Flow to Net Income"
 
 #: Piotroski F-Score
 PIOTROSKI = 'Piotroski F-Score'
+PIETROSKI = 'Piotroski F-Score'
 
 ##########################################################################
 # Growth Signals.

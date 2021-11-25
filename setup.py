@@ -3,7 +3,7 @@ from setuptools import setup
 
 # This is also defined in simfin/__init__.py and must be
 # updated in both places.
-MY_VERSION = '0.8.3'
+MY_VERSION = '0.8.4'
 
 setup(
     name='simfin',

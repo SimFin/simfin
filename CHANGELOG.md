@@ -1,5 +1,9 @@
 # Changes to the SimFin Python package
 
+## Version 0.8.4 (2021-11-25)
+
+Fixed typo in ratios.
+
 ## Version 0.8.3 (2021-09-13)
 
 Added financial signals support for banks and insurance datasets.

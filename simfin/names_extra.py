@@ -194,8 +194,8 @@ LOG_REVENUE = 'Log Revenue'
 #: Free Cash Flow to Net Income
 FCF_NET_INCOME = "Free Cash Flow to Net Income"
 
-#: Pietroski F-Score
-PIETROSKI = 'Pietroski F-Score'
+#: Piotroski F-Score
+PIOTROSKI = 'Piotroski F-Score'
 
 ##########################################################################
 # Growth Signals.

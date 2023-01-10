@@ -19,7 +19,14 @@ from simfin.paths import _filename_dataset, _path_dataset, _path_download_datase
 from simfin.paths import _path_info, _path_download_info
 from simfin.utils import _file_age
 
+
 ##########################################################################
+
+def _headers_dataset():
+    api_key = get_api_key()
+    if api_key is not None:
+        return {'Authorization': 'api-key ' + api_key}
+
 
 def _url_dataset(dataset, market=None, variant=None):
     """
@@ -47,12 +54,12 @@ def _url_dataset(dataset, market=None, variant=None):
         args += '&market=' + market
 
     # API key.
-    api_key = get_api_key()
-    if api_key is not None:
-        args += '&api-key=' + api_key
+    # api_key = get_api_key()
+    # if api_key is not None:
+    #    args += '&api-key=' + api_key
 
     # Base URL for the bulk-download API on the SimFin server.
-    base_url = 'https://simfin.com/api/bulk?'
+    base_url = 'http://localhost:8081/api/bulk-download?'
 
     # Combine base URL and arguments.
     url = base_url + args
@@ -107,7 +114,7 @@ def _print_download_progress(downloaded_size, total_size):
 
 ##########################################################################
 
-def _download(url, download_path):
+def _download(url, headers, download_path):
     """
     Download a file from an internet URL and save it to disk.
 
@@ -130,7 +137,8 @@ def _download(url, download_path):
     """
 
     # Open a streaming connection to the server.
-    with requests.get(url, stream=True) as response:
+    with requests.get(url, headers=headers,
+                      stream=True) as response:
         # Get the status code for the connection.
         status_code = response.status_code
 
@@ -173,7 +181,7 @@ def _download(url, download_path):
 
 ##########################################################################
 
-def _maybe_download(name, url, path, download_path, refresh_days):
+def _maybe_download(name, url, headers, path, download_path, refresh_days):
     """
     Check if the file in `path` exists on disk or if it is too old, and then
     download the file from `url` and save it to disk.
@@ -236,7 +244,7 @@ def _maybe_download(name, url, path, download_path, refresh_days):
     if must_download:
         # Download the file from the SimFin server.
         # This is assumed to succeed unless an exception is raised.
-        _download(url=url, download_path=download_path)
+        _download(url=url, headers=headers, download_path=download_path)
 
         if download_path.endswith('zip'):
             # Downloaded file must be unzipped into the data-dir.
@@ -285,12 +293,14 @@ def _maybe_download_dataset(refresh_days, **kwargs):
     # Full path for the downloaded file.
     download_path = _path_download_dataset(**kwargs)
 
+    headers = _headers_dataset()
+
     # URL to SimFin's server where the file is located.
     url = _url_dataset(**kwargs)
 
     return _maybe_download(name=dataset_name, path=path,
                            download_path=download_path,
-                           url=url, refresh_days=refresh_days)
+                           url=url, headers=headers, refresh_days=refresh_days)
 
 ##########################################################################
 
@@ -313,8 +323,9 @@ def _maybe_download_info(name, refresh_days):
     # URL to SimFin's server where the file is located.
     url = _url_info(name=name)
 
+    headers = _headers_dataset()
     return _maybe_download(name=name, path=path,
                            download_path=download_path,
-                           url=url, refresh_days=refresh_days)
+                           url=url,headers=headers, refresh_days=refresh_days)
 
 ##########################################################################

@@ -18,7 +18,7 @@ from simfin.datasets import iter_all_datasets
 sf.set_data_dir(data_dir='~/simfin_data/')
 
 # Load API key or use default 'free' if key-file doesn't exist.
-sf.load_api_key(path='~/simfin_api_key.txt', default_key='free')
+sf.load_api_key(path='~/simfin_api_key.txt', default_key='ovBimDZTPrKdG9Yx57GjQf2AUskRD4bw')
 
 # Set number of days before refreshing data from SimFin server.
 refresh_days = 30

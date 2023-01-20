@@ -103,3 +103,4 @@ def test_load_industries():
     sf.load_industries(refresh_days=refresh_days)
 
 ##########################################################################
+test_load_income()

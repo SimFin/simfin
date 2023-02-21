@@ -19,13 +19,14 @@ from simfin.paths import _filename_dataset, _path_dataset, _path_download_datase
 from simfin.paths import _path_info, _path_download_info
 from simfin.utils import _file_age
 
-
 ##########################################################################
 
 def _headers_dataset():
     api_key = get_api_key()
     if api_key is not None:
         return {'Authorization': 'api-key ' + api_key}
+    else:
+        raise ValueError('Api-Key is not set')
 
 
 def _url_dataset(dataset, market=None, variant=None):
@@ -53,13 +54,9 @@ def _url_dataset(dataset, market=None, variant=None):
     if market is not None:
         args += '&market=' + market
 
-    # API key.
-    # api_key = get_api_key()
-    # if api_key is not None:
-    #    args += '&api-key=' + api_key
 
     # Base URL for the bulk-download API on the SimFin server.
-    base_url = 'http://localhost:8081/api/bulk-download?'
+    base_url = 'https://backend.simfin.com/api/bulk?'
 
     # Combine base URL and arguments.
     url = base_url + args

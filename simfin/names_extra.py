@@ -18,10 +18,10 @@
 SPS = SALES_PER_SHARE = 'Sales Per Share'
 
 #: Net Income / Number of Shares.
-EPS_BASIC = EPS = EARNINGS_PER_SHARE = 'Earnings per Share, Basic'
+EPS_BASIC = EPS = EARNINGS_PER_SHARE = 'Earnings Per Share, Basic'
 
 #: Net Income / Number of Shares.
-EPS_DILUTED = 'Earnings per Share, Diluted'
+EPS_DILUTED = 'Earnings Per Share, Diluted'
 
 #: Total Equity / Number of Shares.
 EQ_PS = EQUITY_PER_SHARE = BV_PS = BOOK_VALUE_PER_SHARE = 'Equity Per Share'

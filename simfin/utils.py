@@ -11,7 +11,8 @@
 import pandas as pd
 import os
 import time
-from datetime import timedelta
+import csv
+from datetime import timedelta, datetime
 
 from simfin.names import REPORT_DATE, TICKER
 
@@ -33,6 +34,7 @@ MONTHS_PER_YEAR = 12
 
 #: Number of quarters per year.
 QUARTERS_PER_YEAR = 4
+
 
 ##########################################################################
 
@@ -82,6 +84,7 @@ def add_date_offset(df, date_index=REPORT_DATE, offset=pd.DateOffset(days=90)):
     df2 = df2.set_index(date_index, append=True)
 
     return df2
+
 
 ##########################################################################
 
@@ -151,6 +154,7 @@ def apply(df, func, group_index=TICKER, **kwargs):
         df_result = df.groupby(group_index).apply(_apply_group)
 
     return df_result
+
 
 ##########################################################################
 
@@ -248,6 +252,7 @@ def convert_to_periods(freq, bdays=0, days=0, weeks=0,
 
     return periods, shifted_years
 
+
 ##########################################################################
 
 def rename_columns(df, new_names, inplace=False):
@@ -290,6 +295,7 @@ def rename_columns(df, new_names, inplace=False):
         df = df.rename(new_names, inplace=inplace)
 
     return df
+
 
 ##########################################################################
 # Functions for file-dates.
@@ -377,6 +383,7 @@ def _is_file_older(**kwargs):
     """
     return not _is_file_newer(**kwargs)
 
+
 ##########################################################################
 
 def _is_str_or_list_str(s):
@@ -384,7 +391,8 @@ def _is_str_or_list_str(s):
     Return boolean whether `s` is a string or list of strings.
     """
     return isinstance(s, str) or \
-          (isinstance(s, list) and all(isinstance(x, str) for x in s))
+        (isinstance(s, list) and all(isinstance(x, str) for x in s))
+
 
 ##########################################################################
 
@@ -394,4 +402,50 @@ def _func_name(func):
     """
     return None if func is None else func.__name__
 
+
 ##########################################################################
+
+def into_date(date):
+    if date is None:
+        return None
+    if isinstance(date, str):
+        return datetime.strptime(date, '%Y-%m-%d')
+    if isinstance(date, datetime):
+        return date
+    else:
+        raise Exception("filters date not in format")
+
+
+def condition_function(start_date=None, end_date=None):
+    if start_date is not None:
+        if end_date is not None:
+            return lambda x: start_date < x < end_date
+        else:
+            return lambda x: start_date < x
+    else:
+        if end_date is not None:
+            return lambda x: x < end_date
+        else:
+            return None
+
+
+def filtered_file(dataset_path, start_date=None, end_date=None):
+    start_date = into_date(start_date)
+    end_date = into_date(end_date)
+
+    con_fun = condition_function(start_date, end_date)
+    # write new data file
+    new_file_name = os.path.basename(dataset_path)[0:-4] + "_filtered.csv"
+    new_file_path = os.path.join(os.path.dirname(dataset_path), new_file_name)
+
+    with open(new_file_path, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile, delimiter=';', quotechar='"')
+
+        with open(dataset_path) as csvfile:
+            datareader = csv.reader(csvfile, delimiter=';', quotechar='"')
+            for k, row in enumerate(datareader):
+                if k > 0:
+                    date = datetime.strptime(str(row[5]), '%Y-%m-%d')
+                    if con_fun(date):
+                        writer.writerow(row)
+    return new_file_path

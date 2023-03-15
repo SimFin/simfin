@@ -7,6 +7,7 @@
 # www.simfin.com - www.github.com/simfin/simfin
 # See README.md for instructions and LICENSE.txt for license details.
 ##########################################################################
+import datetime
 
 import simfin as sf
 from simfin.datasets import iter_all_datasets
@@ -18,7 +19,7 @@ from simfin.datasets import iter_all_datasets
 sf.set_data_dir(data_dir='~/simfin_data/')
 
 # Load API key or use default 'free' if key-file doesn't exist.
-sf.load_api_key(path='~/simfin_api_key.txt')
+sf.set_api_key("8fe38a8f-15a3-415d-abfc-87c05575c3cc")
 
 # Set number of days before refreshing data from SimFin server.
 refresh_days = 30
@@ -263,10 +264,14 @@ def test_load_industries():
 def test_load_all():
     for i, item in enumerate(all_dataset_test):
         print(i, item)
-        sf.load(dataset=item["dataset"],
-                variant=item["variant"],
-                market=item["market"],
-                refresh_days=refresh_days)
+        t = sf.load(dataset=item["dataset"],
+                    variant=item["variant"],
+                    market=item["market"],
+                    start_date="2023-03-01",
+                    end_date=datetime.datetime(2025, 5, 1),
+                    refresh_days=refresh_days)
+
+        break
 
 
 test_load_all()

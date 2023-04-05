@@ -405,7 +405,7 @@ def _func_name(func):
 
 ##########################################################################
 
-def into_date(date):
+def _into_date(date):
     if date is None:
         return None
     if isinstance(date, str):
@@ -416,7 +416,7 @@ def into_date(date):
         raise Exception("filters date not in format")
 
 
-def condition_function(start_date=None, end_date=None):
+def _condition_function(start_date=None, end_date=None):
     if start_date is not None:
         if end_date is not None:
             return lambda x: start_date < x < end_date
@@ -429,11 +429,11 @@ def condition_function(start_date=None, end_date=None):
             return None
 
 
-def filtered_file(dataset_path, start_date=None, end_date=None):
-    start_date = into_date(start_date)
-    end_date = into_date(end_date)
+def _filtered_file(dataset_path, start_date=None, end_date=None):
+    start_date = _into_date(start_date)
+    end_date = _into_date(end_date)
 
-    con_fun = condition_function(start_date, end_date)
+    con_fun = _condition_function(start_date, end_date)
     # write new data file
     new_file_name = os.path.basename(dataset_path)[0:-4] + "_filtered.csv"
     new_file_path = os.path.join(os.path.dirname(dataset_path), new_file_name)
@@ -443,9 +443,20 @@ def filtered_file(dataset_path, start_date=None, end_date=None):
 
         with open(dataset_path) as csvfile:
             datareader = csv.reader(csvfile, delimiter=';', quotechar='"')
+            index = 0
+            rd_col = "Report Date"
+            d_col = "Date"
             for k, row in enumerate(datareader):
+                if k == 0:
+                    if rd_col in row:
+                        index = row.index(rd_col)
+                    elif d_col in row:
+                        index = row.index(rd_col)
+                    else:
+                        raise ValueError("Date Column not found")
+                    writer.writerow(row)
                 if k > 0:
-                    date = datetime.strptime(str(row[5]), '%Y-%m-%d')
+                    date = datetime.strptime(str(row[index]), '%Y-%m-%d')
                     if con_fun(date):
                         writer.writerow(row)
     return new_file_path

@@ -16,7 +16,7 @@ from simfin.paths import _path_dataset
 from simfin.download import _maybe_download_dataset
 from simfin.names import TICKER, INDUSTRY_ID, MARKET_ID
 from simfin.names import DATE, REPORT_DATE, PUBLISH_DATE, RESTATED_DATE
-from simfin.utils import filtered_file
+from simfin.utils import _filtered_file
 
 
 ##########################################################################
@@ -149,7 +149,7 @@ def load(dataset, variant=None, market=None, start_date=None, end_date=None,
     path = _path_dataset(**dataset_args)
     if start_date or end_date:
         print('\n- Applying filter ... ', end='')
-        path = filtered_file(path, start_date, end_date=end_date)
+        path = _filtered_file(path, start_date, end_date=end_date)
     # Load dataset into Pandas DataFrame.
     df = pd.read_csv(path, sep=';', header=0,
                      parse_dates=parse_dates, date_parser=date_parser)

@@ -263,7 +263,7 @@ def test_load_industries():
 ##########################################################################
 def test_load_all():
     for i, item in enumerate(all_dataset_test):
-        print(i, item)
+        #print(i, item)
         t = sf.load(dataset=item["dataset"],
                     variant=item["variant"],
                     market=item["market"],
@@ -271,7 +271,7 @@ def test_load_all():
                     end_date=datetime.datetime(2025, 5, 1),
                     refresh_days=refresh_days)
 
-        break
+        #break
 
 
 test_load_all()

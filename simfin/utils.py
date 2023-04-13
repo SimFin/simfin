@@ -451,7 +451,7 @@ def _filtered_file(dataset_path, start_date=None, end_date=None):
                     if rd_col in row:
                         index = row.index(rd_col)
                     elif d_col in row:
-                        index = row.index(rd_col)
+                        index = row.index(d_col)
                     else:
                         raise ValueError("Date Column not found")
                     writer.writerow(row)

@@ -56,7 +56,6 @@ def _url_dataset(dataset, market=None, variant=None):
 
     # Base URL for the bulk-download API on the SimFin server.
     base_url = 'https://backend.simfin.com/api/bulk-download?'
-
     # Combine base URL and arguments.
     url = base_url + args
 

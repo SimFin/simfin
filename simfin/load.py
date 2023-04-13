@@ -16,11 +16,13 @@ from simfin.paths import _path_dataset
 from simfin.download import _maybe_download_dataset
 from simfin.names import TICKER, INDUSTRY_ID, MARKET_ID
 from simfin.names import DATE, REPORT_DATE, PUBLISH_DATE, RESTATED_DATE
+from simfin.utils import _filtered_file
+
 
 ##########################################################################
 # Load function.
 
-def load(dataset, variant=None, market=None,
+def load(dataset, variant=None, market=None, start_date=None, end_date=None,
          parse_dates=None, index=None, refresh_days=30):
     """
     Load the dataset from local disk and return it as a Pandas DataFrame.
@@ -91,6 +93,12 @@ def load(dataset, variant=None, market=None,
         Some datasets such as 'industries' do not support the market-keyword
         and will generate a server-error if the market is set.
 
+    :param start_date:
+        datetime or string of format YYYY-MM-DD
+
+    :param end_date:
+        datetime or string of format YYYY-MM-DD
+
     :param parse_dates:
         String or list of strings with column-names that contain dates
         to be parsed. This depends on the dataset.
@@ -139,7 +147,9 @@ def load(dataset, variant=None, market=None,
 
     # Full path for the CSV-file on local disk.
     path = _path_dataset(**dataset_args)
-
+    if start_date or end_date:
+        print('\n- Applying filter ... ', end='')
+        path = _filtered_file(path, start_date, end_date=end_date)
     # Load dataset into Pandas DataFrame.
     df = pd.read_csv(path, sep=';', header=0,
                      parse_dates=parse_dates, date_parser=date_parser)
@@ -156,6 +166,7 @@ def load(dataset, variant=None, market=None,
     print('Done!')
 
     return df
+
 
 ##########################################################################
 # Specialized functions for loading datasets with fundamental data:
@@ -244,7 +255,7 @@ load_shareprices.__doc__ = 'Load share-prices.' + _DOC_LOAD
 
 load_derived = partial(load_fundamental, dataset='derived')
 load_derived.__doc__ = 'Load derived figures & ratios for all companies except banks ' \
-                      'and insurance companies.' + _DOC_LOAD
+                       'and insurance companies.' + _DOC_LOAD
 
 load_derived_banks = partial(load_fundamental, dataset='derived-banks')
 load_derived_banks.__doc__ = 'Load derived figures & ratios for banks.' + _DOC_LOAD
@@ -253,7 +264,7 @@ load_derived_insurance = partial(load_fundamental, dataset='derived-insurance')
 load_derived_insurance.__doc__ = 'Load derived figures & ratios for insurance companies.' + _DOC_LOAD
 
 load_derived_shareprices = partial(load, dataset='derived-shareprices', variant='latest', market='us',
-                           index=[TICKER, DATE], parse_dates=[DATE])
+                                   index=[TICKER, DATE], parse_dates=[DATE])
 load_derived_shareprices.__doc__ = 'Load share-price ratios.' + _DOC_LOAD
 
 ##########################################################################

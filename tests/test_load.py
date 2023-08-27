@@ -263,7 +263,6 @@ def test_load_industries():
 ##########################################################################
 def test_load_all():
     for i, item in enumerate(all_dataset_test):
-        #print(i, item)
         t = sf.load(dataset=item["dataset"],
                     variant=item["variant"],
                     market=item["market"],

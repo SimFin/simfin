@@ -7,6 +7,7 @@
 # www.simfin.com - www.github.com/simfin/simfin
 # See README.md for instructions and LICENSE.txt for license details.
 ##########################################################################
+import hashlib
 
 import pandas as pd
 import os
@@ -429,15 +430,35 @@ def _condition_function(start_date=None, end_date=None):
             return None
 
 
+def _calculate_file_hash(file_path, start_date=None, end_date=None, chunk_size=8192):
+    hash_obj = hashlib.new("sha256")
+    with open(file_path, 'rb') as file:
+        while chunk := file.read(chunk_size):
+            hash_obj.update(chunk)
+    blank_append = "-".encode('utf-8')
+    if start_date is not None:
+        hash_obj.update(start_date.strftime("%Y-%m-%d").encode('utf-8'))
+    else:
+        hash_obj.update(blank_append)
+    if end_date is not None:
+        hash_obj.update(end_date.strftime("%Y-%m-%d").encode('utf-8'))
+    else:
+        hash_obj.update(blank_append)
+    return hash_obj.hexdigest()
+
+
 def _filtered_file(dataset_path, start_date=None, end_date=None):
     start_date = _into_date(start_date)
     end_date = _into_date(end_date)
-
+    hash_of_file = _calculate_file_hash(dataset_path, start_date, end_date)
+    print(f"\n- Hash - {hash_of_file}", end='')
     con_fun = _condition_function(start_date, end_date)
     # write new data file
-    new_file_name = os.path.basename(dataset_path)[0:-4] + "_filtered.csv"
+    new_file_name = os.path.basename(dataset_path)[0:-4] + f"_{hash_of_file}.csv"
     new_file_path = os.path.join(os.path.dirname(dataset_path), new_file_name)
-
+    if os.path.exists(new_file_path):
+        print("\n- Filter data already exists", end='\n')
+        return new_file_path
     with open(new_file_path, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=';', quotechar='"')
 

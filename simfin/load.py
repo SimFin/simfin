@@ -151,8 +151,10 @@ def load(dataset, variant=None, market=None, start_date=None, end_date=None,
         print('\n- Applying filter ... ', end='')
         path = _filtered_file(path, start_date, end_date=end_date)
     # Load dataset into Pandas DataFrame.
-    df = pd.read_csv(path, sep=';', header=0,
-                     parse_dates=parse_dates, date_parser=date_parser)
+    df = pd.read_csv(path, sep=';', header=0)
+    # Convert the necessary columns to datetime.
+    for col in parse_dates:
+        df[col] = pd.to_datetime(df[col])
 
     # Set the index and sort the data.
     if index is not None:

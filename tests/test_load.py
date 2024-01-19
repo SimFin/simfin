@@ -270,7 +270,7 @@ def test_load_all():
                     end_date=datetime.datetime(2025, 5, 1),
                     refresh_days=refresh_days)
 
-        #break
+        print(t)
 
 
 test_load_all()

@@ -1,5 +1,10 @@
 # Changes to the SimFin Python package
 
+## Version 1.0.2 (2026-04-30)
+
+Fixed CSV loading with Pandas 3.x by removing the deprecated `date_parser`
+argument from `pd.read_csv()`.
+
 ## Version 0.8.4 (2021-11-25)
 
 Fixed typo in ratios.

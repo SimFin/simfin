@@ -139,9 +139,6 @@ def load(dataset, variant=None, market=None, start_date=None, end_date=None,
     # Download file if it does not exist on local disk, or if it is too old.
     _maybe_download_dataset(**dataset_args, refresh_days=refresh_days)
 
-    # Lambda function for converting strings to dates. Format: YYYY-MM-DD
-    date_parser = lambda x: pd.to_datetime(x, yearfirst=True, dayfirst=False)
-
     # Print status message.
     print('- Loading from disk ... ', end='')
 
@@ -150,9 +147,12 @@ def load(dataset, variant=None, market=None, start_date=None, end_date=None,
     if start_date or end_date:
         print('\n- Applying filter ... ', end='')
         path = _filtered_file(path, start_date, end_date=end_date)
+
     # Load dataset into Pandas DataFrame.
-    df = pd.read_csv(path, sep=';', header=0,
-                     parse_dates=parse_dates, date_parser=date_parser)
+    # The dataset date columns use ISO-style strings (YYYY-MM-DD), so
+    # Pandas can parse them directly without a custom callback. This keeps
+    # the loader compatible with Pandas 3.x, where `date_parser` was removed.
+    df = pd.read_csv(path, sep=';', header=0, parse_dates=parse_dates)
 
     # Set the index and sort the data.
     if index is not None:

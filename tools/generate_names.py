@@ -171,6 +171,30 @@ def _process():
     # At this point the entire json-file has been organized and we now
     # want to write the data to the names.py file.
 
+    # Find shortcuts that are claimed by more than one distinct column-name
+    # (e.g. server-side 'CAPEX' attached to both 'Capital Expenditures' and
+    # 'Change in Fixed Assets & Intangibles'). If we don't guard against
+    # this, names.py ends up with two separate "SHORTCUT = '...'" lines and
+    # whichever one comes later in alphabetical order silently overwrites
+    # the other at import time, so the shortcut ends up pointing at the
+    # wrong column with no error or warning (see issue #10). We skip these
+    # shortcuts entirely rather than guess which name should win.
+    shortcut_to_names = {}
+    for name, record_org in data_organized.items():
+        for shortcut in set(record_org['shortcuts']):
+            shortcut_to_names.setdefault(shortcut, set()).add(name)
+    conflicting_shortcuts = {shortcut for shortcut, names in shortcut_to_names.items()
+                             if len(names) > 1}
+
+    if len(conflicting_shortcuts) > 0:
+        msg = 'Shortcuts claimed by more than one column-name (skipped, needs a ' \
+             'fix upstream on the SimFin server): {}'.format(len(conflicting_shortcuts))
+        print(msg, file=sys.stderr)
+        for shortcut in sorted(conflicting_shortcuts):
+            names = sorted(shortcut_to_names[shortcut])
+            print('- {}: {}'.format(shortcut, names), file=sys.stderr)
+        print('', file=sys.stderr)
+
     # Text-wrapper to ensure comment-lines are kept within the given length.
     # Note that #: is used by sphinx autodoc to create docs for a variable.
     wrapper = TextWrapper(width=80,
@@ -212,8 +236,9 @@ def _process():
                 for line in desc_lines:
                     print(line, file=file)
 
-            # Ensure the shortcuts are unique for this name.
-            shortcuts = list(set(shortcuts))
+            # Ensure the shortcuts are unique for this name, and drop any
+            # that are also claimed by a different column-name.
+            shortcuts = list(set(shortcuts) - conflicting_shortcuts)
 
             # Write shortcut(s) to file e.g. 'CLOSE = SHARE_PRICE = '
             # This will be sorted ascendingly.

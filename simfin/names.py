@@ -87,7 +87,7 @@ CHG_ACCOUNTS_RECV = 'Change in Accounts Receivable'
 
 CHG_CASH_DISCOP_OTHER = 'Change in Cash from Disc. Operations and Other'
 
-CAPEX = CHG_FIX_ASSETS_INT = 'Change in Fixed Assets & Intangibles'
+CHG_FIX_ASSETS_INT = 'Change in Fixed Assets & Intangibles'
 
 CHG_INSURANCE_RESERVES = 'Change in Insurance Reserves'
 

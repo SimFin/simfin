@@ -23,7 +23,8 @@ from simfin.utils import _filtered_file
 # Load function.
 
 def load(dataset, variant=None, market=None, start_date=None, end_date=None,
-         parse_dates=None, index=None, refresh_days=30):
+         parse_dates=None, index=None, refresh_days=30,
+         create_pandas_dataframe=True):
     """
     Load the dataset from local disk and return it as a Pandas DataFrame.
     If the dataset does not exist on local disk, or if it is too old, then it
@@ -120,8 +121,16 @@ def load(dataset, variant=None, market=None, start_date=None, end_date=None,
         A value of refresh_days == 0 means the data is downloaded regardless
         of the age of the data-files saved on disk.
 
+    :param create_pandas_dataframe:
+        Boolean (default True). If True, load the CSV-file into a Pandas
+        DataFrame and return it as usual. If False, skip that step and just
+        return the path to the CSV-file on disk. Useful if you only want to
+        download the data and use something other than Pandas to read it,
+        while still getting the caching / refresh-days handling for free.
+
     :return:
-        Pandas DataFrame with the data.
+        Pandas DataFrame with the data, or a string with the path to the
+        CSV-file on disk if create_pandas_dataframe=False.
     """
 
     assert dataset is not None
@@ -147,6 +156,12 @@ def load(dataset, variant=None, market=None, start_date=None, end_date=None,
     if start_date or end_date:
         print('\n- Applying filter ... ', end='')
         path = _filtered_file(path, start_date, end_date=end_date)
+
+    # If the caller doesn't want a DataFrame, just hand back the path.
+    # The file is already downloaded / cached / filtered at this point.
+    if not create_pandas_dataframe:
+        print('Done!')
+        return path
 
     # Load dataset into Pandas DataFrame.
     # The dataset date columns use ISO-style strings (YYYY-MM-DD), so
